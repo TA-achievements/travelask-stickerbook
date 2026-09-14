@@ -37,12 +37,7 @@
 <path d="M470 825 C730 705,1090 735,1390 930 C1250 1110,930 1190,630 1085 Z"
       fill="#efdcaa" opacity=".18" filter="url(#blur)"/>
 
-<!-- central scrapbook pieces -->
-<g opacity=".22">
-  <path d="M690 385 L955 360 L1015 470 L845 545 L675 480 Z" fill="#d8e7e4"/>
-  <path d="M1000 525 L1240 505 L1290 605 L1135 665 L985 615 Z" fill="#ead7dc"/>
-  <path d="M470 555 L680 530 L735 620 L590 685 L455 625 Z" fill="#efe3be"/>
-</g>
+<!-- central scrapbook pieces removed -->
 
 <!-- graph-paper blocks -->
 <g opacity=".17">
@@ -52,12 +47,7 @@
   <rect x="1040" y="540" width="205" height="110" rx="6" fill="url(#grid)"/>
 </g>
 
-<!-- map scraps -->
-<g opacity=".22">
-  <path d="M120 135 L320 110 L380 190 L205 245 L95 195 Z" fill="#d4e5e8"/>
-  <path d="M1390 120 L1650 105 L1710 215 L1515 255 L1380 195 Z" fill="#ead2da"/>
-  <path d="M110 930 L330 905 L415 1035 L220 1135 L95 1065 Z" fill="#d2e7db"/>
-</g>
+<!-- map scraps removed -->
 
 <g fill="none" stroke="#829da5" stroke-width="3" opacity=".27" stroke-linecap="round" stroke-linejoin="round">
   <path d="M150 155 l46 -17 56 24 42 -16"/>
