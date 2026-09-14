@@ -152,3 +152,16 @@ button,input{font:inherit}
     transform:scale(3.18) translateZ(22px)!important;
   }
 }
+
+
+/* Dark-mode background fix: the light theme stays unchanged */
+@media (prefers-color-scheme: dark) {
+  body::before{
+    background:
+      linear-gradient(rgba(28,24,18,.86), rgba(28,24,18,.86)),
+      url("background/bg-dark-clean.svg") center/cover no-repeat !important;
+  }
+  body::after{
+    background:rgba(0,0,0,.06) !important;
+  }
+}
