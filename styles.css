@@ -165,3 +165,84 @@ button,input{font:inherit}
     background:rgba(0,0,0,.06) !important;
   }
 }
+
+
+/* Main-page TravelAsk hero banner */
+.hero-banner-wrap{
+  position:relative;
+  width:100%;
+  max-width:680px;
+  margin:18px auto 26px;
+  padding:10px 10px 28px;
+  background:#fffdf8;
+  border:1px solid rgba(99,78,55,.22);
+  box-shadow:
+    0 20px 40px rgba(55,38,24,.18),
+    0 4px 10px rgba(55,38,24,.10);
+  transform:rotate(-1.35deg);
+  transform-origin:center;
+}
+.hero-banner-wrap::before{
+  content:"";
+  position:absolute;
+  z-index:3;
+  width:102px;
+  height:24px;
+  left:50%;
+  top:-14px;
+  transform:translateX(-50%) rotate(2deg);
+  background:rgba(225,181,75,.68);
+  box-shadow:inset 0 0 10px rgba(255,255,255,.30);
+  pointer-events:none;
+}
+.hero-banner{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:3/2;
+  object-fit:cover;
+  border:1px solid rgba(95,73,50,.14);
+}
+
+/* On the home page, let the new banner use the left hero column cleanly. */
+.hero > .hero-banner-wrap{
+  align-self:center;
+}
+
+@media(max-width:950px){
+  .hero-banner-wrap{
+    max-width:720px;
+    margin-top:8px;
+  }
+}
+
+@media(max-width:720px){
+  .hero-banner-wrap{
+    width:calc(100% - 8px);
+    margin:10px auto 24px;
+    padding:7px 7px 22px;
+    transform:rotate(-.8deg);
+    box-shadow:
+      0 14px 28px rgba(55,38,24,.18),
+      0 3px 8px rgba(55,38,24,.10);
+  }
+  .hero-banner-wrap::before{
+    width:82px;
+    height:20px;
+    top:-11px;
+  }
+}
+
+/* Keep the light/dark theme behavior of the rest of the site untouched. */
+@media(prefers-color-scheme:dark){
+  .hero-banner-wrap{
+    background:#24211b;
+    border-color:rgba(255,255,255,.13);
+    box-shadow:
+      0 20px 42px rgba(0,0,0,.36),
+      0 4px 10px rgba(0,0,0,.22);
+  }
+  .hero-banner{
+    border-color:rgba(255,255,255,.08);
+  }
+}
