@@ -1,0 +1,32 @@
+
+/* TravelAsk Stickerbook: dark mode background override.
+   No SVG is used here, so the large polygon "paper scraps" cannot appear. */
+
+@media (prefers-color-scheme: dark) {
+  body::before {
+    background:
+      repeating-linear-gradient(
+        8deg,
+        rgba(255,255,255,.025) 0px,
+        rgba(255,255,255,.025) 1px,
+        transparent 1px,
+        transparent 34px
+      ),
+      repeating-linear-gradient(
+        96deg,
+        rgba(255,255,255,.018) 0px,
+        rgba(255,255,255,.018) 1px,
+        transparent 1px,
+        transparent 48px
+      ),
+      radial-gradient(circle at 18% 18%, rgba(102,135,116,.10), transparent 28%),
+      radial-gradient(circle at 82% 24%, rgba(119,82,105,.09), transparent 25%),
+      radial-gradient(circle at 55% 82%, rgba(146,116,62,.08), transparent 30%),
+      linear-gradient(135deg, #28241d 0%, #211f1a 48%, #2b271f 100%) !important;
+    background-attachment: fixed !important;
+  }
+
+  body::after {
+    background: rgba(0,0,0,.03) !important;
+  }
+}
