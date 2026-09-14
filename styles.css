@@ -1,0 +1,154 @@
+
+:root{
+  --paper:#fbfaf5; --ink:#292720; --muted:#746f66;
+  --mint:#cfeadb; --lav:#dfcff4; --pink:#f0d0d5; --yellow:#f0c968;
+  --line:rgba(83,70,55,.18); --shadow:0 16px 34px rgba(68,49,32,.13);
+}
+*{box-sizing:border-box}
+html{min-height:100%;background:var(--paper)}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:transparent}
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:url("background/bg-scrapbook-v10-no-planes.svg") center/cover no-repeat}
+body::after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(255,255,255,.04)}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit}
+.page{width:min(1220px,calc(100% - 30px));margin:0 auto;padding:24px 0 64px}
+.header{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:24px}
+.brand{display:inline-block}
+.brand-title{font-family:"Segoe Print","Comic Sans MS",cursive;font-weight:800;font-size:clamp(36px,5vw,63px);line-height:.85;letter-spacing:-2px;transform:rotate(-2deg);transform-origin:left center}
+.brand-sub{margin-left:52px;margin-top:8px;font-family:"Segoe Print","Comic Sans MS",cursive;font-size:18px;font-weight:800}
+.nav{display:flex;gap:12px;flex-wrap:wrap}
+.pill{border:1px solid rgba(60,50,40,.12);border-radius:999px;padding:11px 24px;font-weight:800;box-shadow:0 4px 0 rgba(0,0,0,.04);background:#fff;transition:transform .18s ease,box-shadow .18s ease}
+.pill:hover{transform:translateY(-2px);box-shadow:0 7px 13px rgba(60,45,30,.09)}
+.pill.mint{background:var(--mint)} .pill.lav{background:var(--lav)}
+.search{position:relative;margin:2px 0 25px}
+.search input{width:100%;background:rgba(255,255,255,.86);border:2px solid #b88ec8;border-radius:999px;padding:14px 52px 14px 18px;outline:none;box-shadow:0 7px 18px rgba(80,57,92,.06)}
+.search input:focus{box-shadow:0 0 0 4px rgba(184,142,200,.13)}
+.search::after{content:"⌕";position:absolute;right:18px;top:5px;font-size:30px;color:#9869ad}
+.hero{display:grid;grid-template-columns:1.12fr .88fr;gap:28px;align-items:center;margin:6px 0 12px}
+.scrap{min-height:475px;position:relative}
+.polaroid{position:absolute;width:218px;background:#fff;padding:9px 9px 34px;border:1px solid #ddd4c8;box-shadow:var(--shadow)}
+.polaroid img{width:100%;aspect-ratio:4/5;display:block;object-fit:cover}
+.polaroid .caption{text-align:center;font:800 16px/1.15 "Segoe Print","Comic Sans MS",cursive;margin-top:7px}
+.polaroid:nth-child(1){left:12px;top:40px;transform:rotate(-8deg)}
+.polaroid:nth-child(2){left:165px;top:7px;transform:rotate(7deg)}
+.polaroid:nth-child(3){left:305px;top:180px;transform:rotate(-3deg)}
+.polaroid:nth-child(4){left:62px;top:275px;transform:rotate(5deg)}
+.tape{position:absolute;width:82px;height:22px;background:rgba(238,190,82,.85);box-shadow:inset 0 0 10px rgba(255,255,255,.25)}
+.note{position:relative;padding:23px 27px;background:#fffdf8;border:1px solid #e6ddcf;box-shadow:var(--shadow);font:800 22px/1.5 "Segoe Print","Comic Sans MS",cursive;transform:rotate(-1deg)}
+.note::before{content:"";position:absolute;width:78px;height:20px;background:rgba(239,194,88,.8);left:calc(50% - 39px);top:-11px;transform:rotate(-3deg)}
+.note.mint-note{margin-top:26px;background:#dff0e5;transform:rotate(1deg)}
+.section-label{display:inline-block;margin:32px 0 20px;padding:5px 13px;background:#f3d6d5;font:800 34px/1 "Segoe Print","Comic Sans MS",cursive;transform:rotate(-1deg);box-shadow:0 5px 12px rgba(80,55,40,.07)}
+.team-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:27px 20px;align-items:start}
+.member-card{position:relative;display:block;transform:rotate(var(--rot,0deg));transition:transform .22s ease}
+.member-card:nth-child(4n+1){--rot:-1.8deg}.member-card:nth-child(4n+2){--rot:1.6deg}.member-card:nth-child(4n+3){--rot:-.7deg}.member-card:nth-child(4n){--rot:2deg}
+.member-card:hover{transform:rotate(0deg) translateY(-5px)}
+.photo-paper{background:#fff;padding:9px 9px 26px;border:1px solid #ddd4c7;box-shadow:var(--shadow)}
+.photo-paper img{width:100%;aspect-ratio:4/5;display:block;object-fit:cover;object-position:center}
+.avatar-fallback{width:100%;aspect-ratio:4/5;display:grid;place-items:center;background:linear-gradient(145deg,#e5eee9,#eedde3);font:800 clamp(40px,6vw,78px)/1 "Segoe Print","Comic Sans MS",cursive;color:#6b5961}
+.member-name{font:800 20px/1.15 "Segoe Print","Comic Sans MS",cursive;text-align:center;margin:10px 3px 3px}
+.member-role{text-align:center;color:var(--muted);font-size:13px;line-height:1.3;white-space:pre-line}
+.empty{padding:30px;text-align:center;font:700 20px/1.4 "Segoe Print","Comic Sans MS",cursive;color:var(--muted)}
+.back{display:inline-block;margin:2px 0 24px;font-weight:750}
+.profile-top{display:grid;grid-template-columns:360px minmax(0,1fr);gap:36px;align-items:start}
+.profile-photo{background:#fff;padding:10px 10px 30px;border:1px solid #ddd3c7;box-shadow:var(--shadow);transform:rotate(-4deg)}
+.profile-left{display:flex;flex-direction:column;align-items:center;min-width:0}
+.profile-left .profile-photo{width:250px;max-width:100%}
+.profile-special{
+  width:100%;
+  display:flex;
+  flex-wrap:nowrap;
+  justify-content:center;
+  align-items:flex-start;
+  gap:8px;
+  margin-top:18px;
+}
+.profile-special .achievement{flex:0 0 auto;width:108px}
+.profile-special .achievement-visual{width:92px}
+.profile-special .achievement-title{font-size:11px;line-height:1.15;max-width:108px}
+.profile-special-inline{justify-content:flex-start;margin-top:14px;margin-bottom:6px}
+
+.profile-photo img,.profile-photo .avatar-fallback{width:100%;aspect-ratio:4/5;object-fit:cover}
+.name-ribbon{display:inline-block;max-width:100%;padding:14px 40px;background:linear-gradient(90deg,#b88430,#efd078,#b67b27);box-shadow:var(--shadow);font:800 clamp(26px,4vw,38px)/1.1 "Segoe Print","Comic Sans MS",cursive;transform:rotate(-1deg)}
+.profile-role{font-size:17px;color:#615c55;white-space:pre-line;margin:15px 0 6px}
+.tenure-note{display:inline-block;margin-top:17px;background:#fffdf6;padding:11px 17px;border:1px solid #e2d7c8;box-shadow:0 8px 20px rgba(65,45,30,.09);font:800 18px/1.3 "Segoe Print","Comic Sans MS",cursive;transform:rotate(-2deg)}
+.special-badges{display:flex;align-items:flex-start;gap:17px;margin-top:22px}
+.filters{display:flex;gap:9px;flex-wrap:wrap;margin:4px 0 24px}
+.filter{cursor:pointer;border:1px solid rgba(85,70,55,.3);background:rgba(255,255,255,.74);border-radius:999px;padding:9px 16px;transition:.18s}
+.filter:hover{transform:translateY(-1px)} .filter.active{background:var(--mint);font-weight:800}
+.achievement-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:30px 16px;align-items:start}
+.achievement{position:relative;display:inline-flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:9px;cursor:pointer;perspective:760px;isolation:isolate;min-width:0;-webkit-tap-highlight-color:transparent}
+.achievement-visual{position:relative;width:min(150px,100%);aspect-ratio:1;transform-style:preserve-3d;transition:transform .11s ease;will-change:transform;transform-origin:center center;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.achievement-visual img{position:relative;z-index:3;display:block;width:100%;height:100%;object-fit:contain;pointer-events:none;filter:none!important;backface-visibility:hidden;-webkit-backface-visibility:hidden;image-rendering:-webkit-optimize-contrast}
+.achievement-visual::after{
+  content:"";position:absolute;inset:5%;border-radius:50%;z-index:4;pointer-events:none;
+  background:radial-gradient(circle at var(--gx,35%) var(--gy,25%),rgba(255,255,255,.70) 0%,rgba(255,255,255,.34) 13%,rgba(255,255,255,0) 38%);
+  opacity:.72;mix-blend-mode:screen;transition:background-position .08s linear;
+}
+.achievement:hover 
+.achievement-title{font-size:14px;line-height:1.2;text-align:center;max-width:160px;transform:none!important;filter:none!important;text-rendering:geometricPrecision}
+.achievement.expanded{z-index:99}
+.achievement.expanded .achievement-visual{transform:scale(2.25) translateZ(26px)!important;z-index:100}
+.category-block{margin-top:34px}
+.category-title{display:inline-block;margin:0 0 19px;padding:6px 12px;background:#f2d3d2;font:800 29px/1 "Segoe Print","Comic Sans MS",cursive;transform:rotate(-1deg)}
+.catalog-title{font:800 clamp(36px,5vw,52px)/1 "Segoe Print","Comic Sans MS",cursive;margin:18px 0 25px}
+.footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:60px;padding-top:22px;border-top:1px solid var(--line);font:800 17px/1.25 "Segoe Print","Comic Sans MS",cursive}
+.hidden{display:none!important}
+@media(max-width:950px){
+ .team-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .achievement-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .hero{grid-template-columns:1fr}
+ .scrap{min-height:470px;max-width:620px}
+}
+@media(max-width:720px){
+ .page{width:min(100% - 20px,1220px);padding-top:15px}
+ .header{align-items:flex-start;flex-direction:column}
+ .nav{width:100%}.nav .pill{flex:1;text-align:center;padding-inline:15px}
+ .brand-title{font-size:44px}.brand-sub{font-size:16px}
+ .scrap{min-height:405px;transform:scale(.86);transform-origin:top left;width:116%}
+ .polaroid{width:170px}
+ .polaroid:nth-child(2){left:123px}.polaroid:nth-child(3){left:218px;top:151px}.polaroid:nth-child(4){left:29px;top:231px}
+ .note{font-size:18px;padding:20px}
+ .team-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 10px}
+ .member-name{font-size:16px}.member-role{font-size:11px}
+ .profile-top{grid-template-columns:1fr}
+ .profile-left{width:100%}
+ .profile-photo{width:min(75vw,300px);margin:0 auto}
+ .profile-special{width:min(100%,390px);overflow-x:auto;justify-content:center;padding:4px 8px 12px;scrollbar-width:none}
+ .profile-special::-webkit-scrollbar{display:none}
+ .profile-main{text-align:center}
+ .profile-role{font-size:15px}
+ .special-badges{justify-content:center}
+ .achievement-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 8px}
+ .achievement-visual{width:min(125px,100%)}
+ .achievement-title{font-size:12px}
+}
+@media(max-width:480px){
+ .page{width:calc(100% - 14px)}
+ .scrap{transform:scale(.74);width:135%;min-height:345px}
+ .section-label{font-size:29px}
+ .team-grid{gap:15px 8px}
+ .photo-paper{padding:6px 6px 20px}
+ .achievement-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:23px 7px}
+ .achievement-visual{width:min(138px,100%)}
+ .achievement.expanded .achievement-visual{transform:scale(1.95) translateZ(22px)!important}
+ .name-ribbon{padding:12px 24px}
+}
+
+
+/* Final polish: no pale under-shadow below achievements */
+.achievement-visual::before{display:none!important}
+
+/* Special tenure/department badges expand to the same visible size as ordinary achievements */
+.profile-special .achievement.expanded .achievement-visual{
+  transform:scale(3.67) translateZ(26px)!important;
+  z-index:120;
+}
+.profile-special .achievement.expanded{
+  z-index:120;
+}
+
+@media(max-width:480px){
+  .profile-special .achievement.expanded .achievement-visual{
+    transform:scale(3.18) translateZ(22px)!important;
+  }
+}
