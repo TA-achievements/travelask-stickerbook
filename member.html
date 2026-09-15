@@ -6,4 +6,67 @@
   <nav class="nav"><a class="pill mint" href="index.html">Команда</a><a class="pill lav" href="achievements.html">Ачивки</a></nav>
 </header><div id="memberRoot"></div>
 <footer class="footer"><span>Спасибо за твою работу! ♡</span><span>TravelAsk</span></footer>
-</main><script src="data.js"></script><script src="script.js"></script></body></html>
+</main><script src="data.js"></script><script src="script.js"></script>
+<script>
+(function () {
+  function escProfileText(value) {
+    return String(value ?? "").replace(/[&<>"']/g, function (c) {
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];
+    });
+  }
+
+  function renderMiniProfile() {
+    var data = window.STICKERBOOK_DATA;
+    if (!data || !Array.isArray(data.team)) return;
+
+    var params = new URLSearchParams(window.location.search);
+    var memberId = params.get("id");
+    var member = data.team.find(function (item) { return String(item.id) === String(memberId); });
+    if (!member) return;
+
+    var rows = [];
+
+    if (member.birthday) {
+      rows.push('<div class="mini-profile-row"><span class="mini-profile-icon">🎂</span><span><b>Дата рождения</b><br>' + escProfileText(member.birthday) + '</span></div>');
+    }
+    if (member.zodiac) {
+      rows.push('<div class="mini-profile-row"><span class="mini-profile-icon">✦</span><span><b>Знак зодиака</b><br>' + escProfileText(member.zodiac) + '</span></div>');
+    }
+    if (member.city) {
+      rows.push('<div class="mini-profile-row"><span class="mini-profile-icon">📍</span><span><b>Город</b><br>' + escProfileText(member.city) + '</span></div>');
+    }
+    if (member.hobby) {
+      rows.push('<div class="mini-profile-row"><span class="mini-profile-icon">♡</span><span><b>Хобби</b><br>' + escProfileText(member.hobby) + '</span></div>');
+    }
+    if (member.fact) {
+      rows.push('<div class="mini-profile-row mini-profile-fact"><span class="mini-profile-icon">✎</span><span><b>Факт обо мне</b><br>' + escProfileText(member.fact) + '</span></div>');
+    }
+    if (member.interview) {
+      var safeUrl = escProfileText(member.interview);
+      rows.push('<a class="mini-profile-interview" href="' + safeUrl + '" target="_blank" rel="noopener noreferrer"><span>🎤</span><span>Читать интервью</span><span class="mini-profile-arrow">↗</span></a>');
+    }
+
+    if (!rows.length) return;
+
+    var profileMain = document.querySelector(".profile-main");
+    if (!profileMain || profileMain.querySelector(".mini-profile-card")) return;
+
+    var card = document.createElement("section");
+    card.className = "mini-profile-card";
+    card.innerHTML =
+      '<div class="mini-profile-tape"></div>' +
+      '<div class="mini-profile-title">Мини-анкета</div>' +
+      '<div class="mini-profile-list">' + rows.join("") + '</div>';
+
+    profileMain.appendChild(card);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", renderMiniProfile);
+  } else {
+    renderMiniProfile();
+  }
+})();
+</script>
+
+</body></html>
