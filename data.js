@@ -109,12 +109,12 @@ window.STICKERBOOK_DATA = {
         "bezopasnost"
       ],
       "avatarSrc": null,
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "27.07.1995",
+      "zodiac": "♌️ Лев",
       "city": null,
       "hobby": null,
-      "interview": null,
-      "fact": null
+      "interview": "https://t.me/c/1831160384/465",
+      "fact": "Я в равной степени состою из воды, сахара и чёрного юмора"
     },
     {
       "id": "banstas",
@@ -142,12 +142,12 @@ window.STICKERBOOK_DATA = {
         "inq"
       ],
       "avatarSrc": "team/Anastasia Ba.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "15.02",
+      "zodiac": "♒️ Водолей",
       "city": null,
-      "hobby": null,
-      "interview": null,
-      "fact": null
+      "hobby": " нумерология, изготовление украшений",
+      "interview": "https://t.me/c/2088446609/435",
+      "fact": "Самым сильным источником энергии является создание украшений наедине с собой и сериальчиком"
     },
     {
       "id": "alex",
@@ -201,12 +201,12 @@ window.STICKERBOOK_DATA = {
         "inq"
       ],
       "avatarSrc": "team/Anastasia Bo.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "20.07.1993",
+      "zodiac": "♋️ Рак",
       "city": null,
       "hobby": null,
-      "interview": null,
-      "fact": null
+      "interview": "https://t.me/c/1831160384/291",
+      "fact": "Раньше у меня было 5 немецких овчарок 🐕"
     },
     {
       "id": "balina",
@@ -256,12 +256,12 @@ window.STICKERBOOK_DATA = {
         "com"
       ],
       "avatarSrc": "team/Anastasya G.jpg",
-      "birthday": null,
-      "zodiac": null,
-      "city": null,
-      "hobby": null,
-      "interview": null,
-      "fact": null
+      "birthday": "12.05",
+      "zodiac": "♉️ Телец",
+      "city": "Тбилиси",
+      "hobby": "рисует картины",
+      "interview": "https://t.me/c/1831160384/368",
+      "fact": "Я рисую почти всю свою жизнь и сотрудничаю с художественными галереями во Франции и США"
     },
     {
       "id": "davtian",
@@ -281,12 +281,12 @@ window.STICKERBOOK_DATA = {
       "tenure": "3years",
       "department": [],
       "avatarSrc": "team/Shagane.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "14.07.1988",
+      "zodiac": "♋️ Рак",
       "city": null,
       "hobby": null,
-      "interview": null,
-      "fact": null
+      "interview": "https://t.me/c/1831160384/531",
+      "fact": "Счастливая-ленивая- красивая😁"
     },
     {
       "id": "jvaleria",
@@ -433,12 +433,12 @@ window.STICKERBOOK_DATA = {
         "control"
       ],
       "avatarSrc": "team/Lera Z.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "21.09.1992",
+      "zodiac": "♍️ Дева",
       "city": null,
       "hobby": null,
-      "interview": null,
-      "fact": null
+      "interview": "https://t.me/c/1831160384/329",
+      "fact": "Меня однажды не пустили в город, где я прожила 25 лет 🚧☢️"
     },
     {
       "id": "sveta",
@@ -574,12 +574,12 @@ window.STICKERBOOK_DATA = {
         "com"
       ],
       "avatarSrc": "team/Yana.jpg",
-      "birthday": null,
-      "zodiac": null,
-      "city": null,
-      "hobby": null,
-      "interview": null,
-      "fact": null
+      "birthday": "06.05.1993",
+      "zodiac": "♉️ Телец",
+      "city": "Витебск",
+      "hobby": "скрапбукинг, настольные игры, книжный блог",
+      "interview": "https://t.me/c/1831160384/882",
+      "fact": " Сладкоежка и соня"
     },
     {
       "id": "galia",
@@ -750,8 +750,8 @@ window.STICKERBOOK_DATA = {
       "tenure": null,
       "department": [],
       "avatarSrc": "team/Valeria R.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "27.09.1999",
+      "zodiac": "♍️ Дева",
       "city": null,
       "hobby": null,
       "interview": null,
@@ -806,12 +806,12 @@ window.STICKERBOOK_DATA = {
       "tenure": "1year",
       "department": [],
       "avatarSrc": "team/Tamara.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "22.09.1987",
+      "zodiac": "♍️ Дева",
       "city": null,
-      "hobby": null,
-      "interview": null,
-      "fact": null
+      "hobby": "вязать, шить, плести макраме, делать вещи для декора",
+      "interview": "https://t.me/c/2088446609/422",
+      "fact": "Пишу стихи"
     },
     {
       "id": "tanastas",
@@ -989,12 +989,12 @@ window.STICKERBOOK_DATA = {
       "tenure": "2years",
       "department": [],
       "avatarSrc": "team/Oksana.jpg",
-      "birthday": null,
-      "zodiac": null,
-      "city": null,
+      "birthday": "14.09.1994",
+      "zodiac": "♍️ Дева",
+      "city": "посёлок Московский",
       "hobby": null,
-      "interview": null,
-      "fact": null
+      "interview": "https://t.me/c/2088446609/24",
+      "fact": "Моя мама — швея, моя тётя — парикмахер, но у меня никогда не было желания ни стричь, ни зашивать. 😅"
     },
     {
       "id": "chalena",
