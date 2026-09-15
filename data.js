@@ -847,12 +847,12 @@ window.STICKERBOOK_DATA = {
         "teach"
       ],
       "avatarSrc": "team/Anastasia T.jpg",
-      "birthday": null,
-      "zodiac": null,
-      "city": null,
-      "hobby": null,
-      "interview": null,
-      "fact": null
+      "birthday": "03.09.1992",
+      "zodiac": "♍️ Дева",
+      "city": "Москва",
+      "hobby": "Танцы",
+      "interview": "https://t.me/c/1831160384/495",
+      "fact": "Пишу сценки"
     },
     {
       "id": "nika",
