@@ -851,7 +851,7 @@ window.STICKERBOOK_DATA = {
       "zodiac": "♍️ Дева",
       "city": "Москва",
       "hobby": "Танцы",
-      "interview": "tg://privatepost?channel=1831160384&post=495",
+      "interview": "https://t.me/c/1831160384/495",
       "fact": "Пишу сценки"
     },
     {

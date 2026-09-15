@@ -42,8 +42,26 @@
       rows.push('<div class="mini-profile-row mini-profile-fact"><span class="mini-profile-icon">✎</span><span><b>Факт обо мне</b><br>' + escProfileText(member.fact) + '</span></div>');
     }
     if (member.interview) {
-      var safeUrl = escProfileText(member.interview);
-      rows.push('<a class="mini-profile-interview" href="' + safeUrl + '" target="_blank" rel="noopener noreferrer"><span>🎤</span><span>Читать интервью</span><span class="mini-profile-arrow">↗</span></a>');
+      var interviewUrl = String(member.interview).trim();
+
+      // Private Telegram post:
+      // https://t.me/c/1831160384/495
+      // becomes:
+      // tg://privatepost?channel=1831160384&post=495
+      var privateTelegramMatch = interviewUrl.match(/^https?:\/\/(?:www\.)?t\.me\/c\/(\d+)\/(\d+)(?:\?.*)?$/i);
+      if (privateTelegramMatch) {
+        interviewUrl = 'tg://privatepost?channel=' +
+          encodeURIComponent(privateTelegramMatch[1]) +
+          '&post=' +
+          encodeURIComponent(privateTelegramMatch[2]);
+      }
+
+      var safeUrl = escProfileText(interviewUrl);
+      var targetAttrs = interviewUrl.indexOf('tg://') === 0
+        ? ''
+        : ' target="_blank" rel="noopener noreferrer"';
+
+      rows.push('<a class="mini-profile-interview" href="' + safeUrl + '"' + targetAttrs + '><span>🎤</span><span>Читать интервью</span><span class="mini-profile-arrow">↗</span></a>');
     }
 
     if (!rows.length) return;
