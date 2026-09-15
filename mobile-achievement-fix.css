@@ -1,0 +1,44 @@
+/* Mobile achievement zoom fix.
+   Move the whole clickable achievement to the viewport center.
+   This avoids clipping by the profile badge strip, questionnaire card,
+   and other layout containers. */
+@media (max-width:480px){
+
+  .achievement.expanded{
+    position:fixed !important;
+    left:50% !important;
+    top:50% !important;
+    width:min(78vw,320px) !important;
+    max-width:320px !important;
+    margin:0 !important;
+    transform:translate(-50%,-50%) !important;
+    z-index:2147483000 !important;
+    isolation:auto !important;
+  }
+
+  .achievement.expanded .achievement-visual,
+  .profile-special .achievement.expanded .achievement-visual{
+    position:relative !important;
+    left:auto !important;
+    top:auto !important;
+    width:100% !important;
+    height:auto !important;
+    max-width:none !important;
+    transform:none !important;
+    transform-origin:center center !important;
+    z-index:auto !important;
+  }
+
+  .achievement.expanded .achievement-title{
+    display:none !important;
+  }
+
+  /* The special tenure/department row must not clip the enlarged badge. */
+  .profile-special{
+    overflow:visible !important;
+  }
+
+  .profile-special .achievement.expanded{
+    z-index:2147483000 !important;
+  }
+}
