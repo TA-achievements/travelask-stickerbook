@@ -358,3 +358,31 @@ button,input{font:inherit}
     color:#262c29;
   }
 }
+
+
+/* Desktop: place the mini profile card to the right of the member info */
+@media(min-width:721px){
+  .profile-top{
+    grid-template-columns:300px minmax(0,1fr);
+    gap:34px;
+  }
+
+  .profile-main{
+    display:grid;
+    grid-template-columns:minmax(260px,1fr) minmax(320px,390px);
+    column-gap:28px;
+    align-items:start;
+  }
+
+  .profile-main > *:not(.mini-profile-card){
+    grid-column:1;
+  }
+
+  .mini-profile-card{
+    grid-column:2;
+    grid-row:1 / span 8;
+    width:100%;
+    margin:0;
+    align-self:start;
+  }
+}
