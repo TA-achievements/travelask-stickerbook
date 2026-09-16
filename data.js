@@ -21,12 +21,12 @@ window.STICKERBOOK_DATA = {
         "bezopasnost"
       ],
       "avatarSrc": "team/Daria A.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "17.10",
+      "zodiac": "♎️ Весы",
       "city": null,
       "hobby": null,
-      "interview": null,
-      "fact": null
+      "interview": "https://t.me/c/1831160384/801",
+      "fact": "Побывала более чем в 20 странах"
     },
     {
       "id": "lena",
@@ -57,12 +57,12 @@ window.STICKERBOOK_DATA = {
         "com"
       ],
       "avatarSrc": "team/Alena.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "09.03",
+      "zodiac": "♓️ Рыбы",
       "city": null,
       "hobby": null,
-      "interview": null,
-      "fact": null
+      "interview": "https://t.me/c/2088446609/476",
+      "fact": "Могу говорить на трёх языках"
     },
     {
       "id": "alla",
@@ -142,9 +142,9 @@ window.STICKERBOOK_DATA = {
         "inq"
       ],
       "avatarSrc": "team/Anastasia Ba.jpg",
-      "birthday": "15.02",
+      "birthday": "15.02.1990",
       "zodiac": "♒️ Водолей",
-      "city": null,
+      "city": "Краснодар",
       "hobby": " нумерология, изготовление украшений",
       "interview": "https://t.me/c/2088446609/435",
       "fact": "Самым сильным источником энергии является создание украшений наедине с собой и сериальчиком"
@@ -153,7 +153,7 @@ window.STICKERBOOK_DATA = {
       "id": "alex",
       "name": "Бобров Алексей",
       "role": "Основатель TravelAsk",
-      "avatar": null,
+      "avatar": "Alex",
       "startDate": null,
       "achievements": [
         "kapitan",
@@ -171,12 +171,12 @@ window.STICKERBOOK_DATA = {
       "department": [
         "osnovatel"
       ],
-      "avatarSrc": null,
-      "birthday": null,
-      "zodiac": null,
+      "avatarSrc": "team/Alex.jpg",
+      "birthday": "14.02",
+      "zodiac": "♒️ Водолей",
       "city": null,
       "hobby": null,
-      "interview": null,
+      "interview": "https://t.me/c/1831160384/708",
       "fact": null
     },
     {
@@ -329,12 +329,12 @@ window.STICKERBOOK_DATA = {
       "tenure": "3years",
       "department": [],
       "avatarSrc": "team/Viktoria.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "22.06",
+      "zodiac": "♋️ Рак",
       "city": null,
       "hobby": null,
-      "interview": null,
-      "fact": null
+      "interview": "https://t.me/c/1831160384/313",
+      "fact": "Родители в 22 года отправили меня в Магадан"
     },
     {
       "id": "elena",
@@ -396,11 +396,11 @@ window.STICKERBOOK_DATA = {
       "tenure": "1year",
       "department": [],
       "avatarSrc": "team/Ksenia.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "25.03",
+      "zodiac": "♈️ Овен",
       "city": null,
-      "hobby": null,
-      "interview": null,
+      "hobby": "компьютерные и настольные игры, вышивка крестиком, конструкторы",
+      "interview": "https://t.me/c/2088446609/443",
       "fact": null
     },
     {
@@ -529,12 +529,12 @@ window.STICKERBOOK_DATA = {
       "tenure": "4yearsSp",
       "department": [],
       "avatarSrc": "team/Angelika.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "01.11",
+      "zodiac": "♏️ Скорпион",
       "city": null,
       "hobby": null,
-      "interview": null,
-      "fact": null
+      "interview": "https://t.me/c/1831160384/305",
+      "fact": "У меня есть 5 татуировок"
     },
     {
       "id": "yana",
@@ -609,12 +609,12 @@ window.STICKERBOOK_DATA = {
       "tenure": "1year",
       "department": [],
       "avatarSrc": "team/Galina.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "13.01!,
+      "zodiac": "♑️ Козерог",
       "city": null,
       "hobby": null,
-      "interview": null,
-      "fact": null
+      "interview": "https://t.me/c/1831160384/284",
+      "fact": "Имею высшее образование по туризму 👩‍🎓"
     },
     {
       "id": "irina",
@@ -648,11 +648,11 @@ window.STICKERBOOK_DATA = {
         "shef"
       ],
       "avatarSrc": "team/Irina.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "05.12",
+      "zodiac": "♐️ Стрелец",
       "city": null,
       "hobby": null,
-      "interview": null,
+      "interview": "https://t.me/c/1831160384/272",
       "fact": null
     },
     {
@@ -778,12 +778,12 @@ window.STICKERBOOK_DATA = {
         "bezopasnost"
       ],
       "avatarSrc": "team/Ilona.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "12.01",
+      "zodiac": "♑️ Козерог",
       "city": null,
       "hobby": null,
-      "interview": null,
-      "fact": null
+      "interview": "https://t.me/c/1831160384/901",
+      "fact": "Каждую неделю я изучаю новые законопроекты, чтобы быть в курсе изменений в законодательстве"
     },
     {
       "id": "tamara",
@@ -884,12 +884,12 @@ window.STICKERBOOK_DATA = {
         "control"
       ],
       "avatarSrc": null,
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "12.04",
+      "zodiac": "♈️ Овен",
       "city": null,
-      "hobby": null,
-      "interview": null,
-      "fact": null
+      "hobby": "Изучаю английский язык с репетитором",
+      "interview": "https://t.me/c/1831160384/453",
+      "fact": "Спокойно не сидится😅"
     },
     {
       "id": "uolga",
@@ -962,11 +962,11 @@ window.STICKERBOOK_DATA = {
       "tenure": "3years",
       "department": [],
       "avatarSrc": "team/Katerina.jpg",
-      "birthday": null,
-      "zodiac": null,
-      "city": null,
+      "birthday": "19.03",
+      "zodiac": "♓️ Рыбы",
+      "city": "Хургада",
       "hobby": null,
-      "interview": null,
+      "interview": "https://t.me/c/1831160384/506",
       "fact": null
     },
     {
