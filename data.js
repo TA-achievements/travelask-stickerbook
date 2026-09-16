@@ -609,7 +609,7 @@ window.STICKERBOOK_DATA = {
       "tenure": "1year",
       "department": [],
       "avatarSrc": "team/Galina.jpg",
-      "birthday": "13.01!,
+      "birthday": "13.01",
       "zodiac": "♑️ Козерог",
       "city": null,
       "hobby": null,
