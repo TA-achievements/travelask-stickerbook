@@ -77,8 +77,8 @@ window.STICKERBOOK_DATA = {
       "tenure": null,
       "department": [],
       "avatarSrc": "team/Alla.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "30.04",
+      "zodiac": "♉️ Телец",
       "city": null,
       "hobby": null,
       "interview": null,
@@ -227,12 +227,12 @@ window.STICKERBOOK_DATA = {
       "tenure": "3years",
       "department": [],
       "avatarSrc": "team/Alina.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "02.02",
+      "zodiac": "♒️ Водолей",
       "city": null,
       "hobby": null,
-      "interview": null,
-      "fact": null
+      "interview": "https://t.me/c/1831160384/816",
+      "fact": "24 на 7 в наушниках"
     },
     {
       "id": "ganastas",
@@ -673,11 +673,11 @@ window.STICKERBOOK_DATA = {
         "bezopasnost"
       ],
       "avatarSrc": "team/Nadezhda.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "23.12",
+      "zodiac": "♑️ Козерог",
       "city": null,
       "hobby": null,
-      "interview": null,
+      "interview": "https://t.me/c/1831160384/654",
       "fact": null
     },
     {
@@ -750,7 +750,7 @@ window.STICKERBOOK_DATA = {
       "tenure": null,
       "department": [],
       "avatarSrc": "team/Valeria R.jpg",
-      "birthday": "27.09.1999",
+      "birthday": "27.08",
       "zodiac": "♍️ Дева",
       "city": null,
       "hobby": null,
