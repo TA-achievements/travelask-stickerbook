@@ -258,7 +258,7 @@ button,input{font:inherit}
   border:1px solid rgba(113,88,61,.20);
   border-radius:4px;
   box-shadow:0 14px 30px rgba(65,45,30,.13);
-  transform:rotate(.7deg);
+  transform:none;
 }
 .mini-profile-tape{
   position:absolute;
@@ -329,7 +329,7 @@ button,input{font:inherit}
     margin:25px auto 5px;
     padding:24px 21px 22px;
     text-align:left;
-    transform:rotate(-.5deg);
+    transform:none;
   }
   .mini-profile-title{
     font-size:22px;
@@ -384,5 +384,16 @@ button,input{font:inherit}
     width:100%;
     margin:0;
     align-self:start;
+  }
+}
+
+
+/* Keep mini-profile text sharp during achievement hover */
+.mini-profile-card{
+  transform:none !important;
+}
+@media(max-width:720px){
+  .mini-profile-card{
+    transform:none !important;
   }
 }
