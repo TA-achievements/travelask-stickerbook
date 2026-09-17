@@ -370,12 +370,12 @@ window.STICKERBOOK_DATA = {
         "bekoffice"
       ],
       "avatarSrc": "team/Elena.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "20.03",
+      "zodiac": "♓️ Рыбы",
       "city": null,
       "hobby": null,
-      "interview": null,
-      "fact": null
+      "interview": "https://t.me/c/1831160384/344",
+      "fact": " Первые деньги в интернете заработала аж 20 лет назад 🎩"
     },
     {
       "id": "ksenia",
@@ -466,12 +466,12 @@ window.STICKERBOOK_DATA = {
       "tenure": null,
       "department": [],
       "avatarSrc": "team/Svetlana.jpg",
-      "birthday": null,
-      "zodiac": null,
-      "city": null,
+      "birthday": "14.11.1996",
+      "zodiac": "♏️ Скорпион",
+      "city": "Курган",
       "hobby": null,
-      "interview": null,
-      "fact": null
+      "interview": "https://t.me/c/2088446609/458",
+      "fact": "Обожаю тру-крайм подкасты"
     },
     {
       "id": "tania",
@@ -496,12 +496,12 @@ window.STICKERBOOK_DATA = {
       "tenure": "1year",
       "department": [],
       "avatarSrc": "team/Tatiana.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "06.04",
+      "zodiac": "♈️ Овен",
       "city": null,
       "hobby": null,
-      "interview": null,
-      "fact": null
+      "interview": "https://t.me/c/2088446609/429",
+      "fact": " Есть 9 татуировок"
     },
     {
       "id": "lika",
@@ -700,12 +700,12 @@ window.STICKERBOOK_DATA = {
       "tenure": "3years",
       "department": [],
       "avatarSrc": "team/Daria.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "13.04",
+      "zodiac": "♈️ Овен",
       "city": null,
       "hobby": null,
-      "interview": null,
-      "fact": null
+      "interview": "https://t.me/c/1831160384/410",
+      "fact": "Прыгала с парашютом. Без инструктора"
     },
     {
       "id": "ralina",
@@ -727,12 +727,12 @@ window.STICKERBOOK_DATA = {
       "tenure": "2years",
       "department": [],
       "avatarSrc": "team/Alina R.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "27.10",
+      "zodiac": "♏️ Скорпион",
       "city": null,
       "hobby": null,
-      "interview": null,
-      "fact": null
+      "interview": "https://t.me/c/2088446609/482",
+      "fact": "Занимаюсь каратэ - это дисциплинирует и дает энергию, освежает мысли"
     },
     {
       "id": "rlera",
@@ -907,8 +907,8 @@ window.STICKERBOOK_DATA = {
       "tenure": null,
       "department": [],
       "avatarSrc": "team/Olga U.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "10.09",
+      "zodiac": "♍️ Дева",
       "city": null,
       "hobby": null,
       "interview": null,
@@ -934,11 +934,11 @@ window.STICKERBOOK_DATA = {
       "tenure": "3years",
       "department": [],
       "avatarSrc": "team/Lilia.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "02.08",
+      "zodiac": "♌️ Лев",
       "city": null,
       "hobby": null,
-      "interview": null,
+      "interview": "https://t.me/c/1831160384/633",
       "fact": null
     },
     {
@@ -1017,12 +1017,12 @@ window.STICKERBOOK_DATA = {
       "tenure": "1year",
       "department": [],
       "avatarSrc": "team/Alena Ch.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "23.03",
+      "zodiac": "♈️ Овен",
       "city": null,
       "hobby": null,
-      "interview": null,
-      "fact": null
+      "interview": "https://t.me/c/2088446609/452",
+      "fact": "Умею предсказывать будущее, используя карты таро. 🔮"
     },
     {
       "id": "liza",
@@ -1052,12 +1052,12 @@ window.STICKERBOOK_DATA = {
       "tenure": "2years",
       "department": [],
       "avatarSrc": "team/Elizaveta.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "20.03",
+      "zodiac": "♓️ Рыбы",
       "city": null,
-      "hobby": null,
-      "interview": null,
-      "fact": null
+      "hobby": "рисую,пою, фотографирую, балуюсь генерацией AI-шных фото",
+      "interview": "https://t.me/c/1831160384/1009",
+      "fact": "Творческая,чувствительная, терпеливая"
     },
     {
       "id": "julia",
@@ -1081,12 +1081,12 @@ window.STICKERBOOK_DATA = {
       "tenure": "2years",
       "department": [],
       "avatarSrc": "team/Julia.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "28.05",
+      "zodiac": "♊️ Близнецы",
       "city": null,
       "hobby": null,
-      "interview": null,
-      "fact": null
+      "interview": "https://t.me/c/2088446609/19",
+      "fact": "Была фанаткой группы На-На и прокатилась на их лимузине по Красной площади"
     },
     {
       "id": "yaolga",
@@ -1112,12 +1112,12 @@ window.STICKERBOOK_DATA = {
       "tenure": "1year",
       "department": [],
       "avatarSrc": "team/Olga Ya.jpg",
-      "birthday": null,
-      "zodiac": null,
+      "birthday": "11.04",
+      "zodiac": "♈️ Овен",
       "city": null,
       "hobby": null,
-      "interview": null,
-      "fact": null
+      "interview": "https://t.me/c/2088446609/468",
+      "fact": "Была участницей известной детской передачи на первом канале"
     }
   ],
   "achievements": [
