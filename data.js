@@ -102,7 +102,8 @@ window.STICKERBOOK_DATA = {
         "BD25",
         "BD26",
         "8march26",
-        "NY26"
+        "NY26",
+        "hobby"
       ],
       "tenure": "3yaersNM",
       "department": [
@@ -391,7 +392,8 @@ window.STICKERBOOK_DATA = {
         "BD25",
         "8march26",
         "NY26",
-        "BD26"
+        "BD26",
+        "hobby"
       ],
       "tenure": "1year",
       "department": [],
@@ -425,7 +427,8 @@ window.STICKERBOOK_DATA = {
         "detektor",
         "BD25",
         "8march26",
-        "NY26"
+        "NY26",
+        "BD26"
       ],
       "tenure": null,
       "department": [
@@ -801,7 +804,8 @@ window.STICKERBOOK_DATA = {
         "BD25",
         "8march26",
         "NY26",
-        "hobby"
+        "hobby",
+        "BD26"
       ],
       "tenure": "1year",
       "department": [],
@@ -902,7 +906,8 @@ window.STICKERBOOK_DATA = {
         "story",
         "slova",
         "nastarte",
-        "BD26"
+        "BD26",
+        "planka"
       ],
       "tenure": null,
       "department": [],
