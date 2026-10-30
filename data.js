@@ -710,34 +710,7 @@ window.STICKERBOOK_DATA = {
       "interview": "https://t.me/c/1831160384/410",
       "fact": "Прыгала с парашютом. Без инструктора"
     },
-    {
-      "id": "ralina",
-      "name": "Рикун Алина",
-      "role": "Модератор",
-      "avatar": "Alina R",
-      "startDate": null,
-      "achievements": [
-        "anketa",
-        "ugadai",
-        "sticker",
-        "santa",
-        "story",
-        "noerrors",
-        "BD25",
-        "8march26",
-        "NY26"
-      ],
-      "tenure": "2years",
-      "department": [],
-      "avatarSrc": "team/Alina R.jpg",
-      "birthday": "27.10",
-      "zodiac": "♏️ Скорпион",
-      "city": null,
-      "hobby": null,
-      "interview": "https://t.me/c/2088446609/482",
-      "fact": "Занимаюсь каратэ - это дисциплинирует и дает энергию, освежает мысли"
-    },
-    {
+        {
       "id": "rlera",
       "name": "Романова Валерия",
       "role": "Модератор",
