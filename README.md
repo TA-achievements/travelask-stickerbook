@@ -20,6 +20,7 @@
 - `achievements/departments/` — отделы
 - `achievements/other/` — прочее
 
+
 ## Как менять фото участника
 
 1. Открой папку `team`.
