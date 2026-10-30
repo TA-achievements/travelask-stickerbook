@@ -16,7 +16,7 @@
 - `achievements/activity/` — активность
 - `achievements/individual/` — индивидуальные
 - `achievements/holidays/` — праздники
-- `achievements/tenure/` — стаж
+- `achievements/tenure/` — стаж 
 - `achievements/departments/` — отделы
 - `achievements/other/` — прочее
 
