@@ -138,7 +138,7 @@ window.STICKERBOOK_DATA = {
         "slova",
         "hobby"
       ],
-      "tenure": "1yearNM",
+      "tenure": "2yearsNM",
       "department": [
         "inq"
       ],
@@ -297,7 +297,8 @@ window.STICKERBOOK_DATA = {
       "startDate": "2026-05-30",
       "achievements": [
         "pochti",
-        "sticker"
+        "sticker",
+        "noerrors"
       ],
       "tenure": null,
       "department": [],
@@ -325,7 +326,8 @@ window.STICKERBOOK_DATA = {
         "BD25",
         "8march26",
         "NY26",
-        "BD26"
+        "BD26",
+        "chetcko"
       ],
       "tenure": "3years",
       "department": [],
@@ -393,7 +395,9 @@ window.STICKERBOOK_DATA = {
         "8march26",
         "NY26",
         "BD26",
-        "hobby"
+        "hobby",
+        "hal_det",
+        "hal_artf"
       ],
       "tenure": "1year",
       "department": [],
@@ -428,7 +432,8 @@ window.STICKERBOOK_DATA = {
         "BD25",
         "8march26",
         "NY26",
-        "BD26"
+        "BD26",
+        "hal_artf"
       ],
       "tenure": null,
       "department": [
@@ -448,7 +453,7 @@ window.STICKERBOOK_DATA = {
       "name": "Кобец Светлана",
       "role": "Модератор",
       "avatar": "Svetlana",
-      "startDate": "2025-10-17",
+      "startDate": null,
       "achievements": [
         "ugadai",
         "sticker",
@@ -464,9 +469,12 @@ window.STICKERBOOK_DATA = {
         "masterslov",
         "pochti",
         "8march26",
-        "NY26"
+        "NY26",
+        "hal_artf",
+        "darkpro",
+        "Bonus"
       ],
-      "tenure": null,
+      "tenure": "1year",
       "department": [],
       "avatarSrc": "team/Svetlana.jpg",
       "birthday": "14.11.1996",
@@ -494,7 +502,8 @@ window.STICKERBOOK_DATA = {
         "BD25",
         "8march26",
         "NY26",
-        "BD26"
+        "BD26",
+        "hal_artf"
       ],
       "tenure": "1year",
       "department": [],
@@ -527,7 +536,9 @@ window.STICKERBOOK_DATA = {
         "chetcko",
         "BD25",
         "8march26",
-        "NY26"
+        "NY26",
+        "hal_det",
+        "hal_artf"
       ],
       "tenure": "4yearsSp",
       "department": [],
@@ -570,7 +581,9 @@ window.STICKERBOOK_DATA = {
         "BD25",
         "8march26",
         "NY26",
-        "BD26"
+        "BD26",
+        "hal_artf",
+        "darkpro"
       ],
       "tenure": "2yearsNM",
       "department": [
@@ -607,7 +620,8 @@ window.STICKERBOOK_DATA = {
         "NY26",
         "BD26",
         "stabilno",
-        "noerrors"
+        "noerrors",
+        "hal_artf"
       ],
       "tenure": "1year",
       "department": [],
@@ -698,7 +712,8 @@ window.STICKERBOOK_DATA = {
         "8march26",
         "NY26",
         "BD26",
-        "hobby"
+        "hobby",
+        "noerrors"
       ],
       "tenure": "3years",
       "department": [],
@@ -721,7 +736,8 @@ window.STICKERBOOK_DATA = {
         "sticker",
         "story",
         "8march26",
-        "BD26"
+        "BD26",
+        "planka"
       ],
       "tenure": null,
       "department": [],
@@ -778,7 +794,9 @@ window.STICKERBOOK_DATA = {
         "8march26",
         "NY26",
         "hobby",
-        "BD26"
+        "BD26",
+        "hal_artf",
+        "noerrors"
       ],
       "tenure": "1year",
       "department": [],
@@ -935,7 +953,9 @@ window.STICKERBOOK_DATA = {
         "santa",
         "nastavnik",
         "stabilno",
-        "chetcko"
+        "chetcko",
+        "hal_det",
+        "hal_artf"
       ],
       "tenure": "3years",
       "department": [],
@@ -1025,7 +1045,9 @@ window.STICKERBOOK_DATA = {
         "8march26",
         "NY26",
         "BD26",
-        "hobby"
+        "hobby",
+        "hal_det",
+        "hal_artf"
       ],
       "tenure": "2years",
       "department": [],
@@ -1054,7 +1076,8 @@ window.STICKERBOOK_DATA = {
         "BD25",
         "8march26",
         "NY26",
-        "BD26"
+        "BD26",
+        "hal_det"
       ],
       "tenure": "2years",
       "department": [],
@@ -1085,9 +1108,10 @@ window.STICKERBOOK_DATA = {
         "BD25",
         "8march26",
         "NY26",
-        "BD26"
+        "BD26",
+        "chetcko"
       ],
-      "tenure": "1year",
+      "tenure": "2years",
       "department": [],
       "avatarSrc": "team/Olga Ya.jpg",
       "birthday": "11.04",
@@ -1834,6 +1858,30 @@ window.STICKERBOOK_DATA = {
       "category": "Активность",
       "file": "effect_domino",
       "src": "achievements/activity/effect_domino.png"
+    },
+    {
+      "id": "hal_det",
+      "name": "Призрачный детектив",
+      "type": "Обычная",
+      "category": "Активность",
+      "file": "hal_det",
+      "src": "achievements/activity/hal_det.jpg"
+    },
+    {
+      "id": "hal_artf",
+      "name": "Заклинатель артефактов",
+      "type": "Обычная",
+      "category": "Активность",
+      "file": "hal_artf",
+      "src": "achievements/activity/hal_artf.jpg"
+    },
+    {
+      "id": "darkpro",
+      "name": "Темный профайлер",
+      "type": "Обычная",
+      "category": "Активность",
+      "file": "darkpro",
+      "src": "achievements/activity/darkpro.jpg"
     },
     {
       "id": "chelovechnee",
