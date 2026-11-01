@@ -14,7 +14,8 @@ window.STICKERBOOK_DATA = {
         "vkladki",
         "BD25",
         "NY26",
-        "8march26"
+        "8march26",
+        "BD26"
       ],
       "tenure": "3yaersNM",
       "department": [
@@ -327,7 +328,8 @@ window.STICKERBOOK_DATA = {
         "8march26",
         "NY26",
         "BD26",
-        "chetcko"
+        "chetcko",
+        "hobby"
       ],
       "tenure": "3years",
       "department": [],
@@ -472,7 +474,8 @@ window.STICKERBOOK_DATA = {
         "NY26",
         "hal_artf",
         "darkpro",
-        "Bonus"
+        "Bonus",
+        "hobby"
       ],
       "tenure": "1year",
       "department": [],
@@ -538,7 +541,8 @@ window.STICKERBOOK_DATA = {
         "8march26",
         "NY26",
         "hal_det",
-        "hal_artf"
+        "hal_artf",
+        "BD26"
       ],
       "tenure": "4yearsSp",
       "department": [],
@@ -835,7 +839,8 @@ window.STICKERBOOK_DATA = {
         "BD25",
         "8march26",
         "NY26",
-        "BD26"
+        "BD26",
+        "hobby"
       ],
       "tenure": "3yaersNM",
       "department": [
@@ -898,7 +903,8 @@ window.STICKERBOOK_DATA = {
         "slova",
         "nastarte",
         "BD26",
-        "planka"
+        "planka",
+        "hobby"
       ],
       "tenure": null,
       "department": [],
