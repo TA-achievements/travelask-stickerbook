@@ -475,7 +475,8 @@ window.STICKERBOOK_DATA = {
         "hal_artf",
         "darkpro",
         "Bonus",
-        "hobby"
+        "hobby",
+        "therapy"
       ],
       "tenure": "1year",
       "department": [],
@@ -587,7 +588,8 @@ window.STICKERBOOK_DATA = {
         "NY26",
         "BD26",
         "hal_artf",
-        "darkpro"
+        "darkpro",
+        "therapy"
       ],
       "tenure": "2yearsNM",
       "department": [
@@ -1888,6 +1890,14 @@ window.STICKERBOOK_DATA = {
       "category": "Активность",
       "file": "darkpro",
       "src": "achievements/activity/darkpro.jpg"
+    },
+    {
+      "id": "therapy",
+      "name": "Терапия для души",
+      "type": "Обычная",
+      "category": "Активность",
+      "file": "therapy",
+      "src": "achievements/activity/therapy.jpg"
     },
     {
       "id": "chelovechnee",
