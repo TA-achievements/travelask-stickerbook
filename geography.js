@@ -64,6 +64,64 @@ function setZoom(value, from, to = from) {
   viewport.scrollTop = mapY * next - target.y;
 }
 
+const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+let focusFrame;
+
+function cancelCityFocus() {
+  if (focusFrame !== undefined) cancelAnimationFrame(focusFrame);
+  focusFrame = undefined;
+}
+
+function focusCity(place, marker) {
+  cancelCityFocus();
+  const bounds = viewport.getBoundingClientRect();
+  if (bounds.top < 0 || bounds.bottom > window.innerHeight) {
+    viewport.scrollIntoView({ block: "center", behavior: reducedMotion.matches ? "instant" : "smooth" });
+  }
+
+  const halfWidth = viewport.clientWidth / 2;
+  const halfHeight = viewport.clientHeight / 2;
+  const mapWidth = world.getBoundingClientRect().width / scale;
+  const startScale = scale;
+  const endScale = Math.max(scale, 8);
+  const startX = viewport.scrollLeft;
+  const startY = viewport.scrollTop;
+  const cityX = mapWidth * (place.lon + 180) / 360;
+  const cityY = mapWidth * (90 - place.lat) / 360;
+
+  function move(progress) {
+    const next = startScale + (endScale - startScale) * progress;
+    setZoom(next);
+    viewport.scrollLeft = startX + (cityX * endScale - halfWidth - startX) * progress;
+    viewport.scrollTop = startY + (cityY * endScale - halfHeight + 18 - startY) * progress;
+  }
+
+  function highlight() {
+    if (reducedMotion.matches) return;
+    marker.animate([
+      { filter: "drop-shadow(0 0 2px #e5b14f)" },
+      { filter: "drop-shadow(0 0 8px #e5b14f)" },
+      { filter: "drop-shadow(0 0 2px #e5b14f)" },
+      { filter: "none" },
+    ], { duration: 1150 });
+  }
+
+  if (reducedMotion.matches) {
+    move(1);
+    return;
+  }
+
+  let started;
+  function frame(now) {
+    started ??= now;
+    const progress = Math.min((now - started) / 600, 1);
+    move(1 - (1 - progress) ** 3);
+    focusFrame = progress < 1 ? requestAnimationFrame(frame) : undefined;
+    if (progress === 1) highlight();
+  }
+  focusFrame = requestAnimationFrame(frame);
+}
+
 function showPlace(place, label, marker, placeButton) {
   selectedPlaceButton?.setAttribute("aria-pressed", "false");
   placeButton.setAttribute("aria-pressed", "true");
@@ -116,6 +174,7 @@ function pinchGeometry() {
 
 viewport.addEventListener("pointerdown", event => {
   if (event.button !== 0 || pointers.size >= 2) return;
+  cancelCityFocus();
   if (!pointers.size) dragged = false;
   const point = mapPoint(event);
   pointers.set(event.pointerId, { ...point, start: point });
@@ -170,14 +229,24 @@ viewport.addEventListener("click", event => {
 viewport.addEventListener("wheel", event => {
   if (!event.deltaY) return;
   event.preventDefault();
+  cancelCityFocus();
   const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? viewport.clientHeight : 1;
   const delta = Math.max(-400, Math.min(400, event.deltaY * unit));
   setZoom(scale * Math.exp(-delta * .0025), mapPoint(event));
 }, { passive: false });
 
-zoomIn.addEventListener("click", () => setZoom(scale * 2));
-zoomOut.addEventListener("click", () => setZoom(scale / 2));
-zoomReset.addEventListener("click", () => setZoom(1));
+zoomIn.addEventListener("click", () => {
+  cancelCityFocus();
+  setZoom(scale * 2);
+});
+zoomOut.addEventListener("click", () => {
+  cancelCityFocus();
+  setZoom(scale / 2);
+});
+zoomReset.addEventListener("click", () => {
+  cancelCityFocus();
+  setZoom(1);
+});
 
 const preview = document.querySelector("#geoPreview");
 const previewPhotos = preview.querySelector(".geo-preview-photos");
@@ -276,6 +345,7 @@ for (const place of window.STICKERBOOK_GEOGRAPHY) {
   placeButton.addEventListener("click", () => {
     closePreview();
     selectPlace();
+    focusCity(place, marker);
   });
   world.append(marker);
   placeList.append(placeButton);
