@@ -250,8 +250,8 @@ zoomReset.addEventListener("click", () => {
 
 const preview = document.querySelector("#geoPreview");
 const previewPhotos = preview.querySelector(".geo-preview-photos");
-const previewLabel = preview.querySelector(".geo-preview-label");
 let previewMarker;
+let previewAnimation;
 
 function createPhoto(name) {
   const photo = document.createElement("span");
@@ -278,6 +278,7 @@ function createPhoto(name) {
 
 function closePreview(restoreFocus = false) {
   if (!previewMarker) return;
+  previewAnimation?.cancel();
   preview.hidden = true;
   previewMarker.setAttribute("aria-expanded", "false");
   if (restoreFocus) previewMarker.focus({ preventScroll: true });
@@ -291,11 +292,34 @@ function togglePreview(marker, label, members, keyboard) {
   }
   closePreview();
   previewMarker = marker;
-  previewPhotos.replaceChildren(...members.slice(0, 2).map(createPhoto));
-  previewLabel.textContent = label;
+  previewPhotos.replaceChildren(...members.slice(0, 2).map(name => {
+    const card = document.createElement("span");
+    card.className = "geo-polaroid";
+    const caption = document.createElement("span");
+    caption.className = "geo-polaroid-caption";
+    const person = document.createElement("strong");
+    person.textContent = name;
+    const city = document.createElement("span");
+    city.textContent = label;
+    caption.append(person, city);
+    card.append(createPhoto(name), caption);
+    return card;
+  }));
+  preview.setAttribute("aria-label", `Закрыть фото: ${members.slice(0, 2).join(", ")} — ${label}`);
   preview.toggleAttribute("data-pair", members.length > 1);
   preview.hidden = false;
   marker.setAttribute("aria-expanded", "true");
+  if (!reducedMotion.matches) {
+    const source = marker.firstElementChild.getBoundingClientRect();
+    const target = preview.getBoundingClientRect();
+    const x = source.left + source.width / 2 - target.left - target.width / 2;
+    const y = source.top + source.height / 2 - target.top - target.height / 2;
+    const startScale = Math.min(source.width / target.width, source.height / target.height);
+    previewAnimation = preview.animate([
+      { transform: `translate(${x}px, ${y}px) scale(${startScale}) rotate(-6deg)` },
+      { transform: "none" },
+    ], { duration: 350, easing: "cubic-bezier(.2,.75,.25,1)" });
+  }
   if (keyboard) preview.focus({ preventScroll: true });
 }
 
