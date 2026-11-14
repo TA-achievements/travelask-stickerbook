@@ -12,11 +12,7 @@ let zoomIndex = 0;
 let selectedMarker;
 let selectedPlaceButton;
 
-const placeList = document.createElement("div");
-placeList.className = "geo-controls";
-placeList.style.marginTop = "12px";
-placeList.setAttribute("role", "group");
-placeList.setAttribute("aria-label", "Города и страны команды");
+const placeList = document.querySelector("#placeList");
 
 function setZoom(index) {
   const previous = zoomLevels[zoomIndex];
@@ -42,7 +38,7 @@ function showPlace(place, label, marker, placeButton) {
   marker.setAttribute("aria-pressed", "true");
   selectedMarker = marker;
 
-  const heading = document.createElement("h2");
+  const heading = document.createElement("h3");
   heading.textContent = label;
   const description = document.createElement("p");
   description.textContent = place.city ? place.country : "Город не указан";
@@ -81,15 +77,22 @@ for (const place of window.STICKERBOOK_GEOGRAPHY) {
   marker.className = "geo-marker";
   marker.style.left = `${(lon + 180) / 3.6}%`;
   marker.style.top = `${(90 - lat) / 1.8}%`;
-  marker.textContent = members.length;
+  const markerCount = document.createElement("span");
+  markerCount.textContent = members.length;
+  marker.append(markerCount);
   marker.title = label;
   marker.setAttribute("aria-label", `${label} · ${members.length}`);
   marker.setAttribute("aria-controls", "placeDetails");
   marker.setAttribute("aria-pressed", "false");
   const placeButton = document.createElement("button");
   placeButton.type = "button";
-  placeButton.className = "pill";
-  placeButton.textContent = label;
+  placeButton.className = "geo-place";
+  const placeName = document.createElement("span");
+  placeName.textContent = label;
+  const placeCount = document.createElement("span");
+  placeCount.className = "geo-count";
+  placeCount.textContent = members.length;
+  placeButton.append(placeName, placeCount);
   placeButton.setAttribute("aria-controls", "placeDetails");
   placeButton.setAttribute("aria-pressed", "false");
 
@@ -101,6 +104,5 @@ for (const place of window.STICKERBOOK_GEOGRAPHY) {
 }
 
 if (world.childElementCount) {
-  details.before(placeList);
-  details.firstElementChild.textContent = "Выбери отметку на карте или город в списке.";
+  details.firstElementChild.textContent = "Здесь откроется карточка выбранного города.";
 }

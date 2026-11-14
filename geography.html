@@ -8,32 +8,66 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="darkfix.css?v=2">
   <style>
-    .geo-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-    .geo-controls button { color: #292720; cursor: pointer; padding: 7px 14px; }
-    .geo-controls button:disabled { opacity: .65; cursor: default; }
+    .atlas { color: #3d4436; }
+    .atlas-title {
+      margin: 28px 0 8px; font: 700 clamp(34px, 6vw, 68px)/1.03 Georgia, serif;
+      letter-spacing: -.045em; color: var(--ink);
+    }
+    .atlas-intro { margin: 0 0 24px; color: var(--ink); }
+    .atlas-spread {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 295px);
+      align-items: start; gap: 22px;
+    }
+    .atlas-map, .atlas-index {
+      padding: clamp(12px, 2vw, 22px); background: #fffdf3;
+      border: 1px solid #d9d1b7; border-radius: 5px; box-shadow: var(--shadow);
+    }
+    .geo-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .geo-controls button {
+      min-height: 42px; border: 1px solid #d8d2bb; border-radius: 9px;
+      color: #343e32; background: #f5f0e2; cursor: pointer; padding: 6px 13px;
+    }
+    .geo-controls button:disabled { opacity: .55; cursor: default; }
     .geo-viewport {
-      overflow: auto; background: #e6eff6; border: 1px solid #a7bac4;
-      border-radius: 16px; aspect-ratio: 2; box-shadow: var(--shadow);
+      overflow: auto; background: #e5ebdf; border: 1px solid #adb9a4;
+      border-radius: 3px; aspect-ratio: 2;
     }
     .geo-world {
       position: relative; width: 100%; aspect-ratio: 2;
-      background: url("geography-world.svg") center / 100% 100% no-repeat;
+      background: url("geography-world.svg?v=2") center / 100% 100% no-repeat,
+        repeating-linear-gradient(90deg, #657e6c22 0 1px, transparent 1px calc(100% / 12)),
+        repeating-linear-gradient(0deg, #657e6c22 0 1px, transparent 1px calc(100% / 6));
     }
+    .atlas-credit { margin: 10px 0 0; color: #596354; font-size: 11px; }
     .geo-marker {
-      position: absolute; transform: translate(-50%, -50%);
-      min-width: 34px; min-height: 34px; padding: 0 5px; border: 2px solid white;
-      border-radius: 999px; background: #644c80; color: white; cursor: pointer;
-      box-shadow: 0 2px 6px #0005; font-size: 13px; font-weight: 800;
+      position: absolute; transform: translate(-50%, -78%) rotate(-45deg);
+      display: grid; place-items: center; width: 25px; height: 25px; padding: 0;
+      border: 2px solid #fffdf3; border-radius: 50% 50% 50% 3px;
+      background: #9b5147; color: #fff; cursor: pointer;
+      box-shadow: 0 2px 5px #30281e55; font-size: 11px; font-weight: 800;
     }
-    .geo-marker[aria-pressed="true"] { background: #3c2853; z-index: 1; }
-    .geo-details { margin-top: 16px; padding: 16px; border-radius: 12px; background: #fffdf8; color: #292720; }
-    .geo-details h2, .geo-details p { margin: 0; }
-    .geo-details ul { margin-bottom: 0; }
-    .geo-details a { text-decoration: underline; }
+    .geo-marker span { transform: rotate(45deg); }
+    .geo-marker:focus-visible, .geo-marker[aria-pressed="true"] { background: #385b44; z-index: 2; }
+    .atlas-index h2 { margin: 0 0 14px; font: 700 25px/1.1 Georgia, serif; }
+    .geo-place-list { display: grid; gap: 3px; }
+    .geo-place {
+      display: flex; justify-content: space-between; gap: 8px; align-items: center;
+      text-align: left; min-height: 40px; padding: 6px 10px;
+      border: 1px solid transparent; border-bottom-color: #e8e1cd; border-radius: 5px;
+      color: #394434; background: transparent; cursor: pointer;
+    }
+    .geo-place:hover, .geo-place[aria-pressed="true"] { background: #e4ebda; border-color: #c4d1b8; }
+    .geo-count { flex: none; color: #56654e; font-size: 12px; }
+    #placeDetails { margin-top: 16px; padding: 14px; border-left: 3px solid #a1554c; background: #f3eadd; }
+    #placeDetails h3 { margin: 0 0 3px; font: 700 23px/1.1 Georgia, serif; }
+    #placeDetails p { margin: 0; font-size: 14px; }
+    #placeDetails ul { margin: 9px 0 0; padding-left: 18px; }
+    #placeDetails a { text-decoration: underline; text-underline-offset: 3px; }
+    @media (max-width: 760px) { .atlas-spread { grid-template-columns: 1fr; gap: 14px; } }
   </style>
   <script defer src="data.js"></script>
-  <script defer src="geography-data.js"></script>
-  <script defer src="geography.js"></script>
+  <script defer src="geography-data.js?v=2"></script>
+  <script defer src="geography.js?v=2"></script>
 </head>
 <body>
   <main class="page">
@@ -46,19 +80,31 @@
         <a class="pill mint" href="geography.html" aria-current="page">География команды</a>
       </nav>
     </header>
-    <h1 class="section-label">География команды</h1>
-    <div class="geo-controls">
-      <button class="pill" type="button" id="zoomIn" aria-label="Приблизить карту">+</button>
-      <button class="pill" type="button" id="zoomOut" aria-label="Отдалить карту" disabled>−</button>
-      <button class="pill" type="button" id="zoomReset" disabled>Весь мир</button>
+    <div class="atlas">
+      <h1 class="atlas-title">География команды</h1>
+      <p class="atlas-intro">Выбери отметку на карте или город в списке.</p>
+      <div class="atlas-spread">
+        <section class="atlas-map" aria-label="Карта мира">
+          <div class="geo-controls">
+            <button type="button" id="zoomOut" aria-label="Отдалить карту" disabled>−</button>
+            <button type="button" id="zoomIn" aria-label="Приблизить карту">+</button>
+            <button type="button" id="zoomReset" disabled>Весь мир</button>
+          </div>
+          <div class="geo-viewport" id="mapViewport" role="region" aria-label="Прокручиваемая карта мира" tabindex="0">
+            <div class="geo-world" id="worldMap"></div>
+          </div>
+          <p class="atlas-credit">Карта на основе Natural Earth</p>
+        </section>
+        <section class="atlas-index" aria-labelledby="cityIndexTitle">
+          <h2 id="cityIndexTitle">Города команды</h2>
+          <div id="placeList" class="geo-place-list"></div>
+          <div id="placeDetails" aria-live="polite">
+            <p>Здесь появятся города и страны нашей команды.</p>
+          </div>
+        </section>
+      </div>
     </div>
-    <div class="geo-viewport" id="mapViewport" role="region" aria-label="Карта мира. При увеличении прокручивается" tabindex="0">
-      <div class="geo-world" id="worldMap"></div>
-    </div>
-    <section class="geo-details" id="placeDetails" aria-live="polite">
-      <p>Здесь появятся города и страны нашей команды.</p>
-    </section>
-    <footer class="footer"><span>TravelAsk ♡</span><span>Карта на основе Natural Earth</span></footer>
+    <footer class="footer"><span>TravelAsk ♡</span></footer>
   </main>
 </body>
 </html>
