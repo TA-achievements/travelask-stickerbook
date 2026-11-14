@@ -45,6 +45,7 @@ function setZoom(index) {
   const centerY = (viewport.scrollTop + halfHeight) / previous;
 
   zoomIndex = index;
+  viewport.toggleAttribute("data-zoomed", index > 0);
   world.style.width = `${next * 100}%`;
   viewport.scrollLeft = centerX * next - halfWidth;
   viewport.scrollTop = centerY * next - halfHeight;
@@ -84,6 +85,54 @@ function showPlace(place, label, marker, placeButton) {
   details.replaceChildren(heading, description, names);
 }
 
+// Touch scrolling stays native. Mouse dragging scrolls the same viewport.
+let mouseDrag;
+let dragged = false;
+
+viewport.addEventListener("pointerdown", event => {
+  dragged = false;
+  if (event.pointerType !== "mouse" || event.button !== 0 || zoomIndex === 0) return;
+
+  mouseDrag = {
+    id: event.pointerId,
+    x: event.clientX,
+    y: event.clientY,
+    left: viewport.scrollLeft,
+    top: viewport.scrollTop,
+  };
+});
+
+window.addEventListener("pointermove", event => {
+  if (mouseDrag?.id !== event.pointerId) return;
+
+  const dx = event.clientX - mouseDrag.x;
+  const dy = event.clientY - mouseDrag.y;
+  if (!dragged && Math.hypot(dx, dy) < 5) return;
+  if (!dragged) {
+    viewport.setPointerCapture(event.pointerId);
+    viewport.setAttribute("data-dragging", "");
+    dragged = true;
+  }
+
+  viewport.scrollLeft = mouseDrag.left - dx;
+  viewport.scrollTop = mouseDrag.top - dy;
+});
+
+function endMouseDrag(event) {
+  if (mouseDrag?.id !== event.pointerId) return;
+  mouseDrag = undefined;
+  viewport.removeAttribute("data-dragging");
+}
+
+window.addEventListener("pointerup", endMouseDrag);
+window.addEventListener("pointercancel", endMouseDrag);
+viewport.addEventListener("lostpointercapture", endMouseDrag);
+viewport.addEventListener("click", event => {
+  if (!dragged || event.detail === 0) return;
+  event.stopPropagation();
+  dragged = false;
+}, true);
+
 zoomIn.addEventListener("click", () => setZoom(zoomIndex + 1));
 zoomOut.addEventListener("click", () => setZoom(zoomIndex - 1));
 zoomReset.addEventListener("click", () => setZoom(0));
@@ -114,6 +163,7 @@ for (const place of window.STICKERBOOK_GEOGRAPHY) {
     if (avatarSrc) {
       const image = document.createElement("img");
       image.alt = "";
+      image.draggable = false;
       image.decoding = "async";
       image.addEventListener("error", () => image.remove(), { once: true });
       image.src = avatarSrc;
