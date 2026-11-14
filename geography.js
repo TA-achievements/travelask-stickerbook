@@ -14,6 +14,28 @@ let selectedPlaceButton;
 
 const placeList = document.querySelector("#placeList");
 
+const countryLayer = document.querySelector("#countryLabels");
+const countryLabels = [...countryLayer.children];
+
+function layoutCountryLabels() {
+  countryLayer.hidden = false;
+  for (const label of countryLabels) label.hidden = false;
+
+  const mapBounds = world.getBoundingClientRect();
+  const occupied = [...world.querySelectorAll(".geo-marker")].map(marker => marker.getBoundingClientRect());
+  const labelBounds = countryLabels.map(label => label.getBoundingClientRect());
+  for (const [index, box] of labelBounds.entries()) {
+    const fits = box.left >= mapBounds.left && box.right <= mapBounds.right &&
+      box.top >= mapBounds.top && box.bottom <= mapBounds.bottom;
+    const overlaps = occupied.some(other =>
+      box.left < other.right + 5 && box.right > other.left - 5 &&
+      box.top < other.bottom + 3 && box.bottom > other.top - 3
+    );
+    countryLabels[index].hidden = !fits || overlaps;
+    if (!countryLabels[index].hidden) occupied.push(box);
+  }
+}
+
 function setZoom(index) {
   const previous = zoomLevels[zoomIndex];
   const next = zoomLevels[index];
@@ -28,6 +50,7 @@ function setZoom(index) {
   viewport.scrollTop = centerY * next - halfHeight;
   zoomIn.disabled = index === zoomLevels.length - 1;
   zoomOut.disabled = zoomReset.disabled = index === 0;
+  layoutCountryLabels();
 }
 
 function showPlace(place, label, marker, placeButton) {
@@ -103,6 +126,9 @@ for (const place of window.STICKERBOOK_GEOGRAPHY) {
   placeList.append(placeButton);
 }
 
-if (world.childElementCount) {
+layoutCountryLabels();
+new ResizeObserver(layoutCountryLabels).observe(viewport);
+
+if (placeList.childElementCount) {
   details.firstElementChild.textContent = "Здесь откроется карточка выбранного города.";
 }
