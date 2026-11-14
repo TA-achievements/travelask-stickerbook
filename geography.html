@@ -45,7 +45,7 @@
       color: #505b48; text-shadow: 0 1px 2px #eef0e4;
     }
     .geo-viewport {
-      container-type: inline-size; scrollbar-width: none; user-select: none;
+      container-type: inline-size; scrollbar-width: none; user-select: none; touch-action: none;
     }
     .geo-viewport::-webkit-scrollbar { display: none; }
     .geo-viewport[data-zoomed] { cursor: grab; }
@@ -108,7 +108,7 @@
   </style>
   <script defer src="data.js"></script>
   <script defer src="geography-data.js?v=2"></script>
-  <script defer src="geography.js?v=5"></script>
+  <script defer src="geography.js?v=6"></script>
 </head>
 <body>
   <main class="page">

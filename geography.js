@@ -7,8 +7,9 @@ const zoomReset = document.querySelector("#zoomReset");
 const teamByName = new Map(
   (window.STICKERBOOK_DATA?.team ?? []).map(member => [member.name.trim(), member])
 );
-const zoomLevels = [1, 2, 4, 8, 16];
-let zoomIndex = 0;
+const maxScale = 16;
+let scale = 1;
+let labelsFrame;
 let selectedMarker;
 let selectedPlaceButton;
 
@@ -36,22 +37,31 @@ function layoutCountryLabels() {
   }
 }
 
-function setZoom(index) {
-  const previous = zoomLevels[zoomIndex];
-  const next = zoomLevels[index];
-  const halfWidth = viewport.clientWidth / 2;
-  const halfHeight = viewport.clientHeight / 2;
-  const centerX = (viewport.scrollLeft + halfWidth) / previous;
-  const centerY = (viewport.scrollTop + halfHeight) / previous;
+function scheduleCountryLabels() {
+  if (labelsFrame !== undefined) return;
+  labelsFrame = requestAnimationFrame(() => {
+    labelsFrame = undefined;
+    layoutCountryLabels();
+  });
+}
 
-  zoomIndex = index;
-  viewport.toggleAttribute("data-zoomed", index > 0);
-  world.style.width = `${next * 100}%`;
-  viewport.scrollLeft = centerX * next - halfWidth;
-  viewport.scrollTop = centerY * next - halfHeight;
-  zoomIn.disabled = index === zoomLevels.length - 1;
-  zoomOut.disabled = zoomReset.disabled = index === 0;
-  layoutCountryLabels();
+function setZoom(value, from, to = from) {
+  const next = Math.min(maxScale, Math.max(1, value));
+  const anchor = from ?? { x: viewport.clientWidth / 2, y: viewport.clientHeight / 2 };
+  const target = to ?? anchor;
+  const mapX = (viewport.scrollLeft + anchor.x) / scale;
+  const mapY = (viewport.scrollTop + anchor.y) / scale;
+
+  if (scale !== next) {
+    scale = next;
+    world.style.width = `${next * 100}%`;
+    viewport.toggleAttribute("data-zoomed", next > 1);
+    zoomIn.disabled = next === maxScale;
+    zoomOut.disabled = zoomReset.disabled = next === 1;
+    scheduleCountryLabels();
+  }
+  viewport.scrollLeft = mapX * next - target.x;
+  viewport.scrollTop = mapY * next - target.y;
 }
 
 function showPlace(place, label, marker, placeButton) {
@@ -85,57 +95,89 @@ function showPlace(place, label, marker, placeButton) {
   details.replaceChildren(heading, description, names);
 }
 
-// Touch scrolling stays native. Mouse dragging scrolls the same viewport.
-let mouseDrag;
+const pointers = new Map();
 let dragged = false;
 
-viewport.addEventListener("pointerdown", event => {
-  dragged = false;
-  if (event.pointerType !== "mouse" || event.button !== 0 || zoomIndex === 0) return;
-
-  mouseDrag = {
-    id: event.pointerId,
-    x: event.clientX,
-    y: event.clientY,
-    left: viewport.scrollLeft,
-    top: viewport.scrollTop,
+function mapPoint(event) {
+  const bounds = viewport.getBoundingClientRect();
+  return {
+    x: event.clientX - bounds.left - viewport.clientLeft,
+    y: event.clientY - bounds.top - viewport.clientTop,
   };
+}
+
+function pinchGeometry() {
+  const [first, second] = pointers.values();
+  return {
+    center: { x: (first.x + second.x) / 2, y: (first.y + second.y) / 2 },
+    distance: Math.max(1, Math.hypot(first.x - second.x, first.y - second.y)),
+  };
+}
+
+viewport.addEventListener("pointerdown", event => {
+  if (event.button !== 0 || pointers.size >= 2) return;
+  if (!pointers.size) dragged = false;
+  const point = mapPoint(event);
+  pointers.set(event.pointerId, { ...point, start: point });
+  if (pointers.size === 2) {
+    dragged = true;
+    for (const id of pointers.keys()) viewport.setPointerCapture(id);
+    viewport.setAttribute("data-dragging", "");
+  }
 });
 
 window.addEventListener("pointermove", event => {
-  if (mouseDrag?.id !== event.pointerId) return;
+  const previous = pointers.get(event.pointerId);
+  if (!previous) return;
+  const point = mapPoint(event);
+  const before = pointers.size === 2 ? pinchGeometry() : undefined;
+  pointers.set(event.pointerId, { ...point, start: previous.start });
 
-  const dx = event.clientX - mouseDrag.x;
-  const dy = event.clientY - mouseDrag.y;
-  if (!dragged && Math.hypot(dx, dy) < 5) return;
+  if (before) {
+    const after = pinchGeometry();
+    setZoom(scale * after.distance / before.distance, before.center, after.center);
+    return;
+  }
+  if (scale === 1) return;
   if (!dragged) {
+    if (Math.hypot(point.x - previous.start.x, point.y - previous.start.y) < 5) return;
+    dragged = true;
     viewport.setPointerCapture(event.pointerId);
     viewport.setAttribute("data-dragging", "");
-    dragged = true;
+    viewport.scrollLeft += previous.start.x - point.x;
+    viewport.scrollTop += previous.start.y - point.y;
+    return;
   }
 
-  viewport.scrollLeft = mouseDrag.left - dx;
-  viewport.scrollTop = mouseDrag.top - dy;
+  viewport.scrollLeft += previous.x - point.x;
+  viewport.scrollTop += previous.y - point.y;
 });
 
-function endMouseDrag(event) {
-  if (mouseDrag?.id !== event.pointerId) return;
-  mouseDrag = undefined;
-  viewport.removeAttribute("data-dragging");
+function endPointer(event) {
+  if (!pointers.delete(event.pointerId)) return;
+  if (!pointers.size) viewport.removeAttribute("data-dragging");
 }
 
-window.addEventListener("pointerup", endMouseDrag);
-window.addEventListener("pointercancel", endMouseDrag);
-viewport.addEventListener("lostpointercapture", endMouseDrag);
+window.addEventListener("pointerup", endPointer);
+window.addEventListener("pointercancel", endPointer);
+viewport.addEventListener("lostpointercapture", event => {
+  if (event.target === viewport) endPointer(event);
+});
 viewport.addEventListener("click", event => {
-  if (!dragged || event.detail === 0) return;
-  event.stopPropagation();
-  dragged = false;
+  if (dragged && event.detail !== 0) event.stopPropagation();
 }, true);
 
-zoomIn.addEventListener("click", () => setZoom(zoomIndex + 1));
-zoomOut.addEventListener("click", () => setZoom(zoomIndex - 1));
-zoomReset.addEventListener("click", () => setZoom(0));
+viewport.addEventListener("wheel", event => {
+  if (!event.deltaY) return;
+  event.preventDefault();
+  const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? viewport.clientHeight : 1;
+  const delta = Math.max(-400, Math.min(400, event.deltaY * unit));
+  setZoom(scale * Math.exp(-delta * .0025), mapPoint(event));
+}, { passive: false });
+
+zoomIn.addEventListener("click", () => setZoom(scale * 2));
+zoomOut.addEventListener("click", () => setZoom(scale / 2));
+zoomReset.addEventListener("click", () => setZoom(1));
 
 for (const place of window.STICKERBOOK_GEOGRAPHY) {
   const { city, country, lat, lon, members } = place;
