@@ -35,15 +35,15 @@
     }
     .atlas-pin {
       position: absolute; z-index: 3; pointer-events: none;
-      width: 12px; height: 12px; border-radius: 50%;
-      border: 1px solid #794231;
-      background: radial-gradient(circle at 33% 24%, #f8d5ad 0%, #cb8b68 35%, #9b5147 75%);
-      box-shadow: 2px 3px 4px #4d302566, inset 0 1px 1px #fff6;
+      width: 23px; height: 30px; display: block;
+      transform: rotate(var(--pin-tilt)); transform-origin: 50% 85%;
+      filter: drop-shadow(2px 3px 1.5px #4d302560);
     }
-    .atlas-pin--top-left { top: -3px; left: -3px; }
-    .atlas-pin--top-right { top: -3px; right: -3px; }
-    .atlas-pin--bottom-left { bottom: -3px; left: -3px; }
-    .atlas-pin--bottom-right { bottom: -3px; right: -3px; }
+    .atlas-pin svg { display: block; width: 100%; height: 100%; }
+    .atlas-pin--top-left { top: -14px; left: -6px; --pin-tilt: -23deg; }
+    .atlas-pin--top-right { top: -14px; right: -6px; --pin-tilt: 19deg; }
+    .atlas-pin--bottom-left { bottom: -2px; left: -6px; --pin-tilt: -15deg; }
+    .atlas-pin--bottom-right { bottom: -2px; right: -6px; --pin-tilt: 25deg; }
     .atlas-sheet + .atlas-credit { margin-top: 15px; }
     .geo-viewport {
       overflow: auto; background: #e5ebdf; border: 1px solid #adb9a4;
@@ -128,6 +128,28 @@
   <script defer src="geography.js?v=6"></script>
 </head>
 <body>
+  <svg width="0" height="0" aria-hidden="true" style="position:absolute">
+    <defs>
+      <linearGradient id="atlas-pin-plastic" x1="0" x2="1" y1="0" y2="1" gradientUnits="objectBoundingBox">
+        <stop stop-color="#e2a47f"/>
+        <stop offset=".48" stop-color="#b96752"/>
+        <stop offset="1" stop-color="#71372e"/>
+      </linearGradient>
+      <symbol id="atlas-pushpin" viewBox="0 0 24 32">
+        <path d="M11 21h2l-.4 7-1.8 2 .2-2z" fill="#685a53"/>
+        <path d="M11.6 23v4.5" stroke="#dad4c9" stroke-width=".6"/>
+        <path d="M4 17c0-2.6 3.6-4.5 8-4.5s8 1.9 8 4.5v2c0 2.7-3.6 4.6-8 4.6S4 21.7 4 19z"
+          fill="url(#atlas-pin-plastic)" stroke="#71372e" stroke-width=".7"/>
+        <ellipse cx="12" cy="17" rx="8" ry="3.5" fill="#c4775f" stroke="#8b4638" stroke-width=".65"/>
+        <path d="M8 6h8l-.9 9.5c0 1.1-1.4 2-3.1 2s-3.1-.9-3.1-2z"
+          fill="url(#atlas-pin-plastic)" stroke="#8b4638" stroke-width=".65"/>
+        <path d="M6 5c0-1.8 2.7-3.2 6-3.2s6 1.4 6 3.2v2c0 1.8-2.7 3.2-6 3.2S6 8.8 6 7z"
+          fill="url(#atlas-pin-plastic)" stroke="#71372e" stroke-width=".7"/>
+        <ellipse cx="12" cy="5" rx="6" ry="3.2" fill="#d5906c" stroke="#8b4638" stroke-width=".65"/>
+        <path d="M8.4 4.7c1-1.1 3.1-1.5 4.8-1.2" fill="none" stroke="#f4c5a6" stroke-linecap="round" stroke-width=".85"/>
+      </symbol>
+    </defs>
+  </svg>
   <main class="page">
     <header class="header">
       <a class="brand" href="index.html"><div class="brand-title">TravelAsk ✈</div><div class="brand-sub">Стикербук</div></a>
@@ -149,10 +171,10 @@
             <button type="button" id="zoomReset" disabled>Весь мир</button>
           </div>
           <div class="atlas-sheet">
-            <span class="atlas-pin atlas-pin--top-left" aria-hidden="true"></span>
-            <span class="atlas-pin atlas-pin--top-right" aria-hidden="true"></span>
-            <span class="atlas-pin atlas-pin--bottom-left" aria-hidden="true"></span>
-            <span class="atlas-pin atlas-pin--bottom-right" aria-hidden="true"></span>
+            <span class="atlas-pin atlas-pin--top-left" aria-hidden="true"><svg focusable="false"><use href="#atlas-pushpin"></use></svg></span>
+            <span class="atlas-pin atlas-pin--top-right" aria-hidden="true"><svg focusable="false"><use href="#atlas-pushpin"></use></svg></span>
+            <span class="atlas-pin atlas-pin--bottom-left" aria-hidden="true"><svg focusable="false"><use href="#atlas-pushpin"></use></svg></span>
+            <span class="atlas-pin atlas-pin--bottom-right" aria-hidden="true"><svg focusable="false"><use href="#atlas-pushpin"></use></svg></span>
             <div class="geo-viewport" id="mapViewport" role="region" aria-label="Прокручиваемая карта мира" tabindex="0">
               <div class="geo-world" id="worldMap">
               <div aria-hidden="true" id="countryLabels" hidden>
