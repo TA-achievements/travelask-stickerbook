@@ -17,13 +17,91 @@ const placeList = document.querySelector("#placeList");
 
 const countryLayer = document.querySelector("#countryLabels");
 const countryLabels = [...countryLayer.children];
+const markers = [];
+let fan;
+let markerGroups = new Map();
+
+function closeFan() {
+  fan = undefined;
+  arrangeMarkers();
+}
+
+function arrangeMarkers() {
+  const groups = [];
+  const width = world.clientWidth;
+  const height = world.clientHeight;
+
+  for (const entry of markers) {
+    const near = groups.filter(group => group.some(other =>
+      Math.abs(entry.x - other.x) * width < 36 &&
+      Math.abs(entry.y - other.y) * height < 37
+    ));
+    for (const group of near) groups.splice(groups.indexOf(group), 1);
+    groups.push([entry, ...near.flat()]);
+  }
+
+  markerGroups = new Map();
+  for (const group of groups) {
+    const lead = group.find(entry => entry.marker === selectedMarker) ?? group[0];
+    const open = group.includes(fan);
+    for (const entry of group) {
+      const { marker, label, members } = entry;
+      const stacked = group.length > 1 && !open;
+      markerGroups.set(entry, group);
+      marker.toggleAttribute("data-covered", stacked && entry !== lead);
+      marker.toggleAttribute("data-stack", stacked && entry === lead);
+      marker.toggleAttribute("data-fanned", open);
+      marker.setAttribute("aria-label", stacked && entry === lead
+        ? `Развернуть фотокарточки: ${group.map(item => item.label).join(", ")}`
+        : `${label}: ${members.join(", ")}`);
+      marker.title = stacked && entry === lead
+        ? group.map(item => item.label).join(" · ")
+        : label;
+    }
+  }
+}
+
+function openFan(entry, group, keyboard) {
+  closePreview();
+  fan = entry;
+  arrangeMarkers();
+
+  const gap = 45;
+  const columns = Math.min(group.length, Math.max(1, Math.floor((viewport.clientWidth - 12) / gap)));
+  const rows = Math.ceil(group.length / columns);
+  const originX = entry.x * world.clientWidth;
+  const originY = entry.y * world.clientHeight;
+  const left = viewport.scrollLeft;
+  const top = viewport.scrollTop;
+  const startX = Math.max(left + 22, Math.min(
+    originX - (columns - 1) * gap / 2,
+    left + viewport.clientWidth - 22 - (columns - 1) * gap
+  ));
+  const startY = Math.max(top + 44, Math.min(
+    originY, top + viewport.clientHeight - 6 - (rows - 1) * gap
+  ));
+
+  group.forEach((item, index) => {
+    const { marker } = item;
+    const column = index % columns;
+    const x = startX + column * gap - item.x * world.clientWidth;
+    const y = startY + Math.floor(index / columns) * gap - item.y * world.clientHeight;
+    marker.style.setProperty("--fan-offset", `${x}px ${y}px`);
+    marker.style.setProperty("--fan-tilt", `${(column - (columns - 1) / 2) * 12}deg`);
+    if (!reducedMotion.matches) {
+      marker.animate([{ translate: "0 0" }, { translate: `${x}px ${y}px` }],
+        { duration: 260, easing: "cubic-bezier(.2,.75,.25,1)" });
+    }
+  });
+  if (keyboard) entry.marker.focus({ preventScroll: true });
+}
 
 function layoutCountryLabels() {
   countryLayer.hidden = false;
   for (const label of countryLabels) label.hidden = false;
 
   const mapBounds = world.getBoundingClientRect();
-  const occupied = [...world.querySelectorAll(".geo-marker")].map(marker => marker.getBoundingClientRect());
+  const occupied = [...world.querySelectorAll(".geo-marker:not([data-covered])")].map(marker => marker.getBoundingClientRect());
   const labelBounds = countryLabels.map(label => label.getBoundingClientRect());
   for (const [index, box] of labelBounds.entries()) {
     const fits = box.left >= mapBounds.left && box.right <= mapBounds.right &&
@@ -41,6 +119,7 @@ function scheduleCountryLabels() {
   if (labelsFrame !== undefined) return;
   labelsFrame = requestAnimationFrame(() => {
     labelsFrame = undefined;
+    arrangeMarkers();
     layoutCountryLabels();
   });
 }
@@ -53,6 +132,7 @@ function setZoom(value, from, to = from) {
   const mapY = (viewport.scrollTop + anchor.y) / scale;
 
   if (scale !== next) {
+    if (fan) closeFan();
     scale = next;
     world.style.width = `${next * 100}%`;
     viewport.toggleAttribute("data-zoomed", next > 1);
@@ -325,10 +405,20 @@ function togglePreview(marker, label, members, keyboard) {
 
 preview.addEventListener("click", event => closePreview(event.detail === 0 || document.activeElement === preview));
 viewport.addEventListener("click", event => {
-  if (!event.target.closest(".geo-marker")) closePreview();
+  if (!event.target.closest(".geo-marker")) {
+    closePreview();
+    if (fan) closeFan();
+  }
 });
 preview.closest(".atlas-sheet").addEventListener("keydown", event => {
-  if (event.key === "Escape" && !preview.hidden) closePreview(true);
+  if (event.key !== "Escape") return;
+  if (!preview.hidden) closePreview(true);
+  else if (fan) {
+    const entry = fan;
+    closeFan();
+    (markerGroups.get(entry)?.find(item => !item.marker.hasAttribute("data-covered")) ?? entry)
+      .marker.focus({ preventScroll: true });
+  }
 });
 
 for (const place of window.STICKERBOOK_GEOGRAPHY) {
@@ -361,22 +451,34 @@ for (const place of window.STICKERBOOK_GEOGRAPHY) {
   placeButton.setAttribute("aria-controls", "placeDetails");
   placeButton.setAttribute("aria-pressed", "false");
 
+  const entry = { marker, label, members, x: (lon + 180) / 360, y: (90 - lat) / 180 };
+  markers.push(entry);
   const selectPlace = () => showPlace(place, label, marker, placeButton);
   marker.addEventListener("click", event => {
+    const group = markerGroups.get(entry);
+    if (group?.length > 1 && !group.includes(fan)) {
+      openFan(entry, group, event.detail === 0);
+      return;
+    }
     selectPlace();
     togglePreview(marker, label, members, event.detail === 0);
   });
   placeButton.addEventListener("click", () => {
     closePreview();
     selectPlace();
+    closeFan();
     focusCity(place, marker);
   });
   world.append(marker);
   placeList.append(placeButton);
 }
 
+arrangeMarkers();
 layoutCountryLabels();
-new ResizeObserver(layoutCountryLabels).observe(viewport);
+new ResizeObserver(() => {
+  closeFan();
+  layoutCountryLabels();
+}).observe(viewport);
 
 if (placeList.childElementCount) {
   details.firstElementChild.textContent = "Здесь откроется карточка выбранного города.";

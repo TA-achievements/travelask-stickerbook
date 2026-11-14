@@ -113,6 +113,18 @@
       width: 36px; height: 42px; padding: 0 0 6px;
       border: 0; background: transparent; cursor: pointer;
     }
+    .geo-marker[data-covered] { visibility: hidden; }
+    .geo-marker[data-stack]::before {
+      content: ""; position: absolute; top: 2px; left: 7px;
+      width: 28px; height: 30px; border-radius: 3px;
+      background: #fffdf3; border: 1px solid #ac9d81;
+      box-shadow: 0 2px 4px #30281e55; transform: rotate(13deg);
+    }
+    .geo-marker[data-fanned] {
+      translate: var(--fan-offset);
+      z-index: 3;
+    }
+    .geo-marker[data-fanned] .geo-photo { rotate: var(--fan-tilt); }
     .geo-marker::after {
       content: ""; position: absolute; left: 50%; bottom: 1px;
       width: 6px; height: 6px; transform: translateX(-50%);
@@ -160,7 +172,7 @@
   </style>
   <script defer src="data.js"></script>
   <script defer src="geography-data.js?v=2"></script>
-  <script defer src="geography.js?v=9"></script>
+  <script defer src="geography.js?v=10"></script>
 </head>
 <body>
   <svg width="0" height="0" aria-hidden="true" style="position:absolute">
