@@ -421,12 +421,24 @@ preview.closest(".atlas-sheet").addEventListener("keydown", event => {
   }
 });
 
+const countries = [...document.querySelector("#countryShapes").children];
+const countryKey = name => name?.trim().toLowerCase().replaceAll("ё", "е");
+const countryByName = new Map();
+for (const country of countries) {
+  for (const name of country.dataset.names.split("|")) countryByName.set(countryKey(name), country);
+}
 for (const place of window.STICKERBOOK_GEOGRAPHY) {
   const { city, country, lat, lon, members } = place;
   const label = city || country;
   if (!label || !Array.isArray(members) || !members.length ||
       !Number.isFinite(lat) || Math.abs(lat) > 90 ||
       !Number.isFinite(lon) || Math.abs(lon) > 180) continue;
+
+  const countryCode = countryKey(place.countryCode);
+  const countryName = countryKey(country);
+  const region = countryByName.get(countryCode) ?? countryByName.get(countryName) ??
+    countryByName.get(countryName?.split(",").at(-1).trim());
+  region?.setAttribute("data-team", "");
 
   const marker = document.createElement("button");
   marker.type = "button";
