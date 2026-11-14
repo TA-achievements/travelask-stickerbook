@@ -18,7 +18,7 @@ window.STICKERBOOK_GEOGRAPHY = [
     members: ["Кобец Светлана"],
   },
   {
-    city: "Витебск", country: "Белорусь",
+    city: "Витебск", country: "Беларусь",
     lat: 55.19040, lon: 30.20490,
     members: ["Молчанова Яна"],
   },
