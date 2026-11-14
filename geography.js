@@ -179,6 +179,65 @@ zoomIn.addEventListener("click", () => setZoom(scale * 2));
 zoomOut.addEventListener("click", () => setZoom(scale / 2));
 zoomReset.addEventListener("click", () => setZoom(1));
 
+const preview = document.querySelector("#geoPreview");
+const previewPhotos = preview.querySelector(".geo-preview-photos");
+const previewLabel = preview.querySelector(".geo-preview-label");
+let previewMarker;
+
+function createPhoto(name) {
+  const photo = document.createElement("span");
+  photo.className = "geo-photo";
+  photo.setAttribute("aria-hidden", "true");
+
+  const initials = document.createElement("span");
+  initials.textContent = name.trim().split(/\s+/).slice(0, 2)
+    .map(word => word[0]).join("").toUpperCase();
+  photo.append(initials);
+
+  const avatarSrc = teamByName.get(name.trim())?.avatarSrc;
+  if (avatarSrc) {
+    const image = document.createElement("img");
+    image.alt = "";
+    image.draggable = false;
+    image.decoding = "async";
+    image.addEventListener("error", () => image.remove(), { once: true });
+    image.src = avatarSrc;
+    photo.append(image);
+  }
+  return photo;
+}
+
+function closePreview(restoreFocus = false) {
+  if (!previewMarker) return;
+  preview.hidden = true;
+  previewMarker.setAttribute("aria-expanded", "false");
+  if (restoreFocus) previewMarker.focus({ preventScroll: true });
+  previewMarker = undefined;
+}
+
+function togglePreview(marker, label, members, keyboard) {
+  if (previewMarker === marker) {
+    closePreview(keyboard);
+    return;
+  }
+  closePreview();
+  previewMarker = marker;
+  previewPhotos.replaceChildren(...members.slice(0, 2).map(createPhoto));
+  previewLabel.textContent = label;
+  preview.toggleAttribute("data-pair", members.length > 1);
+  preview.hidden = false;
+  marker.setAttribute("aria-expanded", "true");
+  if (keyboard) preview.focus({ preventScroll: true });
+}
+
+preview.addEventListener("click", event => closePreview(event.detail === 0 || document.activeElement === preview));
+viewport.addEventListener("click", event => {
+  if (!event.target.closest(".geo-marker")) closePreview();
+});
+preview.closest(".atlas-sheet").addEventListener("keydown", event => {
+  if (event.key === "Escape" && !preview.hidden) closePreview(true);
+});
+
 for (const place of window.STICKERBOOK_GEOGRAPHY) {
   const { city, country, lat, lon, members } = place;
   const label = city || country;
@@ -191,28 +250,8 @@ for (const place of window.STICKERBOOK_GEOGRAPHY) {
   marker.className = "geo-marker";
   marker.style.left = `${(lon + 180) / 3.6}%`;
   marker.style.top = `${(90 - lat) / 1.8}%`;
-  for (const name of members.slice(0, 2)) {
-    const photo = document.createElement("span");
-    photo.className = "geo-photo";
-    photo.setAttribute("aria-hidden", "true");
-
-    const initials = document.createElement("span");
-    initials.textContent = name.trim().split(/\s+/).slice(0, 2)
-      .map(word => word[0]).join("").toUpperCase();
-    photo.append(initials);
-
-    const avatarSrc = teamByName.get(name.trim())?.avatarSrc;
-    if (avatarSrc) {
-      const image = document.createElement("img");
-      image.alt = "";
-      image.draggable = false;
-      image.decoding = "async";
-      image.addEventListener("error", () => image.remove(), { once: true });
-      image.src = avatarSrc;
-      photo.append(image);
-    }
-    marker.append(photo);
-  }
+  for (const name of members.slice(0, 2)) marker.append(createPhoto(name));
+  marker.setAttribute("aria-expanded", "false");
   marker.title = label;
   marker.setAttribute("aria-label", `${label}: ${members.join(", ")}`);
   marker.setAttribute("aria-controls", "placeDetails");
@@ -230,8 +269,14 @@ for (const place of window.STICKERBOOK_GEOGRAPHY) {
   placeButton.setAttribute("aria-pressed", "false");
 
   const selectPlace = () => showPlace(place, label, marker, placeButton);
-  marker.addEventListener("click", selectPlace);
-  placeButton.addEventListener("click", selectPlace);
+  marker.addEventListener("click", event => {
+    selectPlace();
+    togglePreview(marker, label, members, event.detail === 0);
+  });
+  placeButton.addEventListener("click", () => {
+    closePreview();
+    selectPlace();
+  });
   world.append(marker);
   placeList.append(placeButton);
 }
