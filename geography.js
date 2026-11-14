@@ -5,7 +5,7 @@ const zoomIn = document.querySelector("#zoomIn");
 const zoomOut = document.querySelector("#zoomOut");
 const zoomReset = document.querySelector("#zoomReset");
 const teamByName = new Map(
-  (window.STICKERBOOK_DATA?.team ?? []).map(member => [member.name.trim(), member.id])
+  (window.STICKERBOOK_DATA?.team ?? []).map(member => [member.name.trim(), member])
 );
 const zoomLevels = [1, 2, 4, 8, 16];
 let zoomIndex = 0;
@@ -69,7 +69,7 @@ function showPlace(place, label, marker, placeButton) {
 
   for (const name of place.members) {
     const item = document.createElement("li");
-    const memberId = teamByName.get(name.trim());
+    const memberId = teamByName.get(name.trim())?.id;
     if (memberId) {
       const link = document.createElement("a");
       link.href = `member.html?id=${encodeURIComponent(memberId)}`;
@@ -100,11 +100,29 @@ for (const place of window.STICKERBOOK_GEOGRAPHY) {
   marker.className = "geo-marker";
   marker.style.left = `${(lon + 180) / 3.6}%`;
   marker.style.top = `${(90 - lat) / 1.8}%`;
-  const markerCount = document.createElement("span");
-  markerCount.textContent = members.length;
-  marker.append(markerCount);
+  for (const name of members.slice(0, 2)) {
+    const photo = document.createElement("span");
+    photo.className = "geo-photo";
+    photo.setAttribute("aria-hidden", "true");
+
+    const initials = document.createElement("span");
+    initials.textContent = name.trim().split(/\s+/).slice(0, 2)
+      .map(word => word[0]).join("").toUpperCase();
+    photo.append(initials);
+
+    const avatarSrc = teamByName.get(name.trim())?.avatarSrc;
+    if (avatarSrc) {
+      const image = document.createElement("img");
+      image.alt = "";
+      image.decoding = "async";
+      image.addEventListener("error", () => image.remove(), { once: true });
+      image.src = avatarSrc;
+      photo.append(image);
+    }
+    marker.append(photo);
+  }
   marker.title = label;
-  marker.setAttribute("aria-label", `${label} · ${members.length}`);
+  marker.setAttribute("aria-label", `${label}: ${members.join(", ")}`);
   marker.setAttribute("aria-controls", "placeDetails");
   marker.setAttribute("aria-pressed", "false");
   const placeButton = document.createElement("button");
