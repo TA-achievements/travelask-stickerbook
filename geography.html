@@ -28,6 +28,23 @@
       color: #343e32; background: #f5f0e2; cursor: pointer; padding: 6px 13px;
     }
     .geo-controls button:disabled { opacity: .55; cursor: default; }
+    .atlas-sheet {
+      position: relative; padding: 5px; background: #faf6e5;
+      border: 1px solid #d5ccb0; border-radius: 4px;
+      box-shadow: 0 3px 4px #45352026, 0 9px 15px -5px #45352055;
+    }
+    .atlas-pin {
+      position: absolute; z-index: 3; pointer-events: none;
+      width: 12px; height: 12px; border-radius: 50%;
+      border: 1px solid #794231;
+      background: radial-gradient(circle at 33% 24%, #f8d5ad 0%, #cb8b68 35%, #9b5147 75%);
+      box-shadow: 2px 3px 4px #4d302566, inset 0 1px 1px #fff6;
+    }
+    .atlas-pin--top-left { top: -3px; left: -3px; }
+    .atlas-pin--top-right { top: -3px; right: -3px; }
+    .atlas-pin--bottom-left { bottom: -3px; left: -3px; }
+    .atlas-pin--bottom-right { bottom: -3px; right: -3px; }
+    .atlas-sheet + .atlas-credit { margin-top: 15px; }
     .geo-viewport {
       overflow: auto; background: #e5ebdf; border: 1px solid #adb9a4;
       border-radius: 3px; aspect-ratio: 2;
@@ -131,186 +148,192 @@
             <button type="button" id="zoomIn" aria-label="Приблизить карту">+</button>
             <button type="button" id="zoomReset" disabled>Весь мир</button>
           </div>
-          <div class="geo-viewport" id="mapViewport" role="region" aria-label="Прокручиваемая карта мира" tabindex="0">
-            <div class="geo-world" id="worldMap">
-            <div aria-hidden="true" id="countryLabels" hidden>
-              <span class="geo-country" style="left:62.4129%;top:17.6392%">Россия</span>
-              <span class="geo-country" style="left:21.6915%;top:16.4865%">Канада</span>
-              <span class="geo-country" style="left:22.9215%;top:28.0342%">США</span>
-              <span class="geo-country" style="left:79.5381%;top:31.9455%">Китайская Народная Республика</span>
-              <span class="geo-country" style="left:36.2335%;top:56.7215%">Бразилия</span>
-              <span class="geo-country" style="left:87.2360%;top:63.4053%">Австралия</span>
-              <span class="geo-country" style="left:72.0439%;top:37.3962%">Индия</span>
-              <span class="geo-country" style="left:32.1741%;top:68.6118%">Аргентина</span>
-              <span class="geo-country" style="left:69.0793%;top:22.7477%">Казахстан</span>
-              <span class="geo-country" style="left:56.5163%;top:51.0323%">Демократическая Республика Конго</span>
-              <span class="geo-country" style="left:50.7801%;top:34.7792%">Алжир</span>
-              <span class="geo-country" style="left:39.0735%;top:8.7115%">Гренландия</span>
-              <span class="geo-country" style="left:21.5863%;top:36.7111%">Мексика</span>
-              <span class="geo-country" style="left:62.4166%;top:36.7739%">Саудовская Аравия</span>
-              <span class="geo-country" style="left:58.1280%;top:40.9274%">Судан</span>
-              <span class="geo-country" style="left:78.3036%;top:50.5302%">Индонезия</span>
-              <span class="geo-country" style="left:55.0031%;top:35.2006%">Ливия</span>
-              <span class="geo-country" style="left:65.2587%;top:32.1299%">Иран</span>
-              <span class="geo-country" style="left:78.9307%;top:24.4458%">Монголия</span>
-              <span class="geo-country" style="left:29.7500%;top:57.2093%">Перу</span>
-              <span class="geo-country" style="left:55.1792%;top:41.5872%">Чад</span>
-              <span class="geo-country" style="left:54.9956%;top:56.7682%">Ангола</span>
-              <span class="geo-country" style="left:56.5738%;top:66.5049%">ЮАР</span>
-              <span class="geo-country" style="left:49.4338%;top:39.6152%">Мали</span>
-              <span class="geo-country" style="left:52.6401%;top:40.3077%">Нигер</span>
-              <span class="geo-country" style="left:29.6738%;top:48.1260%">Колумбия</span>
-              <span class="geo-country" style="left:60.8579%;top:45.5373%">Эфиопия</span>
-              <span class="geo-country" style="left:32.0574%;top:59.2589%">Боливия</span>
-              <span class="geo-country" style="left:47.2944%;top:39.1183%">Мавритания</span>
-              <span class="geo-country" style="left:58.1794%;top:35.4521%">Египет</span>
-              <span class="geo-country" style="left:59.7109%;top:53.3621%">Танзания</span>
-              <span class="geo-country" style="left:32.0557%;top:46.0097%">Венесуэла</span>
-              <span class="geo-country" style="left:52.0842%;top:44.7557%">Нигерия</span>
-              <span class="geo-country" style="left:69.0405%;top:33.7065%">Пакистан</span>
-              <span class="geo-country" style="left:54.7523%;top:61.4307%">Намибия</span>
-              <span class="geo-country" style="left:29.9114%;top:71.1954%">Чили</span>
-              <span class="geo-country" style="left:60.5105%;top:57.7462%">Мозамбик</span>
-              <span class="geo-country" style="left:59.5856%;top:28.1415%">Турция</span>
-              <span class="geo-country" style="left:57.3320%;top:58.1449%">Замбия</span>
-              <span class="geo-country" style="left:76.6124%;top:38.0145%">Мьянма</span>
-              <span class="geo-country" style="left:68.4713%;top:31.0199%">Афганистан</span>
-              <span class="geo-country" style="left:50.7090%;top:24.0577%">Франция</span>
-              <span class="geo-country" style="left:58.4417%;top:45.9831%">Южный Судан</span>
-              <span class="geo-country" style="left:55.8075%;top:46.1168%">Центральноафриканская Республика</span>
-              <span class="geo-country" style="left:56.7164%;top:62.2792%">Ботсвана</span>
-              <span class="geo-country" style="left:60.5299%;top:49.6950%">Кения</span>
-              <span class="geo-country" style="left:48.0035%;top:32.4163%">Марокко</span>
-              <span class="geo-country" style="left:62.9734%;top:60.3490%">Мадагаскар</span>
-              <span class="geo-country" style="left:58.9280%;top:22.3751%">Украина</span>
-              <span class="geo-country" style="left:78.0759%;top:41.4113%">Таиланд</span>
-              <span class="geo-country" style="left:49.0376%;top:27.7272%">Испания</span>
-              <span class="geo-country" style="left:62.5534%;top:48.0173%">Сомали</span>
-              <span class="geo-country" style="left:66.2991%;top:27.8582%">Туркмения</span>
-              <span class="geo-country" style="left:89.9751%;top:53.1640%">Папуа — Новая Гвинея</span>
-              <span class="geo-country" style="left:53.4649%;top:47.4528%">Камерун</span>
-              <span class="geo-country" style="left:67.7793%;top:26.8369%">Узбекистан</span>
-              <span class="geo-country" style="left:62.7429%;top:41.4843%">Йемен</span>
-              <span class="geo-country" style="left:55.2825%;top:13.4116%">Швеция</span>
-              <span class="geo-country" style="left:62.0172%;top:31.6144%">Ирак</span>
-              <span class="geo-country" style="left:88.4562%;top:29.9208%">Япония</span>
-              <span class="geo-country" style="left:33.2927%;top:62.0414%">Парагвай</span>
-              <span class="geo-country" style="left:52.6889%;top:15.9127%">Норвегия</span>
-              <span class="geo-country" style="left:58.3126%;top:60.5065%">Зимбабве</span>
-              <span class="geo-country" style="left:52.6884%;top:21.6879%">Германия</span>
-              <span class="geo-country" style="left:54.4168%;top:49.9209%">Республика Конго</span>
-              <span class="geo-country" style="left:81.6214%;top:48.5952%">Малайзия</span>
-              <span class="geo-country" style="left:57.5768%;top:14.8598%">Финляндия</span>
-              <span class="geo-country" style="left:79.2742%;top:37.9359%">Вьетнам</span>
-              <span class="geo-country" style="left:48.4532%;top:45.8381%">Кот-д’Ивуар</span>
-              <span class="geo-country" style="left:53.0769%;top:25.1486%">Италия</span>
-              <span class="geo-country" style="left:65.9268%;top:37.7109%">Оман</span>
-              <span class="geo-country" style="left:55.4140%;top:21.1165%">Польша</span>
-              <span class="geo-country" style="left:84.0181%;top:43.7789%">Филиппины</span>
-              <span class="geo-country" style="left:97.9964%;top:72.0883%">Новая Зеландия</span>
-              <span class="geo-country" style="left:49.6211%;top:42.9594%">Буркина-Фасо</span>
-              <span class="geo-country" style="left:53.2878%;top:50.2432%">Габон</span>
-              <span class="geo-country" style="left:28.2810%;top:50.6995%">Эквадор</span>
-              <span class="geo-country" style="left:49.4121%;top:19.7763%">Великобритания</span>
-              <span class="geo-country" style="left:59.1524%;top:48.9041%">Уганда</span>
-              <span class="geo-country" style="left:49.7120%;top:45.7124%">Гана</span>
-              <span class="geo-country" style="left:47.2177%;top:44.1008%">Гвинея</span>
-              <span class="geo-country" style="left:56.9368%;top:24.5926%">Румыния</span>
-              <span class="geo-country" style="left:78.4816%;top:39.2045%">Лаос</span>
-              <span class="geo-country" style="left:33.6270%;top:47.1532%">Гайана</span>
-              <span class="geo-country" style="left:57.8938%;top:20.0990%">Беларусь</span>
-              <span class="geo-country" style="left:70.7035%;top:26.8508%">Киргизия</span>
-              <span class="geo-country" style="left:45.8948%;top:41.5899%">Сенегал</span>
-              <span class="geo-country" style="left:60.6327%;top:30.5519%">Сирия</span>
-              <span class="geo-country" style="left:79.0291%;top:42.9736%">Камбоджа</span>
-              <span class="geo-country" style="left:34.4536%;top:68.3117%">Уругвай</span>
-              <span class="geo-country" style="left:62.9810%;top:44.7534%">Сомалиленд</span>
-              <span class="geo-country" style="left:52.5022%;top:31.2849%">Тунис</span>
-              <span class="geo-country" style="left:73.2333%;top:34.2789%">Непал</span>
-              <span class="geo-country" style="left:34.4692%;top:47.6978%">Суринам</span>
-              <span class="geo-country" style="left:70.1631%;top:28.7779%">Таджикистан</span>
-              <span class="geo-country" style="left:74.9125%;top:36.5472%">Бангладеш</span>
-              <span class="geo-country" style="left:56.0349%;top:28.0596%">Греция</span>
-              <span class="geo-country" style="left:26.3696%;top:42.9607%">Никарагуа</span>
-              <span class="geo-country" style="left:85.1235%;top:27.8415%">КНДР</span>
-              <span class="geo-country" style="left:60.6349%;top:41.2292%">Эритрея</span>
-              <span class="geo-country" style="left:50.6533%;top:44.2640%">Бенин</span>
-              <span class="geo-country" style="left:28.3400%;top:38.1478%">Куба</span>
-              <span class="geo-country" style="left:25.8646%;top:41.7807%">Гондурас</span>
-              <span class="geo-country" style="left:59.3356%;top:57.4371%">Малави</span>
-              <span class="geo-country" style="left:56.9881%;top:26.3840%">Болгария</span>
-              <span class="geo-country" style="left:24.8619%;top:41.6766%">Гватемала</span>
-              <span class="geo-country" style="left:44.8129%;top:14.0115%">Исландия</span>
-              <span class="geo-country" style="left:85.5915%;top:29.7862%">Республика Корея</span>
-              <span class="geo-country" style="left:47.3721%;top:46.4182%">Либерия</span>
-              <span class="geo-country" style="left:46.4916%;top:36.6847%">Западная Сахара</span>
-              <span class="geo-country" style="left:47.7023%;top:27.9963%">Португалия</span>
-              <span class="geo-country" style="left:55.4022%;top:23.8406%">Венгрия</span>
-              <span class="geo-country" style="left:63.1142%;top:27.5542%">Азербайджан</span>
-              <span class="geo-country" style="left:60.1044%;top:32.8861%">Иордания</span>
-              <span class="geo-country" style="left:53.9251%;top:23.6006%">Австрия</span>
-              <span class="geo-country" style="left:54.2715%;top:22.2876%">Чехия</span>
-              <span class="geo-country" style="left:65.1520%;top:36.9632%">Объединённые Арабские Эмираты</span>
-              <span class="geo-country" style="left:46.7323%;top:45.2125%">Сьерра-Леоне</span>
-              <span class="geo-country" style="left:55.7744%;top:25.4500%">Сербия</span>
-              <span class="geo-country" style="left:27.6800%;top:45.1545%">Панама</span>
-              <span class="geo-country" style="left:62.1488%;top:26.7388%">Грузия</span>
-              <span class="geo-country" style="left:72.4180%;top:45.7883%">Шри-Ланка</span>
-              <span class="geo-country" style="left:57.0719%;top:18.2962%">Латвия</span>
-              <span class="geo-country" style="left:56.6916%;top:19.3868%">Литва</span>
-              <span class="geo-country" style="left:50.2939%;top:45.1071%">Того</span>
-              <span class="geo-country" style="left:47.8337%;top:20.5118%">Ирландия</span>
-              <span class="geo-country" style="left:54.5479%;top:24.5523%">Хорватия</span>
-              <span class="geo-country" style="left:26.6450%;top:44.4083%">Коста-Рика</span>
-              <span class="geo-country" style="left:55.0190%;top:25.5050%">Босния и Герцеговина</span>
-              <span class="geo-country" style="left:30.3739%;top:39.3866%">Доминиканская Республика</span>
-              <span class="geo-country" style="left:55.2916%;top:22.9255%">Словакия</span>
-              <span class="geo-country" style="left:52.0733%;top:24.0449%">Швейцария</span>
-              <span class="geo-country" style="left:57.1853%;top:17.3751%">Эстония</span>
-              <span class="geo-country" style="left:52.5050%;top:18.9072%">Дания</span>
-              <span class="geo-country" style="left:51.5587%;top:20.8765%">Нидерланды</span>
-              <span class="geo-country" style="left:75.0112%;top:34.7018%">Бутан</span>
-              <span class="geo-country" style="left:45.9655%;top:43.2424%">Гвинея-Бисау</span>
-              <span class="geo-country" style="left:83.5745%;top:36.8598%">Тайвань</span>
-              <span class="geo-country" style="left:57.9133%;top:23.6472%">Молдавия</span>
-              <span class="geo-country" style="left:51.3335%;top:21.7859%">Бельгия</span>
-              <span class="geo-country" style="left:55.5872%;top:27.4140%">Албания</span>
-              <span class="geo-country" style="left:29.9378%;top:39.2979%">Республика Гаити</span>
-              <span class="geo-country" style="left:62.4446%;top:27.5227%">Армения</span>
-              <span class="geo-country" style="left:57.8463%;top:66.3779%">Лесото</span>
-              <span class="geo-country" style="left:52.4973%;top:48.7039%">Экваториальная Гвинея</span>
-              <span class="geo-country" style="left:58.3103%;top:51.8516%">Бурунди</span>
-              <span class="geo-country" style="left:55.9877%;top:26.9121%">Северная Македония</span>
-              <span class="geo-country" style="left:94.2140%;top:54.4609%">Соломоновы Острова</span>
-              <span class="geo-country" style="left:58.3622%;top:51.0540%">Руанда</span>
-              <span class="geo-country" style="left:95.8567%;top:61.7026%">Новая Каледония</span>
-              <span class="geo-country" style="left:59.6800%;top:32.8271%">Израиль</span>
-              <span class="geo-country" style="left:25.3575%;top:40.4433%">Белиз</span>
-              <span class="geo-country" style="left:61.8052%;top:43.3465%">Джибути</span>
-              <span class="geo-country" style="left:25.3083%;top:42.3970%">Сальвадор</span>
-              <span class="geo-country" style="left:99.4376%;top:59.9034%">Фиджи</span>
-              <span class="geo-country" style="left:54.1431%;top:24.4107%">Словения</span>
-              <span class="geo-country" style="left:58.7409%;top:64.7409%">Эсватини</span>
-              <span class="geo-country" style="left:63.1428%;top:33.6591%">Кувейт</span>
-              <span class="geo-country" style="left:33.6837%;top:78.6716%">Фолклендские острова</span>
-              <span class="geo-country" style="left:28.5704%;top:35.3323%">Багамские Острова</span>
-              <span class="geo-country" style="left:84.9596%;top:54.8909%">Восточный Тимор</span>
-              <span class="geo-country" style="left:45.8338%;top:42.4213%">Гамбия</span>
-              <span class="geo-country" style="left:55.3177%;top:26.2205%">Черногория</span>
-              <span class="geo-country" style="left:28.5226%;top:39.9238%">Ямайка</span>
-              <span class="geo-country" style="left:69.2006%;top:77.3910%">Французские Южные и Антарктические территории</span>
-              <span class="geo-country" style="left:64.2065%;top:35.9792%">Катар</span>
-              <span class="geo-country" style="left:55.7946%;top:26.3369%">Республика Косово</span>
-              <span class="geo-country" style="left:81.8200%;top:47.5287%">Бруней</span>
-              <span class="geo-country" style="left:59.9980%;top:31.0370%">Ливан</span>
-              <span class="geo-country" style="left:31.5330%;top:39.8696%">Пуэрто-Рико</span>
-              <span class="geo-country" style="left:33.0782%;top:43.8895%">Тринидад и Тобаго</span>
-              <span class="geo-country" style="left:96.3635%;top:58.5397%">Вануату</span>
-              <span class="geo-country" style="left:59.1901%;top:30.6037%">Кипр</span>
-              <span class="geo-country" style="left:59.8032%;top:32.1959%">Палестина</span>
-              <span class="geo-country" style="left:59.3590%;top:30.4355%">Турецкая Республика Северного Кипра</span>
-              <span class="geo-country" style="left:51.6882%;top:22.3701%">Люксембург</span>
-            </div>
+          <div class="atlas-sheet">
+            <span class="atlas-pin atlas-pin--top-left" aria-hidden="true"></span>
+            <span class="atlas-pin atlas-pin--top-right" aria-hidden="true"></span>
+            <span class="atlas-pin atlas-pin--bottom-left" aria-hidden="true"></span>
+            <span class="atlas-pin atlas-pin--bottom-right" aria-hidden="true"></span>
+            <div class="geo-viewport" id="mapViewport" role="region" aria-label="Прокручиваемая карта мира" tabindex="0">
+              <div class="geo-world" id="worldMap">
+              <div aria-hidden="true" id="countryLabels" hidden>
+                <span class="geo-country" style="left:62.4129%;top:17.6392%">Россия</span>
+                <span class="geo-country" style="left:21.6915%;top:16.4865%">Канада</span>
+                <span class="geo-country" style="left:22.9215%;top:28.0342%">США</span>
+                <span class="geo-country" style="left:79.5381%;top:31.9455%">Китайская Народная Республика</span>
+                <span class="geo-country" style="left:36.2335%;top:56.7215%">Бразилия</span>
+                <span class="geo-country" style="left:87.2360%;top:63.4053%">Австралия</span>
+                <span class="geo-country" style="left:72.0439%;top:37.3962%">Индия</span>
+                <span class="geo-country" style="left:32.1741%;top:68.6118%">Аргентина</span>
+                <span class="geo-country" style="left:69.0793%;top:22.7477%">Казахстан</span>
+                <span class="geo-country" style="left:56.5163%;top:51.0323%">Демократическая Республика Конго</span>
+                <span class="geo-country" style="left:50.7801%;top:34.7792%">Алжир</span>
+                <span class="geo-country" style="left:39.0735%;top:8.7115%">Гренландия</span>
+                <span class="geo-country" style="left:21.5863%;top:36.7111%">Мексика</span>
+                <span class="geo-country" style="left:62.4166%;top:36.7739%">Саудовская Аравия</span>
+                <span class="geo-country" style="left:58.1280%;top:40.9274%">Судан</span>
+                <span class="geo-country" style="left:78.3036%;top:50.5302%">Индонезия</span>
+                <span class="geo-country" style="left:55.0031%;top:35.2006%">Ливия</span>
+                <span class="geo-country" style="left:65.2587%;top:32.1299%">Иран</span>
+                <span class="geo-country" style="left:78.9307%;top:24.4458%">Монголия</span>
+                <span class="geo-country" style="left:29.7500%;top:57.2093%">Перу</span>
+                <span class="geo-country" style="left:55.1792%;top:41.5872%">Чад</span>
+                <span class="geo-country" style="left:54.9956%;top:56.7682%">Ангола</span>
+                <span class="geo-country" style="left:56.5738%;top:66.5049%">ЮАР</span>
+                <span class="geo-country" style="left:49.4338%;top:39.6152%">Мали</span>
+                <span class="geo-country" style="left:52.6401%;top:40.3077%">Нигер</span>
+                <span class="geo-country" style="left:29.6738%;top:48.1260%">Колумбия</span>
+                <span class="geo-country" style="left:60.8579%;top:45.5373%">Эфиопия</span>
+                <span class="geo-country" style="left:32.0574%;top:59.2589%">Боливия</span>
+                <span class="geo-country" style="left:47.2944%;top:39.1183%">Мавритания</span>
+                <span class="geo-country" style="left:58.1794%;top:35.4521%">Египет</span>
+                <span class="geo-country" style="left:59.7109%;top:53.3621%">Танзания</span>
+                <span class="geo-country" style="left:32.0557%;top:46.0097%">Венесуэла</span>
+                <span class="geo-country" style="left:52.0842%;top:44.7557%">Нигерия</span>
+                <span class="geo-country" style="left:69.0405%;top:33.7065%">Пакистан</span>
+                <span class="geo-country" style="left:54.7523%;top:61.4307%">Намибия</span>
+                <span class="geo-country" style="left:29.9114%;top:71.1954%">Чили</span>
+                <span class="geo-country" style="left:60.5105%;top:57.7462%">Мозамбик</span>
+                <span class="geo-country" style="left:59.5856%;top:28.1415%">Турция</span>
+                <span class="geo-country" style="left:57.3320%;top:58.1449%">Замбия</span>
+                <span class="geo-country" style="left:76.6124%;top:38.0145%">Мьянма</span>
+                <span class="geo-country" style="left:68.4713%;top:31.0199%">Афганистан</span>
+                <span class="geo-country" style="left:50.7090%;top:24.0577%">Франция</span>
+                <span class="geo-country" style="left:58.4417%;top:45.9831%">Южный Судан</span>
+                <span class="geo-country" style="left:55.8075%;top:46.1168%">Центральноафриканская Республика</span>
+                <span class="geo-country" style="left:56.7164%;top:62.2792%">Ботсвана</span>
+                <span class="geo-country" style="left:60.5299%;top:49.6950%">Кения</span>
+                <span class="geo-country" style="left:48.0035%;top:32.4163%">Марокко</span>
+                <span class="geo-country" style="left:62.9734%;top:60.3490%">Мадагаскар</span>
+                <span class="geo-country" style="left:58.9280%;top:22.3751%">Украина</span>
+                <span class="geo-country" style="left:78.0759%;top:41.4113%">Таиланд</span>
+                <span class="geo-country" style="left:49.0376%;top:27.7272%">Испания</span>
+                <span class="geo-country" style="left:62.5534%;top:48.0173%">Сомали</span>
+                <span class="geo-country" style="left:66.2991%;top:27.8582%">Туркмения</span>
+                <span class="geo-country" style="left:89.9751%;top:53.1640%">Папуа — Новая Гвинея</span>
+                <span class="geo-country" style="left:53.4649%;top:47.4528%">Камерун</span>
+                <span class="geo-country" style="left:67.7793%;top:26.8369%">Узбекистан</span>
+                <span class="geo-country" style="left:62.7429%;top:41.4843%">Йемен</span>
+                <span class="geo-country" style="left:55.2825%;top:13.4116%">Швеция</span>
+                <span class="geo-country" style="left:62.0172%;top:31.6144%">Ирак</span>
+                <span class="geo-country" style="left:88.4562%;top:29.9208%">Япония</span>
+                <span class="geo-country" style="left:33.2927%;top:62.0414%">Парагвай</span>
+                <span class="geo-country" style="left:52.6889%;top:15.9127%">Норвегия</span>
+                <span class="geo-country" style="left:58.3126%;top:60.5065%">Зимбабве</span>
+                <span class="geo-country" style="left:52.6884%;top:21.6879%">Германия</span>
+                <span class="geo-country" style="left:54.4168%;top:49.9209%">Республика Конго</span>
+                <span class="geo-country" style="left:81.6214%;top:48.5952%">Малайзия</span>
+                <span class="geo-country" style="left:57.5768%;top:14.8598%">Финляндия</span>
+                <span class="geo-country" style="left:79.2742%;top:37.9359%">Вьетнам</span>
+                <span class="geo-country" style="left:48.4532%;top:45.8381%">Кот-д’Ивуар</span>
+                <span class="geo-country" style="left:53.0769%;top:25.1486%">Италия</span>
+                <span class="geo-country" style="left:65.9268%;top:37.7109%">Оман</span>
+                <span class="geo-country" style="left:55.4140%;top:21.1165%">Польша</span>
+                <span class="geo-country" style="left:84.0181%;top:43.7789%">Филиппины</span>
+                <span class="geo-country" style="left:97.9964%;top:72.0883%">Новая Зеландия</span>
+                <span class="geo-country" style="left:49.6211%;top:42.9594%">Буркина-Фасо</span>
+                <span class="geo-country" style="left:53.2878%;top:50.2432%">Габон</span>
+                <span class="geo-country" style="left:28.2810%;top:50.6995%">Эквадор</span>
+                <span class="geo-country" style="left:49.4121%;top:19.7763%">Великобритания</span>
+                <span class="geo-country" style="left:59.1524%;top:48.9041%">Уганда</span>
+                <span class="geo-country" style="left:49.7120%;top:45.7124%">Гана</span>
+                <span class="geo-country" style="left:47.2177%;top:44.1008%">Гвинея</span>
+                <span class="geo-country" style="left:56.9368%;top:24.5926%">Румыния</span>
+                <span class="geo-country" style="left:78.4816%;top:39.2045%">Лаос</span>
+                <span class="geo-country" style="left:33.6270%;top:47.1532%">Гайана</span>
+                <span class="geo-country" style="left:57.8938%;top:20.0990%">Беларусь</span>
+                <span class="geo-country" style="left:70.7035%;top:26.8508%">Киргизия</span>
+                <span class="geo-country" style="left:45.8948%;top:41.5899%">Сенегал</span>
+                <span class="geo-country" style="left:60.6327%;top:30.5519%">Сирия</span>
+                <span class="geo-country" style="left:79.0291%;top:42.9736%">Камбоджа</span>
+                <span class="geo-country" style="left:34.4536%;top:68.3117%">Уругвай</span>
+                <span class="geo-country" style="left:62.9810%;top:44.7534%">Сомалиленд</span>
+                <span class="geo-country" style="left:52.5022%;top:31.2849%">Тунис</span>
+                <span class="geo-country" style="left:73.2333%;top:34.2789%">Непал</span>
+                <span class="geo-country" style="left:34.4692%;top:47.6978%">Суринам</span>
+                <span class="geo-country" style="left:70.1631%;top:28.7779%">Таджикистан</span>
+                <span class="geo-country" style="left:74.9125%;top:36.5472%">Бангладеш</span>
+                <span class="geo-country" style="left:56.0349%;top:28.0596%">Греция</span>
+                <span class="geo-country" style="left:26.3696%;top:42.9607%">Никарагуа</span>
+                <span class="geo-country" style="left:85.1235%;top:27.8415%">КНДР</span>
+                <span class="geo-country" style="left:60.6349%;top:41.2292%">Эритрея</span>
+                <span class="geo-country" style="left:50.6533%;top:44.2640%">Бенин</span>
+                <span class="geo-country" style="left:28.3400%;top:38.1478%">Куба</span>
+                <span class="geo-country" style="left:25.8646%;top:41.7807%">Гондурас</span>
+                <span class="geo-country" style="left:59.3356%;top:57.4371%">Малави</span>
+                <span class="geo-country" style="left:56.9881%;top:26.3840%">Болгария</span>
+                <span class="geo-country" style="left:24.8619%;top:41.6766%">Гватемала</span>
+                <span class="geo-country" style="left:44.8129%;top:14.0115%">Исландия</span>
+                <span class="geo-country" style="left:85.5915%;top:29.7862%">Республика Корея</span>
+                <span class="geo-country" style="left:47.3721%;top:46.4182%">Либерия</span>
+                <span class="geo-country" style="left:46.4916%;top:36.6847%">Западная Сахара</span>
+                <span class="geo-country" style="left:47.7023%;top:27.9963%">Португалия</span>
+                <span class="geo-country" style="left:55.4022%;top:23.8406%">Венгрия</span>
+                <span class="geo-country" style="left:63.1142%;top:27.5542%">Азербайджан</span>
+                <span class="geo-country" style="left:60.1044%;top:32.8861%">Иордания</span>
+                <span class="geo-country" style="left:53.9251%;top:23.6006%">Австрия</span>
+                <span class="geo-country" style="left:54.2715%;top:22.2876%">Чехия</span>
+                <span class="geo-country" style="left:65.1520%;top:36.9632%">Объединённые Арабские Эмираты</span>
+                <span class="geo-country" style="left:46.7323%;top:45.2125%">Сьерра-Леоне</span>
+                <span class="geo-country" style="left:55.7744%;top:25.4500%">Сербия</span>
+                <span class="geo-country" style="left:27.6800%;top:45.1545%">Панама</span>
+                <span class="geo-country" style="left:62.1488%;top:26.7388%">Грузия</span>
+                <span class="geo-country" style="left:72.4180%;top:45.7883%">Шри-Ланка</span>
+                <span class="geo-country" style="left:57.0719%;top:18.2962%">Латвия</span>
+                <span class="geo-country" style="left:56.6916%;top:19.3868%">Литва</span>
+                <span class="geo-country" style="left:50.2939%;top:45.1071%">Того</span>
+                <span class="geo-country" style="left:47.8337%;top:20.5118%">Ирландия</span>
+                <span class="geo-country" style="left:54.5479%;top:24.5523%">Хорватия</span>
+                <span class="geo-country" style="left:26.6450%;top:44.4083%">Коста-Рика</span>
+                <span class="geo-country" style="left:55.0190%;top:25.5050%">Босния и Герцеговина</span>
+                <span class="geo-country" style="left:30.3739%;top:39.3866%">Доминиканская Республика</span>
+                <span class="geo-country" style="left:55.2916%;top:22.9255%">Словакия</span>
+                <span class="geo-country" style="left:52.0733%;top:24.0449%">Швейцария</span>
+                <span class="geo-country" style="left:57.1853%;top:17.3751%">Эстония</span>
+                <span class="geo-country" style="left:52.5050%;top:18.9072%">Дания</span>
+                <span class="geo-country" style="left:51.5587%;top:20.8765%">Нидерланды</span>
+                <span class="geo-country" style="left:75.0112%;top:34.7018%">Бутан</span>
+                <span class="geo-country" style="left:45.9655%;top:43.2424%">Гвинея-Бисау</span>
+                <span class="geo-country" style="left:83.5745%;top:36.8598%">Тайвань</span>
+                <span class="geo-country" style="left:57.9133%;top:23.6472%">Молдавия</span>
+                <span class="geo-country" style="left:51.3335%;top:21.7859%">Бельгия</span>
+                <span class="geo-country" style="left:55.5872%;top:27.4140%">Албания</span>
+                <span class="geo-country" style="left:29.9378%;top:39.2979%">Республика Гаити</span>
+                <span class="geo-country" style="left:62.4446%;top:27.5227%">Армения</span>
+                <span class="geo-country" style="left:57.8463%;top:66.3779%">Лесото</span>
+                <span class="geo-country" style="left:52.4973%;top:48.7039%">Экваториальная Гвинея</span>
+                <span class="geo-country" style="left:58.3103%;top:51.8516%">Бурунди</span>
+                <span class="geo-country" style="left:55.9877%;top:26.9121%">Северная Македония</span>
+                <span class="geo-country" style="left:94.2140%;top:54.4609%">Соломоновы Острова</span>
+                <span class="geo-country" style="left:58.3622%;top:51.0540%">Руанда</span>
+                <span class="geo-country" style="left:95.8567%;top:61.7026%">Новая Каледония</span>
+                <span class="geo-country" style="left:59.6800%;top:32.8271%">Израиль</span>
+                <span class="geo-country" style="left:25.3575%;top:40.4433%">Белиз</span>
+                <span class="geo-country" style="left:61.8052%;top:43.3465%">Джибути</span>
+                <span class="geo-country" style="left:25.3083%;top:42.3970%">Сальвадор</span>
+                <span class="geo-country" style="left:99.4376%;top:59.9034%">Фиджи</span>
+                <span class="geo-country" style="left:54.1431%;top:24.4107%">Словения</span>
+                <span class="geo-country" style="left:58.7409%;top:64.7409%">Эсватини</span>
+                <span class="geo-country" style="left:63.1428%;top:33.6591%">Кувейт</span>
+                <span class="geo-country" style="left:33.6837%;top:78.6716%">Фолклендские острова</span>
+                <span class="geo-country" style="left:28.5704%;top:35.3323%">Багамские Острова</span>
+                <span class="geo-country" style="left:84.9596%;top:54.8909%">Восточный Тимор</span>
+                <span class="geo-country" style="left:45.8338%;top:42.4213%">Гамбия</span>
+                <span class="geo-country" style="left:55.3177%;top:26.2205%">Черногория</span>
+                <span class="geo-country" style="left:28.5226%;top:39.9238%">Ямайка</span>
+                <span class="geo-country" style="left:69.2006%;top:77.3910%">Французские Южные и Антарктические территории</span>
+                <span class="geo-country" style="left:64.2065%;top:35.9792%">Катар</span>
+                <span class="geo-country" style="left:55.7946%;top:26.3369%">Республика Косово</span>
+                <span class="geo-country" style="left:81.8200%;top:47.5287%">Бруней</span>
+                <span class="geo-country" style="left:59.9980%;top:31.0370%">Ливан</span>
+                <span class="geo-country" style="left:31.5330%;top:39.8696%">Пуэрто-Рико</span>
+                <span class="geo-country" style="left:33.0782%;top:43.8895%">Тринидад и Тобаго</span>
+                <span class="geo-country" style="left:96.3635%;top:58.5397%">Вануату</span>
+                <span class="geo-country" style="left:59.1901%;top:30.6037%">Кипр</span>
+                <span class="geo-country" style="left:59.8032%;top:32.1959%">Палестина</span>
+                <span class="geo-country" style="left:59.3590%;top:30.4355%">Турецкая Республика Северного Кипра</span>
+                <span class="geo-country" style="left:51.6882%;top:22.3701%">Люксембург</span>
+              </div>
+              </div>
             </div>
           </div>
           <p class="atlas-credit">Карта на основе Natural Earth</p>
