@@ -10,6 +10,13 @@ const teamByName = new Map(
 const zoomLevels = [1, 2, 4, 8, 16];
 let zoomIndex = 0;
 let selectedMarker;
+let selectedPlaceButton;
+
+const placeList = document.createElement("div");
+placeList.className = "geo-controls";
+placeList.style.marginTop = "12px";
+placeList.setAttribute("role", "group");
+placeList.setAttribute("aria-label", "Города и страны команды");
 
 function setZoom(index) {
   const previous = zoomLevels[zoomIndex];
@@ -27,7 +34,10 @@ function setZoom(index) {
   zoomOut.disabled = zoomReset.disabled = index === 0;
 }
 
-function showPlace(place, label, marker) {
+function showPlace(place, label, marker, placeButton) {
+  selectedPlaceButton?.setAttribute("aria-pressed", "false");
+  placeButton.setAttribute("aria-pressed", "true");
+  selectedPlaceButton = placeButton;
   selectedMarker?.setAttribute("aria-pressed", "false");
   marker.setAttribute("aria-pressed", "true");
   selectedMarker = marker;
@@ -76,10 +86,21 @@ for (const place of window.STICKERBOOK_GEOGRAPHY) {
   marker.setAttribute("aria-label", `${label} · ${members.length}`);
   marker.setAttribute("aria-controls", "placeDetails");
   marker.setAttribute("aria-pressed", "false");
-  marker.addEventListener("click", () => showPlace(place, label, marker));
+  const placeButton = document.createElement("button");
+  placeButton.type = "button";
+  placeButton.className = "pill";
+  placeButton.textContent = label;
+  placeButton.setAttribute("aria-controls", "placeDetails");
+  placeButton.setAttribute("aria-pressed", "false");
+
+  const selectPlace = () => showPlace(place, label, marker, placeButton);
+  marker.addEventListener("click", selectPlace);
+  placeButton.addEventListener("click", selectPlace);
   world.append(marker);
+  placeList.append(placeButton);
 }
 
 if (world.childElementCount) {
-  details.firstElementChild.textContent = "Нажми на отметку, чтобы узнать, кто оттуда.";
+  details.before(placeList);
+  details.firstElementChild.textContent = "Выбери отметку на карте или город в списке.";
 }
