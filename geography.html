@@ -65,15 +65,16 @@
       container-type: inline-size; scrollbar-width: none; user-select: none; touch-action: none;
     }
     .geo-viewport::-webkit-scrollbar { display: none; }
-    .geo-viewport, .geo-viewport .geo-marker { cursor: zoom-in; }
+    .atlas-sheet { --atlas-loupe: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cg%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%3E%3Cpath%20d%3D%22m13%2013%206%206%22%20stroke%3D%22white%22%20stroke-width%3D%225%22%2F%3E%3Ccircle%20cx%3D%229%22%20cy%3D%229%22%20r%3D%225.5%22%20stroke%3D%22white%22%20stroke-width%3D%224%22%2F%3E%3Cpath%20d%3D%22m13%2013%206%206%22%20stroke%3D%22%23302c24%22%20stroke-width%3D%222.5%22%2F%3E%3Ccircle%20cx%3D%229%22%20cy%3D%229%22%20r%3D%225.5%22%20stroke%3D%22%23302c24%22%20stroke-width%3D%222%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") 9 9, default; }
+    .geo-viewport, .geo-viewport .geo-marker { cursor: var(--atlas-loupe); }
     .atlas-sheet:has(.geo-preview:not([hidden])) .geo-viewport,
-    .geo-viewport .geo-marker[aria-expanded="true"] { cursor: zoom-out; }
+    .geo-viewport .geo-marker[aria-expanded="true"] { cursor: var(--atlas-loupe); }
     .geo-preview {
       position: absolute; z-index: 4; left: 50%; top: 50%;
       translate: -50% -50%;
       width: min(244px, 78%); height: min(320px, calc(100% - 16px));
       padding: 0; border: 0; background: transparent; color: #3d4436;
-      cursor: zoom-out; touch-action: manipulation;
+      cursor: var(--atlas-loupe); touch-action: manipulation;
     }
     .geo-preview[hidden] { display: none; }
     .geo-preview[data-pair] { width: min(470px, 92%); }
