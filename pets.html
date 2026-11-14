@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#fbfaf5">
+  <title>Пушистые коллеги — TravelAsk Стикербук</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="darkfix.css?v=2">
+  <style>
+    .pet-gallery:empty { display: none; }
+    .pet-gallery:not(:empty) + .empty { display: none; }
+    .pet-gallery .member-name, .pet-gallery .member-role { overflow-wrap: anywhere; }
+    .nav [aria-current="page"] { text-decoration: underline; text-underline-offset: 4px; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <a class="brand" href="index.html"><div class="brand-title">TravelAsk ✈</div><div class="brand-sub">Стикербук</div></a>
+      <nav class="nav">
+        <a class="pill mint" href="index.html">Команда</a>
+        <a class="pill lav" href="achievements.html">Ачивки</a>
+        <a class="pill" href="pets.html" aria-current="page">Пушистые коллеги 🐾</a>
+      </nav>
+    </header>
+    <h1 class="section-label">Секретный отдел контроля качества</h1>
+    <!-- Когда появится первая фотография, скопируйте карточку внутрь pet-gallery.
+    <article class="member-card">
+      <div class="photo-paper">
+        <img src="pets/photo.jpg" alt="Фото питомца" loading="lazy">
+        <h2 class="member-name">Кличка</h2>
+        <div class="member-role">Имя модератора и должность питомца</div>
+      </div>
+    </article>
+    -->
+    <div class="team-grid pet-gallery"></div>
+    <p class="empty">Первые фотокарточки питомцев скоро появятся ♡</p>
+    <footer class="footer"><span>Больше, чем ачивки ♡</span><span>TravelAsk</span></footer>
+  </main>
+</body>
+</html>
