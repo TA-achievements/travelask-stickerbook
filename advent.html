@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Новогодний адвент — TravelAsk Стикербук</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="darkfix.css?v=2">
+<style>
+  .advent { color: #fff0d4; padding: clamp(16px, 4vw, 48px); border-radius: 18px;
+    background: radial-gradient(ellipse at 80% 0%, #3c6d5e, transparent 56%), #142f30;
+    border: 1px solid #9a8c60; box-shadow: 0 12px 30px #281d2240; }
+  .advent h1 { font: 700 clamp(32px, 6vw, 62px)/.98 Georgia, serif; margin: 0 0 14px; }
+  .advent-status { margin: 0 0 24px; line-height: 1.45; color: #f6e7cd; }
+  .advent-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: clamp(6px, 1.4vw, 15px); }
+  .advent-window { position: relative; display: grid; place-items: center; aspect-ratio: 1.04;
+    min-height: 48px; padding: 0; isolation: isolate; perspective: 400px;
+    color: #fff3d9; background: #102121; border: 1px solid #dbc18b80;
+    border-radius: 7px; cursor: pointer; }
+  .advent-door { position: absolute; inset: 0; display: grid; place-content: center; gap: 2px;
+    border-radius: 6px; transform-origin: left center; backface-visibility: hidden;
+    background: linear-gradient(150deg, #6e9b7729, transparent), #284d44; pointer-events: none;
+    font: 700 clamp(19px, 3vw, 37px)/1 Georgia, serif; }
+  .advent-window:nth-child(3n+2) .advent-door { background-color: #743d46; }
+  .advent-window:nth-child(3n) .advent-door { background-color: #344c65; }
+  .advent-window[aria-disabled="true"] { cursor: default; }
+  .advent-window[aria-disabled="true"] .advent-door { filter: saturate(.6) brightness(.86); }
+  .advent-window[data-today] { outline: 2px solid #ffdc90; outline-offset: 2px; }
+  .advent-window[data-opened] .advent-door { box-shadow: inset 0 0 0 2px #ffd89f70; }
+  .advent-window[data-opening] .advent-door { animation: swing .48s ease both; }
+  .advent-symbol { font: 600 11px/1 system-ui, sans-serif; }
+  @keyframes swing { 50%, 100% { transform: rotateY(-108deg); } }
+  .advent-card { width: min(430px, calc(100vw - 32px)); max-height: calc(100dvh - 32px);
+    padding: clamp(20px, 5vw, 34px); border: 1px solid #b58f53; border-radius: 10px;
+    background: #fff7e5; color: #28372f; box-shadow: 0 20px 65px #10201b80; }
+  .advent-card::backdrop { background: #0a191bbb; }
+  .advent-card h2 { margin: 8px 0 12px; font: 700 30px/1.12 Georgia, serif; }
+  .advent-card p { line-height: 1.55; }
+  .advent-date { font-weight: 750; color: #70413b; }
+  .advent-close { color: #263b31; cursor: pointer; }
+  @media (max-width: 650px) { .advent-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+  @media (prefers-reduced-motion: reduce) { .advent-window[data-opening] .advent-door { animation: none; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="header">
+    <a class="brand" href="index.html"><div class="brand-title">TravelAsk ✈</div><div class="brand-sub">Стикербук</div></a>
+    <nav class="nav" aria-label="Стикербук">
+      <a class="pill mint" href="index.html">Команда</a>
+      <a class="pill lav" href="achievements.html">Ачивки</a>
+      <a class="pill" href="pets.html">Пушистые коллеги 🐾</a>
+      <a class="pill mint" href="geography.html">География команды</a>
+      <a class="pill lav" href="advent.html" aria-current="page">Адвент ❄</a>
+    </nav>
+  </header>
+  <section class="advent" aria-labelledby="advent-title">
+    <h1 id="advent-title">Новогодний адвент</h1>
+    <p class="advent-status" id="adventStatus" role="status"></p>
+    <div class="advent-grid" id="adventGrid"></div>
+  </section>
+</main>
+<dialog id="adventCard" class="advent-card" aria-labelledby="activityTitle">
+  <div id="activityDate" class="advent-date"></div>
+  <h2 id="activityTitle"></h2>
+  <p id="activityText"></p>
+  <form method="dialog"><button class="pill mint advent-close">Закрыть</button></form>
+</dialog>
+<script>
+  const year = 2026;
+  const activities = [
+    ["Вечер уюта", "Устроить себе вечер уюта: свечи, тёплый плед и любимая музыка."],
+    ["Список подарков", "Составить список подарков."],
+    ["Гирлянды и снежинки", "Украсить дом гирляндами и бумажными снежинками."],
+    ["Новогодний плейлист", "Послушать новогоднюю музыку."],
+    ["Театр или выставка", "Сходить в театр или на выставку."],
+    ["Прогулка за огоньками", "Прогуляться вечером и выбрать самую красивую праздничную витрину. Если погода не располагает, можно устроить такую прогулку в торговом центре."],
+    ["Новогодняя открытка", "Выбрать или сделать новогоднюю открытку и написать в ней личное пожелание. Отправить её можно ближе к празднику."],
+    ["Зима в Простоквашино", "Посмотреть «Зиму в Простоквашино» и окунуться в детские воспоминания."],
+    ["Какао с зефирками", "Приготовить вкусное какао с зефирками."],
+    ["Зимняя история", "Прочитать небольшой зимний рассказ или сказку. Можно начать с истории, которую давно хотелось перечитать."],
+    ["Декор своими руками", "Сделать новогодний декор своими руками."],
+    ["На каток", "Покататься на коньках."],
+    ["Новогодняя ярмарка", "Сходить на новогоднюю ярмарку, чтобы пить глинтвейн и выбирать презенты близким."],
+    ["Праздничное меню", "Запланировать праздничное меню."],
+    ["Доброе дело", "Сделать доброе дело."],
+    ["Красивая упаковка", "Научиться красиво упаковывать подарки."],
+    ["Новый год в другой стране", "Узнать, как встречают Новый год в другой стране, и выбрать самую неожиданную традицию."],
+    ["Новогоднее печенье", "Испечь новогоднее печенье."],
+    ["Зимняя фотосессия", "Устроить зимнюю фотосессию."],
+    ["Ёлка", "Нарядить ёлку, чтобы задать новогоднее настроение."],
+    ["Зимний пазл", "Собрать небольшой пазл с зимним сюжетом. Подойдёт и онлайн-пазл."],
+    ["Праздничный образ", "Примерить наряд на Новый год и выбрать одну деталь, которая поднимает настроение."],
+    ["Новогодний фильм", "Посмотреть новогодний фильм, который создаёт настоящее праздничное настроение."],
+    ["Танцевальная пауза", "Разучить пару танцевальных движений и устроить себе минуту танцев."],
+    ["Звонок друзьям", "Созвониться с другом, с которым давно не удавалось поговорить, и обменяться планами на праздники."],
+    ["Один дома", "Заказать пиццу, включить «Один дома» и поболеть за Кевина, пока он готовит свой самый хитрый праздничный план."],
+    ["Семейная настолка", "Поиграть в настольную игру с семьёй."],
+    ["Список желаний", "Составить список своих желаний на следующий год."],
+    ["Самые счастливые моменты", "Подвести итоги года и вспомнить самые счастливые моменты."],
+    ["Цели на будущий год", "Написать список целей на будущий год."],
+    ["С Новым годом!", "Встретить Новый год с улыбкой и верой в чудо!"],
+  ];
+
+  const grid = document.querySelector("#adventGrid");
+  const status = document.querySelector("#adventStatus");
+  const dialog = document.querySelector("#adventCard");
+  const motion = matchMedia("(prefers-reduced-motion: reduce)");
+  const clock = new Intl.DateTimeFormat("ru-RU", {
+    timeZone: "Europe/Moscow", year: "numeric", month: "numeric", day: "numeric",
+  });
+  const storageKey = `stickerbook-advent-${year}`;
+  const opened = new Set();
+  try {
+    for (const day of JSON.parse(localStorage.getItem(storageKey) ?? "[]")) {
+      if (Number.isInteger(day) && day >= 1 && day <= 31) opened.add(day);
+    }
+  } catch {}
+  let opening = false;
+
+  function availability(now = new Date()) {
+    const { year: currentYear, month, day } = Object.fromEntries(
+      clock.formatToParts(now).filter(part => part.type !== "literal")
+        .map(part => [part.type, Number(part.value)])
+    );
+    if (currentYear < year || (currentYear === year && month < 12)) return { last: 0, today: 0 };
+    if (currentYear > year) return { last: 31, today: 0 };
+    return { last: day, today: day };
+  }
+
+  function refresh() {
+    const { last, today } = availability();
+    status.textContent = !last ? `Старт 1 декабря ${year} года по Москве.` :
+      today ? "Открывай сегодняшнее окошко и любые пропущенные." : "Все окошки доступны.";
+    buttons.forEach((button, index) => {
+      const day = index + 1;
+      const locked = day > last;
+      button.setAttribute("aria-disabled", String(locked));
+      button.toggleAttribute("data-today", day === today);
+      button.toggleAttribute("data-opened", opened.has(day));
+      button.setAttribute("aria-label", `${day} декабря${locked ? ", ещё закрыто" : opened.has(day) ? ", уже открыто" : ""}`);
+      button.querySelector(".advent-symbol").textContent = opened.has(day) ? "✓" : locked ? "·" : "✦";
+    });
+    return last;
+  }
+
+  function openDay(day, button) {
+    if (opening || dialog.open || day > refresh()) return;
+    opening = true;
+    const alreadyOpened = opened.has(day);
+    opened.add(day);
+    try { localStorage.setItem(storageKey, JSON.stringify([...opened])); } catch {}
+    refresh();
+    const [title, description] = activities[day - 1];
+    document.querySelector("#activityDate").textContent = `${day} декабря`;
+    document.querySelector("#activityTitle").textContent = title;
+    document.querySelector("#activityText").textContent = description;
+    const animate = !motion.matches && !alreadyOpened;
+
+    function showCard() {
+      dialog.showModal();
+      if (animate) {
+        const source = button.getBoundingClientRect();
+        const target = dialog.getBoundingClientRect();
+        const x = source.left + source.width / 2 - target.left - target.width / 2;
+        const y = source.top + source.height / 2 - target.top - target.height / 2;
+        dialog.animate([
+          { transform: `translate(${x}px, ${y}px) scale(.16) rotate(-9deg)`, opacity: .35 },
+          { transform: "translate(0,-12px) scale(1.03) rotate(2deg)", offset: .76 },
+          { transform: "none", opacity: 1 },
+        ], { duration: 465, easing: "cubic-bezier(.2,.74,.3,1)" });
+      }
+      button.removeAttribute("data-opening");
+      opening = false;
+    }
+
+    if (animate) {
+      button.setAttribute("data-opening", "");
+      setTimeout(showCard, 240);
+    } else showCard();
+  }
+
+  const buttons = activities.map((_, index) => {
+    const day = index + 1;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "advent-window";
+    button.innerHTML = `<span class="advent-door" aria-hidden="true">${day}<span class="advent-symbol"></span></span>`;
+    button.addEventListener("click", () => openDay(day, button));
+    grid.append(button);
+    return button;
+  });
+  refresh();
+  setInterval(refresh, 15000);
+  window.addEventListener("pageshow", refresh);
+</script>
+</body>
+</html>
