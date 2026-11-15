@@ -84,9 +84,15 @@
   .advent-window[aria-disabled="true"] .advent-door { filter: saturate(.68) brightness(.86); }
   .advent-window[data-today] { outline: 2px solid #ffdc90; outline-offset: 2px; }
   .advent-window:focus-visible { outline: 3px solid #fff2c9; outline-offset: 3px; z-index: 3; }
-  .advent-window[data-opened] .advent-door { transform: rotateY(-24deg); }
+  .advent-window[data-opened] { --hover-door-angle: -79deg; }
+  .advent-window[data-opened] .advent-door { transform: rotateY(-67deg); }
+  .advent-window .advent-inside-number { display: none; }
+  .advent-window[data-opened] .advent-inside-number {
+    display: block; font: 700 clamp(20px, 3vw, 34px)/1 Georgia, serif;
+    color: #ffebba; text-shadow: 0 1px 3px #21170b;
+  }
   @media (hover: hover) {
-    .advent-window:not([aria-disabled="true"]):not([data-opening]):hover .advent-door { transform: rotateY(-37deg); filter: brightness(1.13); }
+    .advent-window:not([aria-disabled="true"]):not([data-opening]):hover .advent-door { transform: rotateY(var(--hover-door-angle, -37deg)); filter: brightness(1.13); }
   }
   .advent-window[data-opening] { z-index: 4; }
   .advent-window[data-opening] .advent-door { transform: rotateY(-118deg); }
@@ -387,11 +393,16 @@
   });
   const storageKey = `stickerbook-advent-${year}`;
   const opened = new Set();
-  try {
-    for (const day of JSON.parse(localStorage.getItem(storageKey) ?? "[]")) {
-      if (Number.isInteger(day) && day >= 1 && day <= 31) opened.add(day);
-    }
-  } catch {}
+  function restoreOpened() {
+    try {
+      const stored = JSON.parse(localStorage.getItem(storageKey) ?? "[]");
+      if (!Array.isArray(stored)) return;
+      for (const day of stored) {
+        if (Number.isInteger(day) && day >= 1 && day <= activities.length) opened.add(day);
+      }
+    } catch {}
+  }
+  restoreOpened();
   let opening = false;
 
   function availability(now = new Date()) {
@@ -489,6 +500,7 @@
   function openDay(day, button) {
     if (opening || dialog.open || day > refresh()) return;
     opening = true;
+    restoreOpened();
     opened.add(day);
     try { localStorage.setItem(storageKey, JSON.stringify([...opened])); } catch {}
     refresh();
@@ -543,7 +555,7 @@
     const shapes = ["house", "bauble", "star", "tree", "tag", "heart", "arch"];
     button.dataset.shape = day === 31 ? "bow" : shapes[index % shapes.length];
     const motif = ["✧", "❅", "✦", "❋", "✷"][index % 5];
-    button.innerHTML = `<span class="advent-inside" aria-hidden="true">✦</span>
+    button.innerHTML = `<span class="advent-inside" aria-hidden="true"><span class="advent-inside-number">${day}</span></span>
       <span class="advent-door" aria-hidden="true"><span class="advent-number">${day}</span>
       <span class="advent-motif">${motif}</span></span>`;
     button.addEventListener("click", () => openDay(day, button));
@@ -561,7 +573,15 @@
     }, 3400);
   }
   setInterval(refresh, 15000);
-  window.addEventListener("pageshow", refresh);
+  window.addEventListener("pageshow", () => {
+    restoreOpened();
+    refresh();
+  });
+  window.addEventListener("storage", event => {
+    if (event.key !== storageKey) return;
+    restoreOpened();
+    refresh();
+  });
 </script>
 </body>
 </html>
