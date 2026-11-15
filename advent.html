@@ -117,19 +117,13 @@
     perspective: 2300px; padding: 16px clamp(68px, 24vw, 260px) 58px clamp(68px, 24vw, 260px); padding-right: 12px;
   }
   .advent { transform-origin: center 93%; margin-bottom: 24px; }
-  .advent-intro .advent { animation: raise-box 1800ms cubic-bezier(.25,.7,.24,1) both; }
-  @keyframes raise-box {
-    0%, 12% { transform: translateY(7%) rotateX(71deg) rotateZ(-3deg) scale(.92); }
-    69% { transform: translateY(-2%) rotateX(-7deg) rotateZ(1deg); }
-    100% { transform: none; }
-  }
   .advent-covers { position: absolute; inset: 0; z-index: 8; perspective: 1800px; pointer-events: none; }
   .advent-cover {
     position: absolute; inset: 0; transform-origin: left center; transform-style: preserve-3d;
     --open-cover: rotateY(-145deg) scaleX(.43);
     transform: var(--open-cover);
   }
-  .advent-intro .advent-cover { animation: open-book 1550ms 1850ms cubic-bezier(.24,.66,.2,1) both; }
+  .advent-intro .advent-cover { animation: open-book 1550ms 180ms cubic-bezier(.24,.66,.2,1) both; }
   @keyframes open-book { from { transform: none; } to { transform: var(--open-cover); } }
   .advent-cover-face {
     position: absolute; inset: 0; display: grid; place-content: center; text-align: center;
@@ -182,7 +176,7 @@
   .advent-window[data-shape="tree"] .advent-number { translate: 0 6px; }
   .advent-window[data-today] { outline-style: dashed; }
   @media (prefers-reduced-motion: reduce) {
-    .advent-intro .advent, .advent-intro .advent-cover { animation: none; }
+    .advent-intro .advent-cover { animation: none; }
   }
   /* Paint, paper lining, and the exposed edges of the box. */
   .advent {
@@ -570,7 +564,7 @@
     setTimeout(() => {
       stage.classList.remove("advent-intro");
       grid.inert = false;
-    }, 3400);
+    }, 1730);
   }
   setInterval(refresh, 15000);
   window.addEventListener("pageshow", () => {
