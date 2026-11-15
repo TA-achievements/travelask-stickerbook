@@ -7,39 +7,107 @@
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="darkfix.css?v=2">
 <style>
-  .advent { color: #fff0d4; padding: clamp(16px, 4vw, 48px); border-radius: 18px;
-    background: radial-gradient(ellipse at 80% 0%, #3c6d5e, transparent 56%), #142f30;
-    border: 1px solid #9a8c60; box-shadow: 0 12px 30px #281d2240; }
-  .advent h1 { font: 700 clamp(32px, 6vw, 62px)/.98 Georgia, serif; margin: 0 0 14px; }
-  .advent-status { margin: 0 0 24px; line-height: 1.45; color: #f6e7cd; }
-  .advent-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: clamp(6px, 1.4vw, 15px); }
-  .advent-window { position: relative; display: grid; place-items: center; aspect-ratio: 1.04;
-    min-height: 48px; padding: 0; isolation: isolate; perspective: 400px;
-    color: #fff3d9; background: #102121; border: 1px solid #dbc18b80;
-    border-radius: 7px; cursor: pointer; }
-  .advent-door { position: absolute; inset: 0; display: grid; place-content: center; gap: 2px;
-    border-radius: 6px; transform-origin: left center; backface-visibility: hidden;
-    background: linear-gradient(150deg, #6e9b7729, transparent), #284d44; pointer-events: none;
-    font: 700 clamp(19px, 3vw, 37px)/1 Georgia, serif; }
-  .advent-window:nth-child(3n+2) .advent-door { background-color: #743d46; }
-  .advent-window:nth-child(3n) .advent-door { background-color: #344c65; }
+  .advent {
+    --gold: #e7c489; --cream: #fff2d6; --pine: #123b36; --red: #843345;
+    position: relative; isolation: isolate; max-width: 1040px; margin: 28px auto 40px;
+    padding: clamp(14px, 3.6vw, 39px);
+    color: var(--cream); border: 1px solid #b69058; border-radius: 13px;
+    background:
+      radial-gradient(circle at 13% 21%, #f8d9a12b 0 1px, transparent 2px) 0 0 / 27px 29px,
+      radial-gradient(ellipse at top, #306554, transparent 72%), #143c37;
+    box-shadow: 0 7px 0 #10312e, 0 10px 0 #ac8651, 0 16px 0 #102c27, 0 28px 44px #28211755;
+  }
+  .advent::before {
+    content: ""; position: absolute; inset: 7px; z-index: -1;
+    border: 1px solid #edc78c78; border-radius: 8px; pointer-events: none;
+  }
+  .advent-lid { position: relative; text-align: center; padding: clamp(31px, 6vw, 62px) 8px 24px; }
+  .advent-bow {
+    position: absolute; top: -9px; left: 50%; translate: -50% 0; width: 28px; height: 23px;
+    border-radius: 7px; z-index: 1;
+    background: linear-gradient(145deg, #c86f71, #863344 68%);
+    box-shadow: inset 0 0 0 1px #f7c0a18c, 0 3px 7px #102823;
+  }
+  .advent-bow::before, .advent-bow::after {
+    content: ""; position: absolute; top: -6px; width: 38px; height: 26px;
+    z-index: -1; border: 1px solid #f3bc9c9c;
+    background: radial-gradient(ellipse at center, #592434 17%, #a84958 57%, #c77274 82%);
+  }
+  .advent-bow::before { right: 18px; border-radius: 65% 48% 30% 65%; rotate: 20deg; }
+  .advent-bow::after { left: 18px; border-radius: 48% 65% 65% 30%; rotate: -20deg; }
+  .advent-lid h1 { margin: 0; font: 700 clamp(32px, 7vw, 75px)/1 Georgia, serif; text-wrap: balance; }
+  .advent-status { margin: 12px auto 0; line-height: 1.45; color: #ffedc8; }
+  .advent-progress {
+    display: inline-flex; gap: 9px; align-items: center; margin: 14px auto 0;
+    color: #ffe6b8; font-size: 12px;
+  }
+  .advent-progress progress { width: 72px; height: 7px; accent-color: #f2ce8e; }
+  .advent-grid {
+    display: grid; grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-auto-rows: clamp(58px, 9.2vw, 98px); gap: clamp(6px, 1.2vw, 13px);
+    padding: clamp(8px, 1.7vw, 17px); border: 1px solid #d3a95c83; border-radius: 7px;
+    background: #0827249e; box-shadow: inset 0 3px 14px #041b19aa;
+  }
+  .advent-window {
+    --door: #376859; --light: #76a18b;
+    position: relative; display: grid; place-items: center; padding: 0;
+    perspective: 460px; color: var(--cream); border: 1px solid #bda071a6;
+    border-radius: 5px; background: radial-gradient(ellipse, #634e31, #101c19 76%);
+    box-shadow: inset 0 3px 8px #111a16, 0 2px 2px #041813; cursor: pointer;
+  }
+  .advent-window:nth-child(3n + 2) { --door: #853e4c; --light: #ba7981; }
+  .advent-window:nth-child(3n) { --door: #3b566b; --light: #7e9fb1; }
+  .advent-window[data-wide] { grid-column: span 2; }
+  .advent-window:last-child {
+    grid-column: 1 / -1; --door: #84374a; --light: #cb887c;
+    border-color: #e9c078;
+  }
+  .advent-door {
+    display: grid; position: absolute; inset: 0; place-content: center;
+    transform-origin: left center; pointer-events: none; border-radius: 4px;
+    background: radial-gradient(ellipse at top right, var(--light), transparent 87%), var(--door);
+    transition: transform 300ms ease, filter 180ms ease;
+    box-shadow: inset 0 0 0 1px #f7dba555, inset 0 -3px 8px #17292477;
+  }
+  .advent-door::before {
+    content: ""; position: absolute; inset: 4px; border: 1px dashed #f8daa488; border-radius: 3px;
+  }
+  .advent-door::after {
+    content: ""; position: absolute; top: calc(50% - 7px); right: -1px;
+    width: 6px; height: 14px; border-radius: 6px 0 0 6px; background: #1b3028ba;
+  }
+  .advent-number { position: relative; font: 700 clamp(21px, 3.1vw, 37px)/1 Georgia, serif; text-shadow: 0 1px 3px #172b28; }
+  .advent-motif { font: 700 15px/1 Georgia, serif; color: #ffe0a6; margin-top: 3px; }
+  .advent-inside { display: grid; place-items: center; width: 65%; height: 58%; border-radius: 3px;
+    color: #604834; background: #f2d8a8; rotate: 7deg; box-shadow: 0 0 13px #ecc9856b; }
   .advent-window[aria-disabled="true"] { cursor: default; }
-  .advent-window[aria-disabled="true"] .advent-door { filter: saturate(.6) brightness(.86); }
+  .advent-window[aria-disabled="true"] .advent-door { filter: saturate(.68) brightness(.86); }
   .advent-window[data-today] { outline: 2px solid #ffdc90; outline-offset: 2px; }
-  .advent-window[data-opened] .advent-door { box-shadow: inset 0 0 0 2px #ffd89f70; }
-  .advent-window[data-opening] .advent-door { animation: swing .48s ease both; }
-  .advent-symbol { font: 600 11px/1 system-ui, sans-serif; }
-  @keyframes swing { 50%, 100% { transform: rotateY(-108deg); } }
-  .advent-card { width: min(430px, calc(100vw - 32px)); max-height: calc(100dvh - 32px);
-    padding: clamp(20px, 5vw, 34px); border: 1px solid #b58f53; border-radius: 10px;
-    background: #fff7e5; color: #28372f; box-shadow: 0 20px 65px #10201b80; }
-  .advent-card::backdrop { background: #0a191bbb; }
-  .advent-card h2 { margin: 8px 0 12px; font: 700 30px/1.12 Georgia, serif; }
+  .advent-window:focus-visible { outline: 3px solid #fff2c9; outline-offset: 3px; z-index: 3; }
+  .advent-window[data-opened] .advent-door { transform: rotateY(-24deg); }
+  @media (hover: hover) {
+    .advent-window:not([aria-disabled="true"]):not([data-opening]):hover .advent-door { transform: rotateY(-37deg); filter: brightness(1.13); }
+  }
+  .advent-window[data-opening] { z-index: 4; }
+  .advent-window[data-opening] .advent-door { transform: rotateY(-118deg); }
+  .advent-card {
+    width: min(440px, calc(100vw - 32px)); max-height: calc(100dvh - 32px);
+    padding: clamp(23px, 6vw, 42px); color: #2d3c31; border: 1px solid #ab8153;
+    border-radius: 6px; background: repeating-linear-gradient(0deg, #ac895616 0 1px, transparent 1px 24px), #fff4dc;
+    box-shadow: inset 0 0 0 7px #e3ba8255, 0 20px 65px #10201b80;
+  }
+  .advent-card::backdrop { background: #081a199b; }
+  .advent-card h2 { margin: 10px 0 12px; font: 700 clamp(26px, 5vw, 38px)/1.08 Georgia, serif; }
   .advent-card p { line-height: 1.55; }
-  .advent-date { font-weight: 750; color: #70413b; }
+  .advent-date { font-weight: 750; color: #78384a; }
   .advent-close { color: #263b31; cursor: pointer; }
-  @media (max-width: 650px) { .advent-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
-  @media (prefers-reduced-motion: reduce) { .advent-window[data-opening] .advent-door { animation: none; } }
+  @media (max-width: 640px) {
+    .advent-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .advent-window[data-wide] { grid-column: auto; }
+    .advent-window:first-child, .advent-window:nth-child(20) { grid-column: span 2; }
+    .advent { margin-top: 20px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .advent-door { transition: none; } }
 </style>
 </head>
 <body>
@@ -55,8 +123,12 @@
     </nav>
   </header>
   <section class="advent" aria-labelledby="advent-title">
-    <h1 id="advent-title">Новогодний адвент</h1>
-    <p class="advent-status" id="adventStatus" role="status"></p>
+    <div class="advent-lid">
+      <span class="advent-bow" aria-hidden="true"></span>
+      <h1 id="advent-title">Новогодний адвент</h1>
+      <p class="advent-status" id="adventStatus" role="status"></p>
+      <label class="advent-progress"><progress id="adventProgress" max="31" value="0"></progress><span id="adventCount">Открыто 0 из 31</span></label>
+    </div>
     <div class="advent-grid" id="adventGrid"></div>
   </section>
 </main>
@@ -132,14 +204,17 @@
     const { last, today } = availability();
     status.textContent = !last ? `Старт 1 декабря ${year} года по Москве.` :
       today ? "Открывай сегодняшнее окошко и любые пропущенные." : "Все окошки доступны.";
+    const visibleOpened = [...opened].filter(day => day <= last).length;
+    document.querySelector("#adventProgress").value = visibleOpened;
+    document.querySelector("#adventCount").textContent = `Открыто ${visibleOpened} из 31`;
     buttons.forEach((button, index) => {
       const day = index + 1;
       const locked = day > last;
       button.setAttribute("aria-disabled", String(locked));
       button.toggleAttribute("data-today", day === today);
-      button.toggleAttribute("data-opened", opened.has(day));
+      button.toggleAttribute("data-opened", !locked && opened.has(day));
       button.setAttribute("aria-label", `${day} декабря${locked ? ", ещё закрыто" : opened.has(day) ? ", уже открыто" : ""}`);
-      button.querySelector(".advent-symbol").textContent = opened.has(day) ? "✓" : locked ? "·" : "✦";
+
     });
     return last;
   }
@@ -164,19 +239,20 @@
         const target = dialog.getBoundingClientRect();
         const x = source.left + source.width / 2 - target.left - target.width / 2;
         const y = source.top + source.height / 2 - target.top - target.height / 2;
-        dialog.animate([
+        const flight = dialog.animate([
           { transform: `translate(${x}px, ${y}px) scale(.16) rotate(-9deg)`, opacity: .35 },
           { transform: "translate(0,-12px) scale(1.03) rotate(2deg)", offset: .76 },
           { transform: "none", opacity: 1 },
         ], { duration: 465, easing: "cubic-bezier(.2,.74,.3,1)" });
+        const finish = () => button.removeAttribute("data-opening");
+        flight.finished.then(finish, finish);
       }
-      button.removeAttribute("data-opening");
       opening = false;
     }
 
     if (animate) {
       button.setAttribute("data-opening", "");
-      setTimeout(showCard, 240);
+      setTimeout(showCard, 260);
     } else showCard();
   }
 
@@ -185,7 +261,11 @@
     const button = document.createElement("button");
     button.type = "button";
     button.className = "advent-window";
-    button.innerHTML = `<span class="advent-door" aria-hidden="true">${day}<span class="advent-symbol"></span></span>`;
+    button.toggleAttribute("data-wide", [1, 5, 8, 12, 13, 17, 20, 23, 25, 29].includes(day));
+    const motif = ["✧", "❅", "✦", "❋", "✷"][index % 5];
+    button.innerHTML = `<span class="advent-inside" aria-hidden="true">✦</span>
+      <span class="advent-door" aria-hidden="true"><span class="advent-number">${day}</span>
+      <span class="advent-motif">${motif}</span></span>`;
     button.addEventListener("click", () => openDay(day, button));
     grid.append(button);
     return button;
