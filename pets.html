@@ -14,6 +14,12 @@
     .pet-filters button[aria-pressed="true"] { background: var(--mint); }
     .pet-toolbar .search { margin: 12px 0 0; }
     .pet-gallery [hidden], .pet-toolbar[hidden], .empty[hidden] { display: none; }
+    .pet-photo-toggle {
+      display: block; margin: 6px auto 0; padding: 5px 10px;
+      border: 1px solid var(--line); border-radius: 999px;
+      background: #edf3e9; color: #334636; cursor: pointer;
+      font: inherit; font-size: 13px;
+    }
     .pet-owner {
       border: 0; background: transparent; color: inherit; padding: 4px;
       cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
@@ -49,11 +55,15 @@
       <!-- Для каждого питомца скопируй блок от <article> до </article> и вставь
            его после этого комментария, перед закрывающим тегом галереи.
            Категории: cat — кошки, dog — собаки, other — другие питомцы.
-           Фото загрузи в папку pets. Подставь фактическое имя файла в src.
+           Фото загрузи в папку pets. Подставь фактические имена файлов в src.
+           Если фото одно, удали строку с barsik-2.jpg.
+           Для каждого снимка обнови alt. Оставь hidden у второго снимка и кнопки.
 
       <article class="member-card" data-kind="cat">
         <div class="photo-paper">
-          <img src="pets/barsik.jpg" alt="Барсик" loading="lazy">
+          <img class="pet-photo" src="pets/barsik.jpg" alt="Барсик — первое фото" loading="lazy">
+          <img class="pet-photo" src="pets/barsik-2.jpg" alt="Барсик — второе фото" loading="lazy" hidden>
+          <button class="pet-photo-toggle" type="button" hidden>Ещё фото</button>
           <h2 class="member-name">Барсик</h2>
           <div class="member-role">
             <button class="pet-owner" type="button">Анна Иванова</button>
@@ -107,6 +117,19 @@
         selectedOwner = "";
         updateGallery();
       });
+      for (const card of cards) {
+        const photos = card.querySelectorAll(".pet-photo");
+        const toggle = card.querySelector(".pet-photo-toggle");
+        if (photos.length !== 2 || !toggle) continue;
+
+        toggle.hidden = false;
+        toggle.addEventListener("click", () => {
+          const showSecond = photos[1].hidden;
+          photos[0].hidden = showSecond;
+          photos[1].hidden = !showSecond;
+          toggle.textContent = showSecond ? "Первое фото" : "Ещё фото";
+        });
+      }
       gallery.addEventListener("click", event => {
         const owner = event.target.closest(".pet-owner");
         if (!owner) return;
