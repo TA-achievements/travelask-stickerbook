@@ -421,6 +421,8 @@ preview.closest(".atlas-sheet").addEventListener("keydown", event => {
   }
 });
 
+const requestedMember = new URLSearchParams(location.search).get("member");
+let requestedPlaceButton;
 const countries = [...document.querySelector("#countryShapes").children];
 const countryKey = name => name?.trim().toLowerCase().replaceAll("ё", "е");
 const countryByName = new Map();
@@ -483,6 +485,10 @@ for (const place of window.STICKERBOOK_GEOGRAPHY) {
   });
   world.append(marker);
   placeList.append(placeButton);
+  if (!requestedPlaceButton && requestedMember &&
+      members.some(name => String(teamByName.get(name.trim())?.id ?? "") === requestedMember)) {
+    requestedPlaceButton = placeButton;
+  }
 }
 
 arrangeMarkers();
@@ -494,4 +500,5 @@ new ResizeObserver(() => {
 
 if (placeList.childElementCount) {
   details.firstElementChild.textContent = "Здесь откроется карточка выбранного города.";
+  requestedPlaceButton?.click();
 }

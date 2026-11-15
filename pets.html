@@ -253,7 +253,32 @@
         category = "all";
         updateGallery();
       });
+      const request = new URLSearchParams(location.search);
+      const owner = normalize(request.get("owner") ?? "");
+      const pet = normalize(request.get("pet") ?? "");
+      const requestedCard = owner && pet && cards.find(card =>
+        normalize(card.querySelector(".pet-owner")?.textContent ?? "") === owner &&
+        normalize(card.querySelector(".member-name")?.textContent ?? "") === pet
+      );
+      if (requestedCard) {
+        const ownerLabel = requestedCard.querySelector(".pet-owner");
+        search.value = ownerLabel.textContent.trim();
+        selectedOwner = owner;
+        const member = request.get("member");
+        if (member) {
+          const back = document.createElement("a");
+          back.className = "back";
+          back.href = `member.html?id=${encodeURIComponent(member)}`;
+          back.textContent = "← К профилю модератора";
+          toolbar.before(back);
+        }
+      }
       updateGallery();
+      if (requestedCard) {
+        requestedCard.tabIndex = -1;
+        requestedCard.focus({ preventScroll: true });
+        requestedCard.scrollIntoView({ block: "center" });
+      }
     }
   </script>
 </body>

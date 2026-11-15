@@ -1,19 +1,31 @@
 <!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#fbfaf5"><title>TravelAsk Стикербук</title><link rel="stylesheet" href="styles.css">  <link rel="stylesheet" href="darkfix.css?v=2">
+<meta name="theme-color" content="#fbfaf5"><title>TravelAsk Стикербук</title><link rel="stylesheet" href="styles.css?v=album1">  <link rel="stylesheet" href="darkfix.css?v=2">
 </head><body>
 <main class="page"><header class="header">
   <a class="brand" href="index.html"><div class="brand-title">TravelAsk ✈</div><div class="brand-sub">Стикербук</div></a>
   <nav class="nav"><a class="pill mint" href="index.html">Команда</a><a class="pill lav" href="achievements.html">Ачивки</a><a class="pill" href="pets.html">Пушистые коллеги 🐾</a><a class="pill mint" href="geography.html">География команды</a><a class="pill lav" href="advent.html">Адвент ❄</a></nav>
 </header>
-<div class="search"><input id="memberSearch" type="search" placeholder="Поиск по имени или фамилии..." autocomplete="off"></div>
-<section class="hero">
+<section class="hero album-cover" aria-labelledby="album-title">
   <div class="hero-banner-wrap">
     <img class="hero-banner" src="background/hero-travelask.jpg" alt="TravelAsk — пространство для путешествий и идей">
   </div>
-  <div><div class="note">Здесь собран наш отдел модерации и достижения каждого.<br>Нажми на карточку, чтобы узнать больше ♡</div>
-  <div class="note mint-note">Путешествия начинаются с людей ♡</div></div>
+  <div class="album-cover-copy">
+    <h1 id="album-title">Стикербук команды</h1>
+    <p>Знакомься с нашей командой модерации и открывай коллекции ачивок в профилях коллег.</p>
+    <div class="album-actions">
+      <a class="pill mint" href="#team">Найти коллегу ↓</a>
+      <a class="pill album-advent-link" id="albumAdventLink" href="advent.html" hidden>Открыть адвент ❄</a>
+    </div>
+  </div>
 </section>
-<div class="section-label">Команда</div>
-<section id="teamGrid" class="team-grid"></section><div id="teamEmpty" class="empty hidden">Никого не нашлось. Попробуй другое имя ♡</div>
+<section class="album-team" id="team" aria-labelledby="team-title">
+  <div class="album-team-heading">
+    <h2 class="section-label" id="team-title">Команда</h2>
+    <div class="search"><input id="memberSearch" type="search" aria-label="Поиск по имени или фамилии"
+      placeholder="Поиск по имени или фамилии…" autocomplete="off"></div>
+  </div>
+  <div id="teamGrid" class="team-grid"></div>
+  <div id="teamEmpty" class="empty hidden" role="status">Никого не нашлось. Попробуй другое имя ♡</div>
+</section>
 <footer class="footer"><span>TravelAsk ♡</span><span>Путешествия начинаются с людей</span></footer>
-</main><script src="data.js"></script><script src="script.js"></script></body></html>
+</main><script src="data.js"></script><script src="script.js?v=album1"></script></body></html>

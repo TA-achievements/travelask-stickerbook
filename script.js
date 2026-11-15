@@ -71,6 +71,13 @@ function tenureText(startDate){
 function renderTeam(){
   const grid=document.querySelector("#teamGrid");
   if(!grid) return;
+  const date = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/Moscow", year: "numeric", month: "numeric",
+  }).formatToParts();
+  const month = date.find(part => part.type === "month")?.value;
+  const year = date.find(part => part.type === "year")?.value;
+  const adventLink = document.querySelector("#albumAdventLink");
+  if (adventLink && month === "12" && year === "2026") adventLink.hidden = false;
   const cards=DATA.team.map(m=>`<a class="member-card" href="member.html?id=${encodeURIComponent(m.id)}" data-search="${esc((m.name+" "+m.role).toLowerCase())}">
     <div class="photo-paper">${avatarHTML(m)}</div>
     <div class="member-name">${esc(m.name)}</div>
@@ -96,6 +103,45 @@ function renderHeroPhotos(){
   const sample=DATA.team.filter(x=>x.avatarSrc).slice(0,4);
   target.innerHTML=sample.map((m,i)=>`<div class="polaroid">${avatarHTML(m)}${i===0?'<div class="caption">Команда TravelAsk ♡</div>':""}</div>`).join("");
 }
+function albumNameKey(name) {
+  return name.toLowerCase().replaceAll("ё", "е").trim().split(/\s+/).sort().join(" ");
+}
+
+async function renderConnections(host, member) {
+  const area = host.querySelector(".profile-connections");
+  const key = albumNameKey(member.name);
+  const city = (window.STICKERBOOK_GEOGRAPHY ?? []).find(place =>
+    place.members?.some(name => albumNameKey(name) === key)
+  );
+  if (city) {
+    const link = document.createElement("a");
+    link.className = "profile-connection";
+    link.href = `geography.html?member=${encodeURIComponent(member.id)}`;
+    link.textContent = `⌖ ${city.city || city.country}`;
+    area.append(link);
+    area.hidden = false;
+  }
+
+  try {
+    const response = await fetch("pets.html");
+    if (!response.ok) return;
+    const page = new DOMParser().parseFromString(await response.text(), "text/html");
+    for (const pet of page.querySelectorAll("#petGallery .member-card")) {
+      const owner = pet.querySelector(".pet-owner")?.textContent.trim();
+      const name = pet.querySelector(".member-name")?.textContent.trim();
+      if (!owner || !name || albumNameKey(owner) !== key) continue;
+      const link = document.createElement("a");
+      link.className = "profile-connection";
+      link.href = `pets.html?${new URLSearchParams({ owner, pet: name, member: member.id })}`;
+      link.textContent = `🐾 ${name}`;
+      area.append(link);
+      area.hidden = false;
+    }
+  } catch {
+    // The profile remains usable when the gallery is unavailable.
+  }
+}
+
 function renderMember(){
   const host=document.querySelector("#memberRoot");
   if(!host) return;
@@ -116,6 +162,7 @@ function renderMember(){
       <div class="profile-main">
         <div class="name-ribbon">${esc(m.name)}</div>
         <div class="profile-role">${esc(m.role)}</div>
+        <nav class="profile-connections" aria-label="Город и питомцы" hidden></nav>
         ${(tenure||deps.length)?`<div class="special-badges profile-special profile-special-inline">
           ${tenure?achHTML(tenure):""}
           ${deps.map(a=>achHTML(a)).join("")}
@@ -132,6 +179,7 @@ function renderMember(){
       ${regular.length?regular.map(a=>achHTML(a)).join(""):'<div class="empty">Пока без обычных ачивок</div>'}
     </section>`;
   enableAchievementInteraction(host); setFilters(host);
+  renderConnections(host, m);
 }
 function renderCatalog(){
   const host=document.querySelector("#catalogRoot");
