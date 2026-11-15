@@ -14,6 +14,25 @@
     .pet-filters button[aria-pressed="true"] { background: var(--mint); }
     .pet-toolbar .search { margin: 12px 0 0; }
     .pet-gallery [hidden], .pet-toolbar[hidden], .empty[hidden] { display: none; }
+    .pet-prints { display: grid; isolation: isolate; }
+    .pet-prints[data-paired] {
+      margin: 0 clamp(9px, 5%, 15px) 0 3px;
+      padding: 3px 3px 8px 0;
+    }
+    .pet-print { grid-area: 1 / 1; min-width: 0; }
+    .pet-prints[data-paired] .pet-print {
+      position: relative; padding: 4px 4px 10px;
+      border: 1px solid #e6dccb; background: #fffdf8;
+      box-shadow: 0 4px 9px #46352835;
+      transform: translate(8%, 1%) rotate(8deg);
+      transition: transform 240ms ease;
+    }
+    .pet-prints[data-paired] .pet-print[data-front] {
+      z-index: 1; transform: translate(-1%, 0) rotate(-3deg);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pet-prints[data-paired] .pet-print { transition: none; }
+    }
     .pet-photo-toggle {
       display: block; margin: 6px auto 0; padding: 5px 10px;
       border: 1px solid var(--line); border-radius: 999px;
@@ -56,13 +75,15 @@
            его после этого комментария, перед закрывающим тегом галереи.
            Категории: cat — кошки, dog — собаки, other — другие питомцы.
            Фото загрузи в папку pets. Подставь фактические имена файлов в src.
-           Если фото одно, удали строку с barsik-2.jpg.
-           Для каждого снимка обнови alt. Оставь hidden у второго снимка и кнопки.
+           Если фото одно, удали весь второй блок <span class="pet-print">.
+           Для каждого снимка обнови alt. Оставь hidden у второго блока и кнопки.
 
       <article class="member-card" data-kind="cat">
         <div class="photo-paper">
-          <img class="pet-photo" src="pets/barsik.jpg" alt="Барсик — первое фото" loading="lazy">
-          <img class="pet-photo" src="pets/barsik-2.jpg" alt="Барсик — второе фото" loading="lazy" hidden>
+          <div class="pet-prints">
+            <span class="pet-print"><img class="pet-photo" src="pets/barsik.jpg" alt="Барсик — первое фото" loading="lazy"></span>
+            <span class="pet-print" hidden><img class="pet-photo" src="pets/barsik-2.jpg" alt="Барсик — второе фото" loading="lazy"></span>
+          </div>
           <button class="pet-photo-toggle" type="button" hidden>Ещё фото</button>
           <h2 class="member-name">Барсик</h2>
           <div class="member-role">
@@ -118,17 +139,28 @@
         updateGallery();
       });
       for (const card of cards) {
-        const photos = card.querySelectorAll(".pet-photo");
+        const stack = card.querySelector(".pet-prints");
         const toggle = card.querySelector(".pet-photo-toggle");
-        if (photos.length !== 2 || !toggle) continue;
+        if (!stack || !toggle) continue;
+        const prints = stack.querySelectorAll(".pet-print");
+        if (prints.length !== 2) continue;
 
+        stack.setAttribute("data-paired", "");
+        prints[1].hidden = false;
         toggle.hidden = false;
+        let current = 0;
+        function updatePrints() {
+          prints.forEach((print, index) => {
+            print.toggleAttribute("data-front", index === current);
+            print.setAttribute("aria-hidden", String(index !== current));
+          });
+          toggle.textContent = current === 0 ? "Ещё фото" : "Первое фото";
+        }
         toggle.addEventListener("click", () => {
-          const showSecond = photos[1].hidden;
-          photos[0].hidden = showSecond;
-          photos[1].hidden = !showSecond;
-          toggle.textContent = showSecond ? "Первое фото" : "Ещё фото";
+          current = 1 - current;
+          updatePrints();
         });
+        updatePrints();
       }
       gallery.addEventListener("click", event => {
         const owner = event.target.closest(".pet-owner");
