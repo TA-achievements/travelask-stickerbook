@@ -59,7 +59,8 @@
   .advent-window:nth-child(3n) { --door: #3b566b; --light: #7e9fb1; }
   .advent-window[data-wide] { grid-column: span 2; }
   .advent-window:last-child {
-    grid-column: 1 / -1; --door: #84374a; --light: #cb887c;
+    grid-column: 1 / -1; justify-self: center; width: min(100%, clamp(124px, 24vw, 192px));
+    --door: #84374a; --light: #cb887c;
     border-color: #e9c078;
   }
   .advent-door {
@@ -580,19 +581,20 @@
     const animate = !motion.matches;
 
     function showCard() {
+      const source = animate ? button.querySelector(".advent-card-edge").getBoundingClientRect() : null;
       dialog.showModal();
-      if (animate) {
-        const source = button.getBoundingClientRect();
+      if (source) {
         const target = dialog.getBoundingClientRect();
         const x = source.left + source.width / 2 - target.left - target.width / 2;
-        const y = source.top + source.height / 2 - target.top - target.height / 2 - 20;
+        const y = source.top + source.height / 2 - target.top - target.height / 2;
+        const launchScale = Math.min(.25, Math.max(.07, source.height / target.height));
         button.removeAttribute("data-extracting");
         const rotor = dialog.querySelector(".advent-card-rotor");
         const duration = 2800;
         rotor.style.setProperty("--flight-duration", `${duration}ms`);
         const flatten = bendCard(rotor, duration);
         const flight = rotor.animate([
-          { transform: `perspective(950px) translate3d(${x}px,${y}px,0) scale(.15) rotateY(88deg) rotateZ(-10deg)` },
+          { transform: `perspective(950px) translate3d(${x}px,${y}px,0) scale(${launchScale}) rotateY(88deg) rotateZ(-10deg)` },
           { offset: pictureTurn.start, easing: "cubic-bezier(.42,0,.58,1)", transform: `perspective(950px) translate3d(${x * .54}px,${y * .54}px,38px) scale(.43) rotateY(90deg) rotateZ(-12deg)` },
           { offset: pictureTurn.end, transform: "perspective(950px) translate3d(0,-14px,76px) scale(.82) rotateY(180deg) rotateZ(5deg)" },
           { offset: taskTurn.start, easing: "cubic-bezier(.42,0,.58,1)", transform: "perspective(950px) translate3d(0,-14px,76px) scale(.82) rotateY(180deg) rotateZ(2deg)" },
