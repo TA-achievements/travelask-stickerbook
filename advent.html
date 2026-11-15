@@ -121,7 +121,7 @@
   .advent-covers { position: absolute; inset: 0; z-index: 8; perspective: 1800px; pointer-events: none; }
   .advent-cover {
     position: absolute; inset: 0; transform-origin: left center; transform-style: preserve-3d;
-    --open-cover: rotateY(-145deg) scaleX(.43);
+    --open-cover: rotateY(115deg) rotateX(-3deg);
     transform: var(--open-cover);
   }
   .advent-intro .advent-cover { animation: open-book 1550ms 180ms cubic-bezier(.24,.66,.2,1) both; }
@@ -207,7 +207,7 @@
   .advent-window[aria-disabled="true"] .advent-door { filter: saturate(.83) brightness(.98); }
   @media (max-width: 640px) {
     .advent-stage { padding-inline: clamp(39px, 14vw, 82px) 4px; }
-    .advent-cover { --open-cover: rotateY(-145deg) scaleX(.23); }
+    .advent-cover { --open-cover: rotateY(102deg) rotateX(-3deg); }
     .advent-wreath { border-width: 7px; }
     .advent { padding-inline: 9px; }
     .advent-grid { padding-inline: 5px; }
@@ -300,7 +300,7 @@
   .advent-curl-strip > .advent-card-face { position: absolute; inset: 0; }
   .advent {
     --case-depth: clamp(18px, 3.5vw, 42px);
-    --lid-depth: clamp(9px, 1.8vw, 20px);
+    --lid-depth: clamp(22px, 4.1vw, 52px);
   }
   .advent-stage { padding-right: clamp(33px, 6vw, 68px); }
   .advent-case-depth::before {
@@ -314,11 +314,33 @@
   .advent-cover-outside { transform: translateZ(calc(var(--lid-depth) / 2)); }
   .advent-cover-inside { transform: rotateY(180deg) translateZ(calc(var(--lid-depth) / 2)); }
   .advent-cover-edge {
-    position: absolute; inset: 2px 0 2px auto; width: var(--lid-depth);
-    transform: translateX(50%) rotateY(90deg);
-    border-block: 2px solid #ae683e; border-radius: 3px;
-    background: linear-gradient(90deg, #a74757, #f6cd82 25%, #ffe5a7 55%, #b17543 82%, #8b354f);
+    position: absolute; box-sizing: border-box;
+    border: 1px solid #774031;
+    background: linear-gradient(90deg, #7c2948 0 9%, #b65263 18% 54%, #8e344f 68%, #ffdf96 83%, #ae763b 94%);
   }
+  .advent-cover-edge--fore, .advent-cover-edge--hinge {
+    inset-block: 0; width: var(--lid-depth);
+  }
+  .advent-cover-edge--fore { right: 0; transform: translateX(50%) rotateY(90deg); }
+  .advent-cover-edge--hinge { left: 0; transform: translateX(-50%) rotateY(-90deg); }
+  .advent-cover-edge--top, .advent-cover-edge--bottom {
+    inset-inline: 0; height: var(--lid-depth);
+    background: linear-gradient(#ffdc95, #b77943 17%, #a84058 24%, #6d2744 90%);
+  }
+  .advent-cover-edge--top { top: 0; transform: translateY(-50%) rotateX(90deg); }
+  .advent-cover-edge--bottom { bottom: 0; transform: translateY(50%) rotateX(-90deg); }
+  .advent-cover-inside {
+    background: radial-gradient(ellipse at 58% 36%, #fff9e5 10%, #eac686 94%);
+    box-shadow: inset 0 0 0 6px #a16c36, inset 0 0 0 10px #ffdf94;
+  }
+  .advent-cover-inside::before {
+    content: ""; position: absolute; inset: clamp(11px, 2vw, 24px);
+    border-style: solid; border-width: clamp(5px, 1.05vw, 13px);
+    border-color: #a37643 #f9dea5 #fff0c9 #b48348;
+    border-radius: 6px; box-shadow: inset 4px 7px 15px #6a3b2c5e, 0 0 0 1px #7d5237;
+    pointer-events: none;
+  }
+  .advent-cover-inside .advent-wreath { width: min(62%, 310px); }
   .advent-tray { position: relative; isolation: isolate; border-radius: 8px; }
   .advent-tray-shadow {
     position: absolute; inset: 0; overflow: hidden; z-index: 6;
@@ -533,7 +555,10 @@
     </div>
     <div class="advent-covers" aria-hidden="true">
       <div class="advent-cover">
-        <div class="advent-cover-edge"></div>
+        <div class="advent-cover-edge advent-cover-edge--fore"></div>
+        <div class="advent-cover-edge advent-cover-edge--hinge"></div>
+        <div class="advent-cover-edge advent-cover-edge--top"></div>
+        <div class="advent-cover-edge advent-cover-edge--bottom"></div>
         <div class="advent-cover-face advent-cover-outside">❄<br>Новогодний адвент</div>
         <div class="advent-cover-face advent-cover-inside"><span class="advent-wreath" id="adventWreath">❄</span></div>
       </div>
