@@ -347,7 +347,7 @@
     box-shadow: 0 0 9px #ffc35c9c; opacity: 0; pointer-events: none;
   }
   .advent-window[data-extracting] .advent-card-edge {
-    animation: extract-card 480ms 140ms cubic-bezier(.22,.68,.28,1) both;
+    animation: extract-card 480ms var(--extract-delay, 140ms) cubic-bezier(.22,.68,.28,1) both;
   }
   @keyframes extract-card {
     0% { transform: translate(-50%, -24%) scaleY(.4) rotate(-10deg); opacity: 0; }
@@ -412,6 +412,40 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .advent-star-tip, .advent-wreath-light { transition: none; }
+  }
+  .advent[data-finale] { --extract-delay: 570ms; }
+  .advent[data-finale] .advent-tray::after {
+    content: ""; position: absolute; inset: -2px; z-index: 7;
+    border: 2px solid #fff0b1; border-radius: inherit; pointer-events: none;
+    box-shadow: 0 0 16px 3px #ffbb55, inset 0 0 12px #ffdd87;
+    animation: finale-glow 1350ms ease both;
+  }
+  .advent[data-finale] .advent-wreath-light {
+    animation: finale-wreath 1350ms ease both;
+  }
+  @keyframes finale-glow {
+    0%, 100% { opacity: 0; }
+    20%, 74% { opacity: 1; }
+  }
+  @keyframes finale-wreath {
+    0%, 100% { }
+    20%, 74% { background-color: #fffceb; box-shadow: 0 0 0 1px #ffba4c, 0 0 14px 3px #ffcb5d; }
+  }
+  .advent-card[data-finale]::backdrop {
+    background:
+      radial-gradient(circle at 10% 27%, #ffe5a9 0 2px, #ffbe626b 5px, transparent 22px),
+      radial-gradient(circle at 84% 23%, #fff0c9 0 3px, #ffbe6270 7px, transparent 27px),
+      radial-gradient(circle at 23% 76%, #ffdc9a 0 3px, #f4a75b55 8px, transparent 29px),
+      radial-gradient(circle at 91% 73%, #ffdfa3 0 2px, #f5b85d69 9px, transparent 23px),
+      radial-gradient(circle at 70% 87%, #ffd485 0 2px, #f5b85d50 6px, transparent 19px),
+      radial-gradient(ellipse at center, #96512765, #2c1c24d6 78%),
+      #2c1c2466;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .advent[data-finale] .advent-tray::after { animation: none; opacity: .65; }
+    .advent[data-finale] .advent-wreath-light {
+      animation: none; background: #fff9c4; box-shadow: 0 0 8px 2px #ffb63b;
+    }
   }
 </style>
 </head>
@@ -499,6 +533,7 @@
   ];
 
   const grid = document.querySelector("#adventGrid");
+  const box = document.querySelector(".advent");
   const status = document.querySelector("#adventStatus");
   const dialog = document.querySelector("#adventCard");
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
@@ -612,6 +647,11 @@
     };
   }
 
+  dialog.addEventListener("close", () => {
+    box.removeAttribute("data-finale");
+    dialog.removeAttribute("data-finale");
+  });
+
   function openDay(day, button) {
     if (opening || dialog.open || day > refresh()) return;
     opening = true;
@@ -624,6 +664,9 @@
     document.querySelector("#activityTitle").textContent = title;
     document.querySelector("#activityText").textContent = description;
     const animate = !motion.matches;
+    const finale = day === activities.length;
+    box.toggleAttribute("data-finale", finale);
+    dialog.toggleAttribute("data-finale", finale);
 
     function showCard() {
       const source = animate ? button.querySelector(".advent-card-edge").getBoundingClientRect() : null;
@@ -661,7 +704,7 @@
     if (animate) {
       button.setAttribute("data-opening", "");
       button.setAttribute("data-extracting", "");
-      setTimeout(showCard, 620);
+      setTimeout(showCard, finale ? 1050 : 620);
     } else showCard();
   }
 
