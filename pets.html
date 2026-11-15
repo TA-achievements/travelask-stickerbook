@@ -8,8 +8,16 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="darkfix.css?v=2">
   <style>
-    .pet-gallery:empty { display: none; }
-    .pet-gallery:not(:empty) + .empty { display: none; }
+    .pet-toolbar { margin: 0 0 24px; }
+    .pet-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pet-filters button { cursor: pointer; color: var(--ink); padding: 8px 15px; }
+    .pet-filters button[aria-pressed="true"] { background: var(--mint); }
+    .pet-toolbar .search { margin: 12px 0 0; }
+    .pet-gallery [hidden], .pet-toolbar[hidden], .empty[hidden] { display: none; }
+    .pet-owner {
+      border: 0; background: transparent; color: inherit; padding: 4px;
+      cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
+    }
     .pet-gallery .member-name, .pet-gallery .member-role { overflow-wrap: anywhere; }
     .nav [aria-current="page"] { text-decoration: underline; text-underline-offset: 4px; }
   </style>
@@ -25,18 +33,90 @@
       <a class="pill mint" href="geography.html">География команды</a></nav>
     </header>
     <h1 class="section-label">Секретный отдел контроля качества</h1>
-    <!-- Когда появится первая фотография, скопируйте карточку внутрь pet-gallery.
-    <article class="member-card">
-      <div class="photo-paper">
-        <img src="pets/photo.jpg" alt="Фото питомца" loading="lazy">
-        <h2 class="member-name">Кличка</h2>
-        <div class="member-role">Имя модератора и должность питомца</div>
+    <section class="pet-toolbar" id="petToolbar" aria-label="Фильтры питомцев" hidden>
+      <div class="pet-filters" role="group" aria-label="Вид питомца">
+        <button class="pill" type="button" data-filter="all" aria-pressed="true">Все</button>
+        <button class="pill" type="button" data-filter="cat" aria-pressed="false">Кошки 🐱</button>
+        <button class="pill" type="button" data-filter="dog" aria-pressed="false">Собаки 🐶</button>
+        <button class="pill" type="button" data-filter="other" aria-pressed="false">Другие питомцы 🐾</button>
       </div>
-    </article>
-    -->
-    <div class="team-grid pet-gallery"></div>
-    <p class="empty">Первые фотокарточки питомцев скоро появятся ♡</p>
+      <div class="search">
+        <input id="petSearch" type="search" aria-label="Найти по кличке или имени хозяина"
+          placeholder="Найти по кличке или имени хозяина" autocomplete="off">
+      </div>
+    </section>
+    <div class="team-grid pet-gallery" id="petGallery">
+      <!-- Для каждого питомца скопируй блок от <article> до </article> и вставь
+           его после этого комментария, перед закрывающим тегом галереи.
+           Категории: cat — кошки, dog — собаки, other — другие питомцы.
+           Фото загрузи в папку pets. Подставь фактическое имя файла в src.
+
+      <article class="member-card" data-kind="cat">
+        <div class="photo-paper">
+          <img src="pets/barsik.jpg" alt="Барсик" loading="lazy">
+          <h2 class="member-name">Барсик</h2>
+          <div class="member-role">
+            <button class="pet-owner" type="button">Анна Иванова</button>
+          </div>
+        </div>
+      </article>
+      -->
+    </div>
+    <p class="empty" id="petEmpty" role="status">Первые фотокарточки питомцев скоро появятся ♡</p>
     <footer class="footer"><span>Больше, чем ачивки ♡</span><span>TravelAsk</span></footer>
   </main>
+  <script>
+    const gallery = document.querySelector("#petGallery");
+    const toolbar = document.querySelector("#petToolbar");
+    const search = document.querySelector("#petSearch");
+    const empty = document.querySelector("#petEmpty");
+    const filters = [...toolbar.querySelectorAll("[data-filter]")];
+    const cards = [...gallery.querySelectorAll(".member-card")];
+    const normalize = value => value.trim().toLowerCase().replaceAll("ё", "е").replace(/\s+/g, " ");
+    let category = "all";
+    let selectedOwner = "";
+
+    function updateGallery() {
+      const query = normalize(search.value);
+      let visible = 0;
+      for (const card of cards) {
+        const owner = normalize(card.querySelector(".pet-owner")?.textContent ?? "");
+        const name = normalize(card.querySelector(".member-name")?.textContent ?? "");
+        const kind = card.dataset.kind || "other";
+        const matchesSearch = selectedOwner ? owner === selectedOwner :
+          query.split(" ").every(word => name.includes(word) || owner.includes(word));
+        card.hidden = (category !== "all" && category !== kind) || !matchesSearch;
+        if (!card.hidden) visible++;
+      }
+      empty.hidden = visible > 0;
+      for (const button of filters) {
+        button.setAttribute("aria-pressed", String(button.dataset.filter === category));
+      }
+    }
+
+    if (cards.length) {
+      empty.textContent = "Питомцы не найдены. Попробуй изменить поиск или выбрать «Все» ♡";
+      toolbar.hidden = false;
+      for (const button of filters) {
+        button.addEventListener("click", () => {
+          category = button.dataset.filter;
+          updateGallery();
+        });
+      }
+      search.addEventListener("input", () => {
+        selectedOwner = "";
+        updateGallery();
+      });
+      gallery.addEventListener("click", event => {
+        const owner = event.target.closest(".pet-owner");
+        if (!owner) return;
+        search.value = owner.textContent.trim();
+        selectedOwner = normalize(search.value);
+        category = "all";
+        updateGallery();
+      });
+      updateGallery();
+    }
+  </script>
 </body>
 </html>
