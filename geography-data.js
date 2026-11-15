@@ -37,4 +37,11 @@ window.STICKERBOOK_GEOGRAPHY = [
     lat: 55.59911, lon: 37.35495,
     members: ["Чистякова Оксана"],
   },
+ {
+    city: "Ковров",
+    country: "Россия",
+    lat: 56.3625,
+    lon: 41.3109,
+    members: ["Адякова Елена"],
+  },
 ];
