@@ -297,6 +297,77 @@
     position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none;
   }
   .advent-curl-strip > .advent-card-face { position: absolute; inset: 0; }
+  .advent {
+    --case-depth: clamp(18px, 3.5vw, 42px);
+    --lid-depth: clamp(9px, 1.8vw, 20px);
+  }
+  .advent-stage { padding-right: clamp(33px, 6vw, 68px); }
+  .advent-case-depth::before {
+    background: linear-gradient(180deg, #ffdc8c 0 3px, transparent 3px),
+      linear-gradient(90deg, #e0a35c 0 3px, #b34561 3px, #922e4b 42%, #651a36);
+  }
+  .advent-case-depth::after {
+    background: linear-gradient(#facb77 0 3px, #c55b70 3px, #8e2c4b 62%, #641d37);
+  }
+  .advent-cover-face { box-shadow: inset 0 0 0 6px #d89c50, inset 0 0 0 10px #fff2bc; }
+  .advent-cover-outside { transform: translateZ(calc(var(--lid-depth) / 2)); }
+  .advent-cover-inside { transform: rotateY(180deg) translateZ(calc(var(--lid-depth) / 2)); }
+  .advent-cover-edge {
+    position: absolute; inset: 2px 0 2px auto; width: var(--lid-depth);
+    transform: translateX(50%) rotateY(90deg);
+    border-block: 2px solid #ae683e; border-radius: 3px;
+    background: linear-gradient(90deg, #a74757, #f6cd82 25%, #ffe5a7 55%, #b17543 82%, #8b354f);
+  }
+  .advent-tray { position: relative; isolation: isolate; border-radius: 8px; }
+  .advent-tray-shadow {
+    position: absolute; inset: 0; overflow: hidden; z-index: 6;
+    border-radius: inherit; pointer-events: none;
+  }
+  .advent-tray-shadow::before {
+    content: ""; position: absolute; inset: -12% -16%; opacity: 0;
+    background: linear-gradient(90deg, #39252dba 0 50%, #4b283d66 68%, transparent 91%);
+    transform-origin: left center;
+  }
+  .advent-intro .advent-tray-shadow::before {
+    animation: tray-shadow 1550ms 180ms cubic-bezier(.24,.66,.2,1) both;
+  }
+  @keyframes tray-shadow {
+    from { opacity: .72; transform: skewY(5deg); }
+    to { opacity: 0; transform: skewY(12deg) scaleX(.07); }
+  }
+  .advent-inside {
+    background: radial-gradient(ellipse at 62% 70%, #99713c, #513623 56%, #321d16 82%);
+    box-shadow: inset 5px 8px 9px #261512e0, inset -3px -3px #edbc6759;
+  }
+  .advent-card-edge {
+    position: absolute; z-index: 2; top: 50%; left: 50%;
+    width: 5px; height: clamp(27px, 4.5vw, 51px); border-radius: 2px;
+    background: linear-gradient(90deg, #9a6021, #ffedab 56%, #c48b35);
+    box-shadow: 0 0 9px #ffc35c9c; opacity: 0; pointer-events: none;
+  }
+  .advent-window[data-extracting] .advent-card-edge {
+    animation: extract-card 480ms 140ms cubic-bezier(.22,.68,.28,1) both;
+  }
+  @keyframes extract-card {
+    0% { transform: translate(-50%, -24%) scaleY(.4) rotate(-10deg); opacity: 0; }
+    32% { transform: translate(-50%, -52%) scaleY(.66) rotate(-10deg); opacity: 1; }
+    100% { transform: translate(-50%, calc(-50% - 20px)) scaleY(1) rotate(-10deg); opacity: 1; }
+  }
+  @property --foil-position { syntax: "<percentage>"; inherits: true; initial-value: 0%; }
+  .advent-card-rotor[data-bending] { animation: foil-sweep var(--flight-duration, 2800ms) linear both; }
+  .advent-card-ornament span {
+    background: linear-gradient(112deg, #8c5517 44%, #fff8d2 49%, #fbd279 51%, #8c5517 56%) var(--foil-position) 0 / 250% 100%;
+    background-clip: text; color: transparent; text-shadow: none;
+  }
+  @keyframes foil-sweep {
+    0%, 17% { --foil-position: 0%; }
+    48%, 61.99% { --foil-position: 100%; }
+    62% { --foil-position: 0%; }
+    96%, 100% { --foil-position: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .advent-intro .advent-tray-shadow::before { animation: none; }
+  }
 </style>
 </head>
 <body>
@@ -320,9 +391,13 @@
       <p class="advent-status" id="adventStatus" role="status"></p>
       <label class="advent-progress"><progress id="adventProgress" max="31" value="0"></progress><span id="adventCount">Открыто 0 из 31</span></label>
     </div>
-    <div class="advent-grid" id="adventGrid"></div>
+    <div class="advent-tray">
+      <div class="advent-grid" id="adventGrid"></div>
+      <div class="advent-tray-shadow" aria-hidden="true"></div>
+    </div>
     <div class="advent-covers" aria-hidden="true">
       <div class="advent-cover">
+        <div class="advent-cover-edge"></div>
         <div class="advent-cover-face advent-cover-outside">❄<br>Новогодний адвент</div>
         <div class="advent-cover-face advent-cover-inside"><span class="advent-wreath">❄</span></div>
       </div>
@@ -510,9 +585,11 @@
         const source = button.getBoundingClientRect();
         const target = dialog.getBoundingClientRect();
         const x = source.left + source.width / 2 - target.left - target.width / 2;
-        const y = source.top + source.height / 2 - target.top - target.height / 2;
+        const y = source.top + source.height / 2 - target.top - target.height / 2 - 20;
+        button.removeAttribute("data-extracting");
         const rotor = dialog.querySelector(".advent-card-rotor");
         const duration = 2800;
+        rotor.style.setProperty("--flight-duration", `${duration}ms`);
         const flatten = bendCard(rotor, duration);
         const flight = rotor.animate([
           { transform: `perspective(950px) translate3d(${x}px,${y}px,0) scale(.15) rotateY(88deg) rotateZ(-10deg)` },
@@ -536,7 +613,8 @@
 
     if (animate) {
       button.setAttribute("data-opening", "");
-      setTimeout(showCard, 260);
+      button.setAttribute("data-extracting", "");
+      setTimeout(showCard, 620);
     } else showCard();
   }
 
@@ -550,6 +628,7 @@
     button.dataset.shape = day === 31 ? "bow" : shapes[index % shapes.length];
     const motif = ["✧", "❅", "✦", "❋", "✷"][index % 5];
     button.innerHTML = `<span class="advent-inside" aria-hidden="true"><span class="advent-inside-number">${day}</span></span>
+      <span class="advent-card-edge" aria-hidden="true"></span>
       <span class="advent-door" aria-hidden="true"><span class="advent-number">${day}</span>
       <span class="advent-motif">${motif}</span></span>`;
     button.addEventListener("click", () => openDay(day, button));
