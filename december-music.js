@@ -11,7 +11,7 @@
     ["Sleigh Ride", "The Ronettes", "Звон бубенцов и настроение праздничной открытки."],
     ["Кабы не было зимы", "Валентина Толкунова", "Зимний привет из Простоквашино."],
     ["The Christmas Song", "Nat King Cole", "Мягкий голос и кружка какао."],
-    ["White Christmas", "Bing Crosby", "Снег хотя бы в песне."],
+    ["Once Upon a December", "Liz Callaway", "Вальс из «Анастасии» к окошку с зимней историей."],
     ["Rockin’ Around the Christmas Tree", "Brenda Lee", "Включить, пока мастеришь праздничный декор."],
     ["Winter Wonderland", "Ella Fitzgerald", "Лёгкий свинг под прогулку или каток."],
     ["It’s Beginning to Look a Lot Like Christmas", "Michael Bublé", "Под прогулку между праздничными витринами."],
