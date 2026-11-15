@@ -118,14 +118,17 @@
     perspective: 2300px; padding: 16px clamp(68px, 24vw, 260px) 58px clamp(68px, 24vw, 260px); padding-right: 12px;
   }
   .advent { transform-origin: center 93%; margin-bottom: 24px; }
-  .advent-covers { position: absolute; inset: 0; z-index: 8; perspective: 1800px; pointer-events: none; }
+  .advent-covers { position: absolute; inset: 0; z-index: 8; perspective: 4000px; perspective-origin: left center; pointer-events: none; }
   .advent-cover {
     position: absolute; inset: 0; transform-origin: left center; transform-style: preserve-3d;
-    --open-cover: rotateY(115deg) rotateX(-3deg);
-    transform: var(--open-cover);
+    --cover-angle: -102deg;
+    transform: translateZ(calc(var(--lid-depth) / 2)) rotateY(var(--cover-angle));
   }
   .advent-intro .advent-cover { animation: open-book 1550ms 180ms cubic-bezier(.24,.66,.2,1) both; }
-  @keyframes open-book { from { transform: none; } to { transform: var(--open-cover); } }
+  @keyframes open-book {
+    from { transform: translateZ(calc(var(--lid-depth) / 2)) rotateY(0deg); }
+    to { transform: translateZ(calc(var(--lid-depth) / 2)) rotateY(var(--cover-angle)); }
+  }
   .advent-cover-face {
     position: absolute; inset: 0; display: grid; place-content: center; text-align: center;
     border-radius: 8px; border: 2px solid #e5b86c; backface-visibility: hidden;
@@ -207,7 +210,7 @@
   .advent-window[aria-disabled="true"] .advent-door { filter: saturate(.83) brightness(.98); }
   @media (max-width: 640px) {
     .advent-stage { padding-inline: clamp(39px, 14vw, 82px) 4px; }
-    .advent-cover { --open-cover: rotateY(102deg) rotateX(-3deg); }
+    .advent-cover { --cover-angle: -98deg; }
     .advent-wreath { border-width: 7px; }
     .advent { padding-inline: 9px; }
     .advent-grid { padding-inline: 5px; }
