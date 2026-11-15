@@ -86,17 +86,17 @@
   .advent-window[data-today] { outline: 2px solid #ffdc90; outline-offset: 2px; }
   .advent-window:focus-visible { outline: 3px solid #fff2c9; outline-offset: 3px; z-index: 3; }
   .advent-window[data-opened] { --hover-door-angle: -79deg; }
-  .advent-window[data-opened] .advent-door { transform: rotateY(-67deg); }
+  .advent-window[data-opened] .advent-door { transform: var(--door-open, rotateY(-67deg)); }
   .advent-window .advent-inside-number { display: none; }
   .advent-window[data-opened] .advent-inside-number {
     display: block; font: 700 clamp(20px, 3vw, 34px)/1 Georgia, serif;
     color: #ffebba; text-shadow: 0 1px 3px #21170b;
   }
   @media (hover: hover) {
-    .advent-window:not([aria-disabled="true"]):not([data-opening]):hover .advent-door { transform: rotateY(var(--hover-door-angle, -37deg)); filter: brightness(1.13); }
+    .advent-window:not([aria-disabled="true"]):not([data-opening]):hover .advent-door { transform: var(--door-hover, rotateY(var(--hover-door-angle, -37deg))); filter: brightness(1.13); }
   }
   .advent-window[data-opening] { z-index: 4; }
-  .advent-window[data-opening] .advent-door { transform: rotateY(-118deg); }
+  .advent-window[data-opening] .advent-door { transform: var(--door-swing, rotateY(-118deg)); }
   .advent-card {
     width: min(440px, calc(100vw - 32px)); max-height: calc(100dvh - 32px);
     padding: clamp(23px, 6vw, 42px); color: #2d3c31; border: 1px solid #ab8153;
@@ -369,6 +369,50 @@
   @media (prefers-reduced-motion: reduce) {
     .advent-intro .advent-tray-shadow::before { animation: none; }
   }
+  .advent-window:is([data-shape="bauble"], [data-shape="tag"], [data-shape="bow"]) {
+    --door-open: rotateX(67deg); --door-hover: rotateX(35deg); --door-swing: rotateX(112deg);
+  }
+  .advent-window[data-opened]:is([data-shape="bauble"], [data-shape="tag"], [data-shape="bow"]) {
+    --door-hover: rotateX(77deg);
+  }
+  .advent-window:is([data-shape="bauble"], [data-shape="tag"], [data-shape="bow"]) .advent-door {
+    transform-origin: top center;
+  }
+  .advent-window[data-shape="star"] {
+    --door-open: rotateY(-66deg); --door-hover: rotateY(-24deg); --door-swing: rotateY(-104deg);
+  }
+  .advent-window[data-shape="star"][data-opened] { --door-hover: rotateY(-76deg); }
+  .advent-window[data-shape="star"] .advent-door {
+    clip-path: none; background: none; box-shadow: none;
+  }
+  .advent-window[data-shape="star"] .advent-door::after { display: none; }
+  .advent-window[data-shape="star"] .advent-door::before {
+    inset: 0; border: 0; opacity: 1;
+    background: radial-gradient(ellipse at top right, var(--light), transparent 87%), var(--door);
+    clip-path: polygon(50% 0, 63% 23%, 83% 42%, 100% 58%, 75% 68%, 77% 95%,
+      50% 82%, 23% 95%, 25% 68%, 0 58%, 17% 42%, 9% 15%, 37% 23%);
+  }
+  .advent-window[data-shape="star"] .advent-motif { position: relative; }
+  .advent-star-tip {
+    position: absolute; inset: 0; pointer-events: none;
+    clip-path: polygon(62.5% 22.5%, 91% 15%, 83.5% 42.5%);
+    background: linear-gradient(145deg, var(--door), var(--light));
+    transform-origin: 73% 32%; transition: transform 250ms ease;
+  }
+  .advent-window[data-opened] .advent-star-tip { transform: rotateZ(39deg) rotateY(-50deg) rotateZ(-39deg); }
+  .advent-window[data-opening] .advent-star-tip { transform: rotateZ(39deg) rotateY(-147deg) rotateZ(-39deg); }
+  .advent-wreath { position: relative; }
+  .advent-wreath-light {
+    position: absolute; width: clamp(4px, .8vw, 8px); aspect-ratio: 1;
+    translate: -50% -50%; border-radius: 50%; background: #a97848;
+    transition: background-color .45s ease, box-shadow .45s ease;
+  }
+  .advent-wreath-light[data-lit] {
+    background: #fff9c4; box-shadow: 0 0 0 1px #eaa343, 0 0 8px 2px #ffb63b;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .advent-star-tip, .advent-wreath-light { transition: none; }
+  }
 </style>
 </head>
 <body>
@@ -400,7 +444,7 @@
       <div class="advent-cover">
         <div class="advent-cover-edge"></div>
         <div class="advent-cover-face advent-cover-outside">❄<br>Новогодний адвент</div>
-        <div class="advent-cover-face advent-cover-inside"><span class="advent-wreath">❄</span></div>
+        <div class="advent-cover-face advent-cover-inside"><span class="advent-wreath" id="adventWreath">❄</span></div>
       </div>
     </div>
   </section>
@@ -490,6 +534,7 @@
     status.textContent = !last ? `Старт 1 декабря ${year} года по Москве.` :
       today ? "Открывай сегодняшнее окошко и любые пропущенные." : "Все окошки доступны.";
     const visibleOpened = [...opened].filter(day => day <= last).length;
+    wreathLights.forEach((light, index) => light.toggleAttribute("data-lit", index < visibleOpened));
     document.querySelector("#adventProgress").value = visibleOpened;
     document.querySelector("#adventCount").textContent = `Открыто ${visibleOpened} из 31`;
     buttons.forEach((button, index) => {
@@ -632,10 +677,20 @@
     button.innerHTML = `<span class="advent-inside" aria-hidden="true"><span class="advent-inside-number">${day}</span></span>
       <span class="advent-card-edge" aria-hidden="true"></span>
       <span class="advent-door" aria-hidden="true"><span class="advent-number">${day}</span>
-      <span class="advent-motif">${motif}</span></span>`;
+      <span class="advent-motif">${motif}</span>${button.dataset.shape === "star" ? '<span class="advent-star-tip"></span>' : ""}</span>`;
     button.addEventListener("click", () => openDay(day, button));
     grid.append(button);
     return button;
+  });
+  const wreath = document.querySelector("#adventWreath");
+  const wreathLights = activities.map((_, index) => {
+    const angle = index * 2 * Math.PI / activities.length - Math.PI / 2;
+    const light = document.createElement("span");
+    light.className = "advent-wreath-light";
+    light.style.left = `${50 + 50 * Math.cos(angle)}%`;
+    light.style.top = `${50 + 50 * Math.sin(angle)}%`;
+    wreath.append(light);
+    return light;
   });
   refresh();
   if (!motion.matches) {
