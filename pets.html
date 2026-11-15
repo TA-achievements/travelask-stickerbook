@@ -33,6 +33,25 @@
     @media (prefers-reduced-motion: reduce) {
       .pet-prints[data-paired] .pet-print { transition: none; }
     }
+    .pet-photo-open {
+      display: block; width: 100%; padding: 0; border: 0;
+      background: transparent; cursor: zoom-in;
+    }
+    .pet-photo-dialog {
+      max-width: calc(100vw - 24px); max-height: calc(100dvh - 24px);
+      padding: 8px; border: 1px solid #ddd4c7; border-radius: 4px;
+      background: #fffdf8; box-shadow: 0 15px 45px #201a1766;
+    }
+    .pet-photo-dialog::backdrop { background: #211b17c9; }
+    .pet-photo-close {
+      display: block; padding: 0; border: 0;
+      background: transparent; cursor: zoom-out;
+    }
+    .pet-photo-close img {
+      display: block; width: auto; height: auto;
+      max-width: min(960px, calc(100vw - 42px));
+      max-height: calc(100dvh - 42px);
+    }
     .pet-photo-toggle {
       display: block; margin: 6px auto 0; padding: 5px 10px;
       border: 1px solid var(--line); border-radius: 999px;
@@ -77,25 +96,43 @@
            Фото загрузи в папку pets. Подставь фактические имена файлов в src.
            Если фото одно, удали весь второй блок <span class="pet-print">.
            Для каждого снимка обнови alt. Оставь hidden у второго блока и кнопки.
+         -->
 
       <article class="member-card" data-kind="cat">
         <div class="photo-paper">
           <div class="pet-prints">
-            <span class="pet-print"><img class="pet-photo" src="pets/barsik.jpg" alt="Барсик — первое фото" loading="lazy"></span>
-            <span class="pet-print" hidden><img class="pet-photo" src="pets/barsik-2.jpg" alt="Барсик — второе фото" loading="lazy"></span>
+            <span class="pet-print"><img class="pet-photo" src="pets/black_coat1.jpg" alt="Черный плащ — первое фото" loading="lazy"></span>
+            <span class="pet-print" hidden><img class="pet-photo" src="pets/black_coat2.jpg" alt="Черный плащ — второе фото" loading="lazy"></span>
           </div>
           <button class="pet-photo-toggle" type="button" hidden>Ещё фото</button>
-          <h2 class="member-name">Барсик</h2>
+          <h2 class="member-name">Черный плащ</h2>
           <div class="member-role">
-            <button class="pet-owner" type="button">Анна Иванова</button>
+            <button class="pet-owner" type="button">Яна Молчанова</button>
           </div>
         </div>
       </article>
-      -->
-    </div>
+       <article class="member-card" data-kind="dog">
+        <div class="photo-paper">
+          <div class="pet-prints">
+            <span class="pet-print"><img class="pet-photo" src="pets/panda1.jpg" alt="Панда — первое фото" loading="lazy"></span>
+            <span class="pet-print" hidden><img class="pet-photo" src="pets/panda2.jpg" alt="Панда — второе фото" loading="lazy"></span>
+          </div>
+          <button class="pet-photo-toggle" type="button" hidden>Ещё фото</button>
+          <h2 class="member-name">Панда</h2>
+          <div class="member-role">
+            <button class="pet-owner" type="button">Яна Молчанова</button>
+          </div>
+        </div>
+      </article>
+       </div>
     <p class="empty" id="petEmpty" role="status">Первые фотокарточки питомцев скоро появятся ♡</p>
     <footer class="footer"><span>Больше, чем ачивки ♡</span><span>TravelAsk</span></footer>
   </main>
+  <dialog class="pet-photo-dialog" id="petPhotoDialog" aria-label="Увеличенное фото питомца">
+    <button type="button" class="pet-photo-close" aria-label="Закрыть увеличенное фото">
+      <img alt="">
+    </button>
+  </dialog>
   <script>
     const gallery = document.querySelector("#petGallery");
     const toolbar = document.querySelector("#petToolbar");
@@ -125,6 +162,29 @@
       }
     }
 
+    const photoDialog = document.querySelector("#petPhotoDialog");
+    const fullPhoto = photoDialog.querySelector("img");
+    const closePhoto = photoDialog.querySelector("button");
+
+    closePhoto.addEventListener("click", () => photoDialog.close());
+    photoDialog.addEventListener("click", event => {
+      if (event.target === photoDialog) photoDialog.close();
+    });
+
+    for (const photo of gallery.querySelectorAll(".photo-paper img")) {
+      const openPhoto = document.createElement("button");
+      openPhoto.type = "button";
+      openPhoto.className = "pet-photo-open";
+      openPhoto.setAttribute("aria-label", photo.alt ? `Увеличить фото: ${photo.alt}` : "Увеличить фото");
+      photo.before(openPhoto);
+      openPhoto.append(photo);
+      openPhoto.addEventListener("click", () => {
+        fullPhoto.src = photo.currentSrc || photo.src;
+        fullPhoto.alt = photo.alt;
+        photoDialog.showModal();
+      });
+    }
+
     if (cards.length) {
       empty.textContent = "Питомцы не найдены. Попробуй изменить поиск или выбрать «Все» ♡";
       toolbar.hidden = false;
@@ -152,7 +212,6 @@
         function updatePrints() {
           prints.forEach((print, index) => {
             print.toggleAttribute("data-front", index === current);
-            print.setAttribute("aria-hidden", String(index !== current));
           });
           toggle.textContent = current === 0 ? "Ещё фото" : "Первое фото";
         }
