@@ -508,4 +508,18 @@ body::after {
   .page > .header .brand { color: #f6eed6; }
   #petGallery .photo-paper .member-name { color: #26392e; }
 }
+/* More room for overlapping pet prints inside the winter frame on phones. */
+@media (max-width: 720px) {
+  #petGallery .pet-prints[data-paired] {
+    position: relative;
+    z-index: 3;
+    margin: 5px clamp(13px, 4.2vw, 21px) 0 clamp(5px, 1.6vw, 9px);
+  }
+  #petGallery .pet-prints[data-paired] .pet-print {
+    transform: translate(4%, 1.5%) rotate(4deg);
+  }
+  #petGallery .pet-prints[data-paired] .pet-print[data-front] {
+    transform: translate(0, 0) rotate(-2deg);
+  }
+}
 /* END: новогоднее оформление Стикербука */
