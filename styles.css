@@ -470,27 +470,30 @@ body::after {
 }
 #teamGrid .photo-paper, #petGallery .photo-paper, .profile-left .profile-photo {
   position: relative;
-  border: 4px solid #2a6750; border-radius: 5px;
-  background: var(--winter-paper);
-  box-shadow: inset 0 0 0 1px #d2b26c, 0 9px 18px #24443e35;
+  border: 1px solid #a0b3a6; border-radius: 2px;
+  background: linear-gradient(155deg, #fffdf5 26%, #f1f6ee 84%, #e5efe5);
+  box-shadow: 0 2px 3px #30413616, 0 9px 20px #24443e29;
 }
-#teamGrid .photo-paper::after, #petGallery .photo-paper::after,
-.profile-left .profile-photo::after {
+#teamGrid .photo-paper img, #teamGrid .avatar-fallback,
+.profile-left .profile-photo img, .profile-left .avatar-fallback {
+  outline: 1px solid #416d5747;
+}
+#teamGrid .photo-paper::before, #teamGrid .photo-paper::after,
+#petGallery .photo-paper::before, #petGallery .photo-paper::after,
+.profile-left .profile-photo::before, .profile-left .profile-photo::after {
   content: ""; position: absolute; z-index: 2; pointer-events: none;
-  width: clamp(31px, 28%, 64px); height: 19px; top: -7px; right: -6px;
-  transform: rotate(13deg); border-radius: 62% 15% 60% 18%;
-  background:
-    radial-gradient(circle at 24% 54%, #ffe8a0 0 2px, #cc943c 3px, transparent 4px),
-    radial-gradient(circle at 49% 39%, #ffb0ad 0 2px, #a2374f 3px, transparent 4px),
-    radial-gradient(circle at 72% 51%, #fff0b4 0 2px, #c99140 3px, transparent 4px),
-    var(--winter-fir);
-  box-shadow: 0 2px 4px #193d374e, inset 0 1px 1px #aac193aa;
+  width: clamp(15px, 13%, 27px); aspect-ratio: 1;
+  clip-path: polygon(0 0, 100% 0, 100% 18%, 18% 100%, 0 100%);
+  background: linear-gradient(135deg, #406954 0 31%, #b6c9ad 33% 39%, #698a71 41% 67%, #dbe7d8 70%);
 }
+#teamGrid .photo-paper::before, #petGallery .photo-paper::before,
+.profile-left .profile-photo::before { top: 4px; left: 4px; }
+#teamGrid .photo-paper::after, #petGallery .photo-paper::after,
+.profile-left .profile-photo::after { bottom: 4px; right: 4px; rotate: 180deg; }
 .page > .footer { border-top-color: var(--winter-gold); }
 @media (max-width: 720px) {
   .page > .header { align-items: flex-start; padding-inline: 10px; }
   .page > .header .nav .pill { flex: 1 1 auto; }
-  #teamGrid .photo-paper, #petGallery .photo-paper, .profile-left .profile-photo { border-width: 3px; }
 }
 @media (prefers-color-scheme: dark) {
   body::after {
