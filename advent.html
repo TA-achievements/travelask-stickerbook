@@ -109,33 +109,32 @@
   }
   @media (prefers-reduced-motion: reduce) { .advent-door { transition: none; } }
   .advent-stage {
-    perspective: 1800px; overflow: clip; padding: 12px 6px 28px;
+    perspective: 2300px; padding: 16px clamp(27px, 12vw, 175px) 58px;
   }
   .advent { transform-origin: center 93%; margin-bottom: 24px; }
-  .advent-intro .advent { animation: raise-box 1050ms cubic-bezier(.25,.7,.24,1) both; }
+  .advent-intro .advent { animation: raise-box 1800ms cubic-bezier(.25,.7,.24,1) both; }
   @keyframes raise-box {
-    0% { transform: translateY(9%) rotateX(76deg) rotateZ(-4deg) scale(.91); }
+    0%, 12% { transform: translateY(7%) rotateX(71deg) rotateZ(-3deg) scale(.92); }
     69% { transform: translateY(-2%) rotateX(-7deg) rotateZ(1deg); }
     100% { transform: none; }
   }
   .advent-covers {
-    position: absolute; inset: 0; z-index: 8; visibility: hidden;
-    perspective: 1400px; pointer-events: none;
+    position: absolute; inset: 0; z-index: 8;
+    perspective: 2400px; pointer-events: none;
   }
-  .advent-intro .advent-covers { animation: cover-visibility 2050ms step-end both; }
-  @keyframes cover-visibility { from { visibility: visible; } to { visibility: hidden; } }
   .advent-cover {
     position: absolute; inset-block: 0; width: 50%;
-    border: 1px solid #e3b87e; transform-style: preserve-3d;
+    border: 2px solid #f8da9c; transform-style: preserve-3d;
+    transform: rotateY(var(--turn));
     box-shadow: inset 0 0 0 5px #713141, inset 0 0 0 7px #d9ac72, 0 4px 12px #26131588;
     background:
       radial-gradient(circle, #ffe6b3a0 0 1px, transparent 2px) 3px 12px / 24px 27px,
       repeating-linear-gradient(135deg, #fff0c416 0 2px, transparent 2px 19px),
       linear-gradient(145deg, #a44755, #632638);
   }
-  .advent-cover--left { left: 0; transform-origin: left center; border-radius: 12px 0 0 12px; --turn: -103deg; }
-  .advent-cover--right { right: 0; transform-origin: right center; border-radius: 0 12px 12px 0; --turn: 103deg; }
-  .advent-intro .advent-cover { animation: open-covers 1000ms 990ms cubic-bezier(.24,.66,.2,1) both; }
+  .advent-cover--left { left: 0; transform-origin: left center; border-radius: 12px 0 0 12px; --turn: -110deg; }
+  .advent-cover--right { right: 0; transform-origin: right center; border-radius: 0 12px 12px 0; --turn: 110deg; }
+  .advent-intro .advent-cover { animation: open-covers 1550ms 1850ms cubic-bezier(.24,.66,.2,1) both; }
   @keyframes open-covers { from { transform: rotateY(0); } to { transform: rotateY(var(--turn)); } }
   .advent-cover::before {
     content: ""; position: absolute; inset: 0; margin: auto 0; height: clamp(24px, 5vw, 59px);
@@ -176,7 +175,45 @@
   .advent-window[data-shape="tree"] .advent-number { translate: 0 6px; }
   .advent-window[data-today] { outline-style: dashed; }
   @media (prefers-reduced-motion: reduce) {
-    .advent-intro .advent, .advent-intro .advent-cover, .advent-intro .advent-covers { animation: none; }
+    .advent-intro .advent, .advent-intro .advent-cover { animation: none; }
+  }
+  /* Paint, paper lining, and the exposed edges of the box. */
+  .advent {
+    --cream: #fffaf0; color: #1e5148;
+    border: 3px solid #dba34d;
+    background:
+      radial-gradient(circle, #fffdfa 0 1.5px, transparent 2.5px) 0 0 / 24px 27px,
+      linear-gradient(155deg, #f6fdfa, #d2f2e9 52%, #a8ddce);
+    box-shadow: inset 0 0 0 3px #fff2cf, 0 4px 0 #ffe4a2, 0 9px 0 #e0ae59,
+      0 15px 0 #be7651, 0 23px 0 #a33d54, 0 38px 32px -10px #7046466e;
+  }
+  .advent::before { border-color: #c58a3a; }
+  .advent-status { color: #315b52; }
+  .advent-progress { color: #315b52; }
+  .advent-progress progress { accent-color: #b23f54; }
+  .advent-grid {
+    border-color: #d3a663;
+    background: repeating-linear-gradient(135deg, #dfbd8026 0 1px, transparent 1px 10px), #fff4db;
+    box-shadow: inset 0 3px 9px #a9744538;
+  }
+  .advent-window { --door: #277462; --light: #459d83; }
+  .advent-window:nth-child(3n + 2) { --door: #ac3650; --light: #d46276; }
+  .advent-window:nth-child(3n) { --door: #2e5d88; --light: #5087b0; }
+  .advent-window:last-child { --door: #a62d48; --light: #df6d71; }
+  .advent-window[data-today] { outline-color: #a86215; }
+  .advent-window:focus-visible { outline-color: #81304c; }
+  .advent-window[aria-disabled="true"] .advent-door { filter: saturate(.83) brightness(.98); }
+  .advent-cover {
+    box-shadow: inset 0 0 0 4px #a0334d, inset 0 0 0 7px #f5cb77, 0 5px 12px #70334566;
+    background:
+      radial-gradient(circle, #ffebba 0 1px, transparent 2px) 4px 5px / 20px 23px,
+      repeating-linear-gradient(130deg, #ffd5ad30 0 2px, transparent 2px 13px),
+      linear-gradient(145deg, #df6d7c, #ae3553 71%, #863347);
+  }
+  @media (max-width: 640px) {
+    .advent-stage { padding-inline: clamp(28px, 10vw, 62px); }
+    .advent { padding-inline: 9px; }
+    .advent-grid { padding-inline: 5px; }
   }
 </style>
 </head>
@@ -356,7 +393,7 @@
     setTimeout(() => {
       stage.classList.remove("advent-intro");
       grid.inert = false;
-    }, 2050);
+    }, 3400);
   }
   setInterval(refresh, 15000);
   window.addEventListener("pageshow", refresh);
