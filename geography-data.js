@@ -44,4 +44,11 @@ window.STICKERBOOK_GEOGRAPHY = [
     lon: 41.3109,
     members: ["Адякова Елена"],
   },
+ {
+    city: "Оренбург",
+    country: "Россия",
+    lat: 51.7682,
+    lon: 55.0970,
+    members: ["Торохтий Вероника"],
+  },
 ];
