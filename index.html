@@ -1,5 +1,25 @@
 <!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#fbfaf5"><title>TravelAsk Стикербук</title><link rel="stylesheet" href="styles.css?v=album1">  <link rel="stylesheet" href="darkfix.css?v=2">
+<style>
+  .december-music[hidden], .december-music [hidden] { display: none; }
+  .december-music { margin-top: 19px; padding: 15px; border: 1px solid #bcb998; border-radius: 3px;
+    color: #24473d; background: linear-gradient(130deg, #fff6e4, #f5f0dd); }
+  .music-layout { display: grid; grid-template-columns: 50px minmax(0, 1fr); gap: 12px; align-items: start; }
+  .music-record { width: 46px; height: 46px; border-radius: 50%;
+    margin-block: 4px; background: radial-gradient(circle, #f4e7c3 0 2px, #a54455 3px 10px, transparent 11px),
+      repeating-radial-gradient(circle, #203e36 0 2px, #628076 3px, #18352c 4px 5px);
+    box-shadow: 2px 3px 5px #2c4b3f50; }
+  .december-music h2 { margin: 0 0 5px; font: 700 21px/1.05 Georgia, serif; }
+  .december-music time { font-size: 13px; color: #6b3c43; }
+  .december-music .music-track { margin: 7px 0 1px; font-weight: 750; line-height: 1.25; overflow-wrap: anywhere; }
+  .december-music .music-artist, .december-music .music-note { margin: 0 0 8px; font-size: 14px; line-height: 1.4; }
+  .music-play { display: inline-block; font-weight: 750; text-decoration: underline; text-underline-offset: 3px; }
+  .december-music details { margin-top: 12px; padding-top: 8px; border-top: 1px solid #c6c1a8; }
+  .december-music summary { cursor: pointer; font-size: 14px; }
+  .december-music ol { max-height: 210px; overflow: auto; padding-left: 19px; margin-bottom: 0; font-size: 14px; }
+  .december-music li { margin-bottom: 5px; }
+  .december-music li a:hover { text-decoration: underline; }
+</style>
 </head><body>
 <main class="page"><header class="header">
   <a class="brand" href="index.html"><div class="brand-title">TravelAsk ✈</div><div class="brand-sub">Стикербук</div></a>
@@ -16,6 +36,20 @@
       <a class="pill mint" href="#team">Найти коллегу ↓</a>
       <a class="pill album-advent-link" id="albumAdventLink" href="advent.html" hidden>Открыть адвент ❄</a>
     </div>
+    <section class="december-music" id="decemberMusic" aria-labelledby="decemberMusicTitle" hidden>
+      <div class="music-layout">
+        <span class="music-record" aria-hidden="true"></span>
+        <div>
+          <h2 id="decemberMusicTitle">Мелодия дня</h2>
+          <time></time>
+          <p class="music-track"></p>
+          <p class="music-artist"></p>
+          <p class="music-note"></p>
+          <a class="music-play" target="_blank" rel="noopener noreferrer">Послушать ♫</a>
+        </div>
+      </div>
+      <details hidden><summary>Предыдущие мелодии</summary><ol></ol></details>
+    </section>
   </div>
 </section>
 <section class="album-team" id="team" aria-labelledby="team-title">
@@ -28,4 +62,4 @@
   <div id="teamEmpty" class="empty hidden" role="status">Никого не нашлось. Попробуй другое имя ♡</div>
 </section>
 <footer class="footer"><span>TravelAsk ♡</span><span>Путешествия начинаются с людей</span></footer>
-</main><script src="data.js"></script><script src="script.js?v=album1"></script></body></html>
+</main><script src="data.js"></script><script src="script.js?v=album1"></script><script src="december-music.js"></script></body></html>

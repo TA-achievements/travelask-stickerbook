@@ -553,6 +553,12 @@
     .advent[data-finale] .advent-wreath, .advent[data-finale] .advent-wreath::after { animation: none; }
     .advent[data-finale] .advent-wreath::after { opacity: .85; }
   }
+  .advent-music-link {
+    display: block; margin-top: 10px; color: #65353b;
+    font: 700 14px/1.4 system-ui, sans-serif; text-decoration: underline;
+    text-underline-offset: 3px; overflow-wrap: anywhere;
+  }
+  .advent-music-link[hidden] { display: none; }
 </style>
 </head>
 <body>
@@ -623,11 +629,13 @@
         <div id="activityDate" class="advent-date"></div>
         <h2 id="activityTitle"></h2>
         <p id="activityText"></p>
+        <a id="adventMusicLink" class="advent-music-link" target="_blank" rel="noopener noreferrer" hidden></a>
       </div>
   <form method="dialog"><button class="advent-card-close" aria-label="Закрыть карточку">×</button></form>
     </div>
   </div>
 </dialog>
+<script src="december-music.js"></script>
 <script>
   const year = 2026;
   const activities = [
@@ -795,6 +803,7 @@
     document.querySelector("#activityDate").textContent = `${day} декабря`;
     document.querySelector("#activityTitle").textContent = title;
     document.querySelector("#activityText").textContent = description;
+    window.STICKERBOOK_MUSIC?.showAdventTrack(day);
     const animate = !motion.matches;
     const finale = day === activities.length;
     box.toggleAttribute("data-finale", finale);
