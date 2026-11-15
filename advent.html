@@ -292,6 +292,11 @@
   }
   .advent-card-close:hover { background: #fff2c4; }
   .advent-card-close:focus-visible { outline: 2px solid #704018; outline-offset: 2px; }
+  .advent-card-rotor[data-bending] > .advent-card-face { opacity: 0; }
+  .advent-curl, .advent-curl-strip {
+    position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none;
+  }
+  .advent-curl-strip > .advent-card-face { position: absolute; inset: 0; }
 </style>
 </head>
 <body>
@@ -418,10 +423,72 @@
     return last;
   }
 
+  const pictureTurn = { start: .17, end: .48 };
+  const taskTurn = { start: .62, end: .96 };
+
+  function bendCard(rotor, duration) {
+    const width = rotor.offsetWidth;
+    if (!width) return () => {};
+
+    const layer = document.createElement("div");
+    layer.className = "advent-curl";
+    layer.setAttribute("aria-hidden", "true");
+    layer.inert = true;
+    const faces = [...rotor.children];
+    const strips = 20;
+    const animations = [];
+    for (let index = 0; index < strips; index++) {
+      const strip = document.createElement("div");
+      strip.className = "advent-curl-strip";
+      const center = (index + .5) / strips;
+      strip.style.transformOrigin = `${center * 100}% 50%`;
+      faces.forEach((face, side) => {
+        const copy = face.cloneNode(true);
+        for (const element of copy.querySelectorAll("[id]")) element.removeAttribute("id");
+        const column = side === 0 ? strips - index - 1 : index;
+        copy.style.clipPath = `inset(0 max(0px, ${100 - (column + 1) * 100 / strips}% - .35px)
+          0 max(0px, ${column * 100 / strips}% - .35px))`;
+        strip.append(copy);
+      });
+      layer.append(strip);
+
+      const flatX = (center - .5) * width;
+      const keyframes = [{ offset: 0, transform: "none" }];
+      for (const { start, end } of [pictureTurn, taskTurn]) {
+        for (let step = 0; step <= 24; step++) {
+          const progress = step / 24;
+          const offset = start + (end - start) * progress;
+          // The bend peaks halfway through the turn, then eases back to flat.
+          const arc = Math.PI * .98 * Math.sin(Math.PI * progress) ** 2;
+          if (arc < .0001) {
+            keyframes.push({ offset, transform: "none" });
+            continue;
+          }
+          const angle = arc * (center - .5);
+          const radius = width / arc;
+          const x = radius * Math.sin(angle) - flatX;
+          const z = radius * (1 - Math.cos(angle));
+          keyframes.push({ offset, transform: `translate3d(${x}px,0,${z}px) rotateY(${-angle}rad)` });
+        }
+      }
+      keyframes.push({ offset: 1, transform: "none" });
+      animations.push({ strip, keyframes });
+    }
+    rotor.append(layer);
+    rotor.setAttribute("data-bending", "");
+    const flights = animations.map(({ strip, keyframes }) =>
+      strip.animate(keyframes, { duration, easing: "linear", fill: "both" })
+    );
+    return () => {
+      flights.forEach(animation => animation.cancel());
+      layer.remove();
+      rotor.removeAttribute("data-bending");
+    };
+  }
+
   function openDay(day, button) {
     if (opening || dialog.open || day > refresh()) return;
     opening = true;
-    const alreadyOpened = opened.has(day);
     opened.add(day);
     try { localStorage.setItem(storageKey, JSON.stringify([...opened])); } catch {}
     refresh();
@@ -429,7 +496,7 @@
     document.querySelector("#activityDate").textContent = `${day} декабря`;
     document.querySelector("#activityTitle").textContent = title;
     document.querySelector("#activityText").textContent = description;
-    const animate = !motion.matches && !alreadyOpened;
+    const animate = !motion.matches;
 
     function showCard() {
       dialog.showModal();
@@ -439,16 +506,23 @@
         const x = source.left + source.width / 2 - target.left - target.width / 2;
         const y = source.top + source.height / 2 - target.top - target.height / 2;
         const rotor = dialog.querySelector(".advent-card-rotor");
+        const duration = 2800;
+        const flatten = bendCard(rotor, duration);
         const flight = rotor.animate([
           { transform: `perspective(950px) translate3d(${x}px,${y}px,0) scale(.15) rotateY(88deg) rotateZ(-10deg)` },
-          { offset: .22, transform: `perspective(950px) translate3d(${x * .54}px,${y * .54}px,38px) scale(.43) rotateY(117deg) rotateZ(-12deg)` },
-          { offset: .43, transform: "perspective(950px) translate3d(0,-14px,76px) scale(.82) rotateY(180deg) rotateZ(5deg)" },
-          { offset: .61, transform: "perspective(950px) translate3d(0,-14px,76px) scale(.82) rotateY(180deg) rotateZ(2deg)" },
-          { offset: .85, transform: "perspective(950px) translate3d(0,-5px,130px) scale(.87) rotateY(330deg) rotateZ(-3deg)" },
+          { offset: pictureTurn.start, easing: "cubic-bezier(.42,0,.58,1)", transform: `perspective(950px) translate3d(${x * .54}px,${y * .54}px,38px) scale(.43) rotateY(90deg) rotateZ(-12deg)` },
+          { offset: pictureTurn.end, transform: "perspective(950px) translate3d(0,-14px,76px) scale(.82) rotateY(180deg) rotateZ(5deg)" },
+          { offset: taskTurn.start, easing: "cubic-bezier(.42,0,.58,1)", transform: "perspective(950px) translate3d(0,-14px,76px) scale(.82) rotateY(180deg) rotateZ(2deg)" },
+          { offset: taskTurn.end, easing: "ease-out", transform: "perspective(950px) translate3d(0,0,18px) scale(.97) rotateY(360deg) rotateZ(0deg)" },
           { transform: "perspective(950px) translate3d(0,0,0) scale(1) rotateY(360deg) rotateZ(0deg)" },
-        ], { duration: 1920, easing: "linear" });
-        dialog.addEventListener("close", () => flight.cancel(), { once: true });
-        const finish = () => button.removeAttribute("data-opening");
+        ], { duration, easing: "linear" });
+        const cancelFlight = () => flight.cancel();
+        dialog.addEventListener("close", cancelFlight, { once: true });
+        const finish = () => {
+          dialog.removeEventListener("close", cancelFlight);
+          flatten();
+          button.removeAttribute("data-opening");
+        };
         flight.finished.then(finish, finish);
       }
       opening = false;
