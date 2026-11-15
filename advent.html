@@ -108,6 +108,76 @@
     .advent { margin-top: 20px; }
   }
   @media (prefers-reduced-motion: reduce) { .advent-door { transition: none; } }
+  .advent-stage {
+    perspective: 1800px; overflow: clip; padding: 12px 6px 28px;
+  }
+  .advent { transform-origin: center 93%; margin-bottom: 24px; }
+  .advent-intro .advent { animation: raise-box 1050ms cubic-bezier(.25,.7,.24,1) both; }
+  @keyframes raise-box {
+    0% { transform: translateY(9%) rotateX(76deg) rotateZ(-4deg) scale(.91); }
+    69% { transform: translateY(-2%) rotateX(-7deg) rotateZ(1deg); }
+    100% { transform: none; }
+  }
+  .advent-covers {
+    position: absolute; inset: 0; z-index: 8; visibility: hidden;
+    perspective: 1400px; pointer-events: none;
+  }
+  .advent-intro .advent-covers { animation: cover-visibility 2050ms step-end both; }
+  @keyframes cover-visibility { from { visibility: visible; } to { visibility: hidden; } }
+  .advent-cover {
+    position: absolute; inset-block: 0; width: 50%;
+    border: 1px solid #e3b87e; transform-style: preserve-3d;
+    box-shadow: inset 0 0 0 5px #713141, inset 0 0 0 7px #d9ac72, 0 4px 12px #26131588;
+    background:
+      radial-gradient(circle, #ffe6b3a0 0 1px, transparent 2px) 3px 12px / 24px 27px,
+      repeating-linear-gradient(135deg, #fff0c416 0 2px, transparent 2px 19px),
+      linear-gradient(145deg, #a44755, #632638);
+  }
+  .advent-cover--left { left: 0; transform-origin: left center; border-radius: 12px 0 0 12px; --turn: -103deg; }
+  .advent-cover--right { right: 0; transform-origin: right center; border-radius: 0 12px 12px 0; --turn: 103deg; }
+  .advent-intro .advent-cover { animation: open-covers 1000ms 990ms cubic-bezier(.24,.66,.2,1) both; }
+  @keyframes open-covers { from { transform: rotateY(0); } to { transform: rotateY(var(--turn)); } }
+  .advent-cover::before {
+    content: ""; position: absolute; inset: 0; margin: auto 0; height: clamp(24px, 5vw, 59px);
+    background: linear-gradient(#f3cf92, #a87949 9%, #d7a560 45%, #ecc387 88%, #805a41);
+    box-shadow: 0 3px 8px #401c2999;
+  }
+  .advent-cover::after {
+    content: "❄"; position: absolute; inset: 18% 0 auto;
+    color: #ffe5a9; text-align: center; font: clamp(36px, 10vw, 120px)/1 Georgia, serif;
+    text-shadow: 0 2px 8px #502433;
+  }
+  .advent-lid::after {
+    content: "✦  ❄  ✧"; position: absolute; inset: 5px 0 auto; z-index: -1;
+    color: #e7c489; text-align: center; letter-spacing: clamp(22px, 8vw, 100px);
+    padding-left: clamp(22px, 8vw, 100px); opacity: .8;
+  }
+  .advent-window, .advent-window:last-child {
+    border: 0; background: transparent; box-shadow: none;
+    --shape: inset(3% 5% round 38% 38% 8% 8%);
+  }
+  .advent-window[data-shape="bauble"] { --shape: ellipse(45% 49% at 50% 50%); }
+  .advent-window[data-shape="tree"] { --shape: polygon(50% 0, 74% 28%, 66% 28%, 86% 53%, 75% 53%, 97% 85%, 61% 85%, 61% 99%, 39% 99%, 39% 85%, 3% 85%, 25% 53%, 14% 53%, 34% 28%, 26% 28%); }
+  .advent-window[data-shape="star"] { --shape: polygon(50% 0, 63% 23%, 91% 15%, 83% 42%, 100% 58%, 75% 68%, 77% 95%, 50% 82%, 23% 95%, 25% 68%, 0 58%, 17% 42%, 9% 15%, 37% 23%); }
+  .advent-window[data-shape="house"] { --shape: polygon(50% 1%, 98% 39%, 90% 39%, 90% 96%, 10% 96%, 10% 39%, 2% 39%); }
+  .advent-window[data-shape="tag"] { --shape: polygon(14% 3%, 86% 3%, 99% 22%, 99% 80%, 85% 97%, 15% 97%, 1% 80%, 1% 22%); }
+  .advent-window[data-shape="heart"] { --shape: polygon(50% 96%, 14% 63%, 4% 48%, 2% 32%, 7% 18%, 16% 9%, 28% 6%, 40% 10%, 50% 21%, 60% 10%, 72% 6%, 84% 9%, 93% 18%, 98% 32%, 96% 48%, 86% 63%); }
+  .advent-window[data-shape="heart"] .advent-door, .advent-window[data-shape="heart"] .advent-inside { border-radius: 42% 42% 49% 49%; }
+  .advent-window[data-shape="bow"] { --shape: polygon(2% 8%, 13% 5%, 45% 26%, 55% 26%, 87% 5%, 98% 8%, 98% 92%, 87% 95%, 55% 74%, 45% 74%, 13% 95%, 2% 92%); }
+  .advent-door, .advent-inside { clip-path: var(--shape); }
+  .advent-door::before { inset: 9%; opacity: .55; }
+  .advent-door::after { right: 13%; width: 5px; height: 11px; background: #ffe2a3cc; }
+  .advent-inside {
+    position: absolute; inset: 0; width: auto; height: auto; rotate: none;
+    background: radial-gradient(ellipse, #806541, #201813 74%); color: #f7d5a1;
+  }
+  .advent-window[data-shape="tree"] .advent-motif,
+  .advent-window[data-shape="bow"] .advent-motif { display: none; }
+  .advent-window[data-shape="tree"] .advent-number { translate: 0 6px; }
+  .advent-window[data-today] { outline-style: dashed; }
+  @media (prefers-reduced-motion: reduce) {
+    .advent-intro .advent, .advent-intro .advent-cover, .advent-intro .advent-covers { animation: none; }
+  }
 </style>
 </head>
 <body>
@@ -122,6 +192,7 @@
       <a class="pill lav" href="advent.html" aria-current="page">Адвент ❄</a>
     </nav>
   </header>
+  <div class="advent-stage" id="adventStage">
   <section class="advent" aria-labelledby="advent-title">
     <div class="advent-lid">
       <span class="advent-bow" aria-hidden="true"></span>
@@ -130,7 +201,12 @@
       <label class="advent-progress"><progress id="adventProgress" max="31" value="0"></progress><span id="adventCount">Открыто 0 из 31</span></label>
     </div>
     <div class="advent-grid" id="adventGrid"></div>
+    <div class="advent-covers" aria-hidden="true">
+      <div class="advent-cover advent-cover--left"></div>
+      <div class="advent-cover advent-cover--right"></div>
+    </div>
   </section>
+  </div>
 </main>
 <dialog id="adventCard" class="advent-card" aria-labelledby="activityTitle">
   <div id="activityDate" class="advent-date"></div>
@@ -262,6 +338,8 @@
     button.type = "button";
     button.className = "advent-window";
     button.toggleAttribute("data-wide", [1, 5, 8, 12, 13, 17, 20, 23, 25, 29].includes(day));
+    const shapes = ["house", "bauble", "star", "tree", "tag", "heart", "arch"];
+    button.dataset.shape = day === 31 ? "bow" : shapes[index % shapes.length];
     const motif = ["✧", "❅", "✦", "❋", "✷"][index % 5];
     button.innerHTML = `<span class="advent-inside" aria-hidden="true">✦</span>
       <span class="advent-door" aria-hidden="true"><span class="advent-number">${day}</span>
@@ -271,6 +349,15 @@
     return button;
   });
   refresh();
+  if (!motion.matches) {
+    const stage = document.querySelector("#adventStage");
+    grid.inert = true;
+    stage.classList.add("advent-intro");
+    setTimeout(() => {
+      stage.classList.remove("advent-intro");
+      grid.inert = false;
+    }, 2050);
+  }
   setInterval(refresh, 15000);
   window.addEventListener("pageshow", refresh);
 </script>
