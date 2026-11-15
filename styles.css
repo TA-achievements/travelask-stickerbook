@@ -574,4 +574,9 @@ body::after {
 #petGallery .pet-prints[data-paired] .pet-print[data-front] {
   transform: translate(0, 0) rotate(-2deg);
 }
+/* Equal top and bottom mat around team portraits. */
+#teamGrid .photo-paper { padding-bottom: 9px; }
+@media (max-width: 480px) {
+  #teamGrid .photo-paper { padding-bottom: 6px; }
+}
 /* END: новогоднее оформление Стикербука */
