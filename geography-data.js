@@ -33,7 +33,7 @@ window.STICKERBOOK_GEOGRAPHY = [
     members: ["Хассан Катерина"],
   },
   {
-    city: "Московский", country: "Новая Москва, Россия",
+    city: "Московский", country: "Россия",
     lat: 55.59911, lon: 37.35495,
     members: ["Чистякова Оксана"],
   },
@@ -50,5 +50,12 @@ window.STICKERBOOK_GEOGRAPHY = [
     lat: 51.7682,
     lon: 55.0970,
     members: ["Торохтий Вероника"],
+  },
+ {
+    city: "Тбилисская",
+    country: "Россия",
+    lat: 45.364528,
+    lon: 40.201774,
+    members: ["Малухина Анжелика"],
   },
 ];
