@@ -94,8 +94,8 @@
            его после этого комментария, перед закрывающим тегом галереи.
            Категории: cat — кошки, dog — собаки, other — другие питомцы.
            Фото загрузи в папку pets. Подставь фактические имена файлов в src.
-           Если фото одно, удали весь второй блок <span class="pet-print">.
-           Для каждого снимка обнови alt. Оставь hidden у второго блока и кнопки.
+           Для каждого дополнительного фото добавь ещё один <span class="pet-print" hidden> внутри pet-prints.
+           Для каждого снимка обнови alt. Оставь hidden у всех снимков после первого. Кнопка появится автоматически.
          -->
 
       <article class="member-card" data-kind="cat">
@@ -224,23 +224,33 @@
       });
       for (const card of cards) {
         const stack = card.querySelector(".pet-prints");
-        const toggle = card.querySelector(".pet-photo-toggle");
-        if (!stack || !toggle) continue;
-        const prints = stack.querySelectorAll(".pet-print");
-        if (prints.length !== 2) continue;
+        if (!stack) continue;
+        const prints = [...stack.querySelectorAll(".pet-print")];
+        if (prints.length < 2) continue;
+
+        let toggle = card.querySelector(".pet-photo-toggle");
+        if (!toggle) {
+          toggle = document.createElement("button");
+          toggle.type = "button";
+          toggle.className = "pet-photo-toggle";
+          stack.after(toggle);
+        }
 
         stack.setAttribute("data-paired", "");
-        prints[1].hidden = false;
         toggle.hidden = false;
         let current = 0;
+
         function updatePrints() {
+          const next = (current + 1) % prints.length;
           prints.forEach((print, index) => {
+            print.hidden = index !== current && index !== next;
             print.toggleAttribute("data-front", index === current);
           });
-          toggle.textContent = current === 0 ? "Ещё фото" : "Первое фото";
+          toggle.textContent = `Ещё фото · ${current + 1} из ${prints.length}`;
         }
+
         toggle.addEventListener("click", () => {
-          current = 1 - current;
+          current = (current + 1) % prints.length;
           updatePrints();
         });
         updatePrints();
