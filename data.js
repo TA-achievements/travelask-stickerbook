@@ -58,7 +58,7 @@ window.STICKERBOOK_DATA = {
         "com"
       ],
       "avatarSrc": "team/Alena.jpg",
-      "birthday": "09.03",
+      "birthday": "09.03.1998",
       "zodiac": "♓️ Рыбы",
       "city": null,
       "hobby": null,
@@ -548,7 +548,7 @@ window.STICKERBOOK_DATA = {
       "tenure": "4yearsSp",
       "department": [],
       "avatarSrc": "team/Angelika.jpg",
-      "birthday": "01.11",
+      "birthday": "01.11.1993",
       "zodiac": "♏️ Скорпион",
       "city": null,
       "hobby": null,
@@ -886,7 +886,7 @@ window.STICKERBOOK_DATA = {
         "control"
       ],
       "avatarSrc": null,
-      "birthday": "12.04",
+      "birthday": "12.04.1996",
       "zodiac": "♈️ Овен",
       "city": null,
       "hobby": "Изучаю английский язык с репетитором",
