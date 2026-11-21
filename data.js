@@ -1060,9 +1060,9 @@ window.STICKERBOOK_DATA = {
       "tenure": "2years",
       "department": [],
       "avatarSrc": "team/Elizaveta.jpg",
-      "birthday": "20.03",
+      "birthday": "20.03.1999",
       "zodiac": "♓️ Рыбы",
-      "city": null,
+      "city": "Зеленоград",
       "hobby": "рисую,пою, фотографирую, балуюсь генерацией AI-шных фото",
       "interview": "https://t.me/c/1831160384/1009",
       "fact": "Творческая,чувствительная, терпеливая"

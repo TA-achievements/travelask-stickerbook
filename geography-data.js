@@ -58,4 +58,11 @@ window.STICKERBOOK_GEOGRAPHY = [
     lon: 40.201774,
     members: ["Малухина Анжелика"],
   },
+ {
+    city: "Зеленоград",
+    country: "Россия",
+    lat: 55.9825,
+    lon: 37.1814,
+    members: ["Шаповалова Елизавета"],
+  },
 ];
