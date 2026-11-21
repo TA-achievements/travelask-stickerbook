@@ -375,9 +375,9 @@ window.STICKERBOOK_DATA = {
         "bekoffice"
       ],
       "avatarSrc": "team/Elena.jpg",
-      "birthday": "20.03",
+      "birthday": "20.03.1992",
       "zodiac": "♓️ Рыбы",
-      "city": null,
+      "city": "Екатеринбург",
       "hobby": null,
       "interview": "https://t.me/c/1831160384/344",
       "fact": " Первые деньги в интернете заработала аж 20 лет назад 🎩"

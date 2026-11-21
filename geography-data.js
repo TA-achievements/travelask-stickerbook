@@ -65,4 +65,11 @@ window.STICKERBOOK_GEOGRAPHY = [
     lon: 37.1814,
     members: ["Шаповалова Елизавета"],
   },
+ {
+    city: "Екатеринбург",
+    country: "Россия",
+    lat: 56.837435,
+    lon: 60.597636,
+    members: ["Жиянова Елена"],
+  },
 ];
