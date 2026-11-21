@@ -158,6 +158,29 @@
     .geo-marker[aria-pressed="true"]::after { background: #42674e; }
     .atlas-index h2 { margin: 0 0 14px; font: 700 25px/1.1 Georgia, serif; }
     .geo-place-list { display: grid; gap: 3px; }
+    .geo-country-group { border-bottom: 1px solid #e8e1cd; }
+    .geo-country-toggle {
+      display: flex; justify-content: space-between; align-items: center; gap: 10px;
+      width: 100%; min-height: 44px; padding: 8px 10px; text-align: left;
+      background: transparent; color: #394434; border: 1px solid transparent;
+      border-radius: 5px; font-weight: 700; cursor: pointer;
+    }
+    .geo-country-toggle:hover, .geo-country-toggle[aria-expanded="true"] {
+      background: #e4ebda; border-color: #c4d1b8;
+    }
+    .geo-country-toggle::after { content: "▾"; color: #557650; }
+    .geo-country-toggle[aria-expanded="true"]::after { transform: rotate(180deg); }
+    .geo-country-cities:not([hidden]) {
+      display: grid; gap: 2px; padding: 4px 0 6px 11px;
+      animation: reveal-cities 180ms ease-out both;
+    }
+    @keyframes reveal-cities {
+      from { opacity: 0; translate: 0 -4px; }
+      to { opacity: 1; translate: 0 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .geo-country-cities:not([hidden]) { animation: none; }
+    }
     .geo-place {
       display: flex; justify-content: space-between; gap: 8px; align-items: center;
       text-align: left; min-height: 40px; padding: 6px 10px;
@@ -175,7 +198,7 @@
   </style>
   <script defer src="data.js"></script>
   <script defer src="geography-data.js?v=2"></script>
-  <script defer src="geography.js?v=12"></script>
+  <script defer src="geography.js?v=13"></script>
 </head>
 <body>
   <svg width="0" height="0" aria-hidden="true" style="position:absolute">
@@ -212,7 +235,7 @@
     </header>
     <div class="atlas">
       <h1 class="atlas-title">География команды</h1>
-      <p class="atlas-intro">Выбери отметку на карте или город в списке.</p>
+      <p class="atlas-intro">Выбери страну в списке или отметку на карте.</p>
       <div class="atlas-spread">
         <section class="atlas-map" aria-label="Карта мира">
           <div class="geo-controls">
@@ -733,7 +756,7 @@
           <p class="atlas-credit">Карта на основе Natural Earth</p>
         </section>
         <section class="atlas-index" aria-labelledby="cityIndexTitle">
-          <h2 id="cityIndexTitle">Города команды</h2>
+          <h2 id="cityIndexTitle">Страны команды</h2>
           <div id="placeList" class="geo-place-list"></div>
           <div id="placeDetails" aria-live="polite">
             <p>Здесь появятся города и страны нашей команды.</p>

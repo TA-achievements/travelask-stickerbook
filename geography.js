@@ -14,6 +14,7 @@ let selectedMarker;
 let selectedPlaceButton;
 
 const placeList = document.querySelector("#placeList");
+let activeCountry;
 
 const countryLayer = document.querySelector("#countryLabels");
 const countryLabels = [...countryLayer.children];
@@ -137,7 +138,8 @@ function setZoom(value, from, to = from) {
     world.style.width = `${next * 100}%`;
     viewport.toggleAttribute("data-zoomed", next > 1);
     zoomIn.disabled = next === maxScale;
-    zoomOut.disabled = zoomReset.disabled = next === 1;
+    zoomOut.disabled = next === 1;
+    zoomReset.disabled = next === 1 && !activeCountry;
     scheduleCountryLabels();
   }
   viewport.scrollLeft = mapX * next - target.x;
@@ -152,38 +154,29 @@ function cancelCityFocus() {
   focusFrame = undefined;
 }
 
-function focusCity(place, marker) {
+function focusMap(x, y, endScale, onArrival, revealMap = true) {
   cancelCityFocus();
   const bounds = viewport.getBoundingClientRect();
-  if (bounds.top < 0 || bounds.bottom > window.innerHeight) {
+  if (revealMap && (bounds.top < 0 || bounds.bottom > window.innerHeight)) {
     viewport.scrollIntoView({ block: "center", behavior: reducedMotion.matches ? "instant" : "smooth" });
   }
 
   const halfWidth = viewport.clientWidth / 2;
   const halfHeight = viewport.clientHeight / 2;
-  const mapWidth = world.getBoundingClientRect().width / scale;
+  const map = world.getBoundingClientRect();
+  const mapWidth = map.width / scale;
+  const mapHeight = map.height / scale;
   const startScale = scale;
-  const endScale = Math.max(scale, 8);
   const startX = viewport.scrollLeft;
   const startY = viewport.scrollTop;
-  const cityX = mapWidth * (place.lon + 180) / 360;
-  const cityY = mapWidth * (90 - place.lat) / 360;
+  const endX = Math.max(0, Math.min(mapWidth * endScale - 2 * halfWidth, x * mapWidth * endScale - halfWidth));
+  const endY = Math.max(0, Math.min(mapHeight * endScale - 2 * halfHeight, y * mapHeight * endScale - halfHeight));
 
   function move(progress) {
     const next = startScale + (endScale - startScale) * progress;
     setZoom(next);
-    viewport.scrollLeft = startX + (cityX * endScale - halfWidth - startX) * progress;
-    viewport.scrollTop = startY + (cityY * endScale - halfHeight + 18 - startY) * progress;
-  }
-
-  function highlight() {
-    if (reducedMotion.matches) return;
-    marker.animate([
-      { filter: "drop-shadow(0 0 2px #e5b14f)" },
-      { filter: "drop-shadow(0 0 8px #e5b14f)" },
-      { filter: "drop-shadow(0 0 2px #e5b14f)" },
-      { filter: "none" },
-    ], { duration: 1150 });
+    viewport.scrollLeft = startX + (endX - startX) * progress;
+    viewport.scrollTop = startY + (endY - startY) * progress;
   }
 
   if (reducedMotion.matches) {
@@ -197,9 +190,60 @@ function focusCity(place, marker) {
     const progress = Math.min((now - started) / 600, 1);
     move(1 - (1 - progress) ** 3);
     focusFrame = progress < 1 ? requestAnimationFrame(frame) : undefined;
-    if (progress === 1) highlight();
+    if (progress === 1) onArrival?.();
   }
   focusFrame = requestAnimationFrame(frame);
+}
+
+function focusCity(place, marker) {
+  const mapHeight = world.getBoundingClientRect().height / scale;
+  const cityY = (90 - place.lat) / 180;
+  const cityScale = Math.max(scale, 8);
+  focusMap((place.lon + 180) / 360, cityY - 18 / (mapHeight * cityScale), cityScale, () => {
+    marker.animate([
+      { filter: "drop-shadow(0 0 2px #e5b14f)" },
+      { filter: "drop-shadow(0 0 8px #e5b14f)" },
+      { filter: "drop-shadow(0 0 2px #e5b14f)" },
+      { filter: "none" },
+    ], { duration: 1150 });
+  });
+}
+
+function focusCountry(entries) {
+  const xs = entries.map(entry => entry.x);
+  const ys = entries.map(entry => entry.y);
+  const left = Math.min(...xs), right = Math.max(...xs);
+  const top = Math.min(...ys), bottom = Math.max(...ys);
+  const map = world.getBoundingClientRect();
+  // Reserve room for the photos above their anchors and the margin beside them.
+  const fitX = Math.max(viewport.clientWidth - 92, 1) / ((right - left) * map.width / scale);
+  const fitY = Math.max(viewport.clientHeight - 76, 1) / ((bottom - top) * map.height / scale);
+  const next = Math.max(1, Math.min(entries.length === 1 ? 5 : 8, fitX, fitY));
+  const offsetY = next > 1 ? 15 / (map.height / scale * next) : 0;
+  focusMap((left + right) / 2, (top + bottom) / 2 - offsetY, next, undefined,
+    viewport.getBoundingClientRect().bottom <= 0);
+}
+
+function openCountry(group) {
+  if (activeCountry) {
+    activeCountry.list.hidden = true;
+    activeCountry.button.setAttribute("aria-expanded", "false");
+  }
+  activeCountry = group;
+  if (group) {
+    group.list.hidden = false;
+    group.button.setAttribute("aria-expanded", "true");
+  }
+  zoomReset.disabled = scale === 1 && !group;
+}
+
+function clearPlace(message) {
+  selectedPlaceButton?.setAttribute("aria-pressed", "false");
+  selectedMarker?.setAttribute("aria-pressed", "false");
+  selectedPlaceButton = selectedMarker = undefined;
+  const hint = document.createElement("p");
+  hint.textContent = message;
+  details.replaceChildren(hint);
 }
 
 function showPlace(place, label, marker, placeButton) {
@@ -325,7 +369,12 @@ zoomOut.addEventListener("click", () => {
 });
 zoomReset.addEventListener("click", () => {
   cancelCityFocus();
+  closePreview();
+  closeFan();
+  openCountry(undefined);
+  clearPlace("Выбери страну или отметку на карте.");
   setZoom(1);
+  viewport.scrollLeft = viewport.scrollTop = 0;
 });
 
 const preview = document.querySelector("#geoPreview");
@@ -423,6 +472,7 @@ preview.closest(".atlas-sheet").addEventListener("keydown", event => {
 
 const requestedMember = new URLSearchParams(location.search).get("member");
 let requestedPlaceButton;
+const countryGroups = new Map();
 const countries = [...document.querySelector("#countryShapes").children];
 const countryKey = name => name?.trim().toLowerCase().replaceAll("ё", "е");
 const countryByName = new Map();
@@ -441,6 +491,11 @@ for (const place of window.STICKERBOOK_GEOGRAPHY) {
   const region = countryByName.get(countryCode) ?? countryByName.get(countryName) ??
     countryByName.get(countryName?.split(",").at(-1).trim());
   region?.setAttribute("data-team", "");
+  const groupKey = region ?? (countryName || countryKey(label));
+  if (!countryGroups.has(groupKey)) {
+    countryGroups.set(groupKey, { name: country?.split(",").at(-1).trim() || label, entries: [] });
+  }
+  const countryGroup = countryGroups.get(groupKey);
 
   const marker = document.createElement("button");
   marker.type = "button";
@@ -467,7 +522,11 @@ for (const place of window.STICKERBOOK_GEOGRAPHY) {
 
   const entry = { marker, label, members, x: (lon + 180) / 360, y: (90 - lat) / 180 };
   markers.push(entry);
-  const selectPlace = () => showPlace(place, label, marker, placeButton);
+  countryGroup.entries.push({ ...entry, placeButton });
+  const selectPlace = () => {
+    if (activeCountry !== countryGroup) openCountry(countryGroup);
+    showPlace(place, label, marker, placeButton);
+  };
   marker.addEventListener("click", event => {
     const group = markerGroups.get(entry);
     if (group?.length > 1 && !group.includes(fan)) {
@@ -484,11 +543,40 @@ for (const place of window.STICKERBOOK_GEOGRAPHY) {
     focusCity(place, marker);
   });
   world.append(marker);
-  placeList.append(placeButton);
   if (!requestedPlaceButton && requestedMember &&
       members.some(name => String(teamByName.get(name.trim())?.id ?? "") === requestedMember)) {
     requestedPlaceButton = placeButton;
   }
+}
+
+const byRussianName = new Intl.Collator("ru");
+const sortedGroups = [...countryGroups.values()].sort((a, b) => byRussianName.compare(a.name, b.name));
+for (const [index, group] of sortedGroups.entries()) {
+  const section = document.createElement("section");
+  section.className = "geo-country-group";
+  group.button = document.createElement("button");
+  group.button.type = "button";
+  group.button.className = "geo-country-toggle";
+  group.button.textContent = group.name;
+  group.list = document.createElement("div");
+  group.list.className = "geo-country-cities";
+  group.list.id = `geo-country-cities-${index}`;
+  group.list.hidden = true;
+  group.button.setAttribute("aria-expanded", "false");
+  group.button.setAttribute("aria-controls", group.list.id);
+  group.entries.sort((a, b) => byRussianName.compare(a.label, b.label));
+  group.list.append(...group.entries.map(entry => entry.placeButton));
+  group.button.addEventListener("click", () => {
+    const opening = activeCountry !== group;
+    cancelCityFocus();
+    closePreview();
+    closeFan();
+    openCountry(opening ? group : undefined);
+    clearPlace(opening ? "Выбери город в списке." : "Выбери страну или отметку на карте.");
+    if (opening) focusCountry(group.entries);
+  });
+  section.append(group.button, group.list);
+  placeList.append(section);
 }
 
 arrangeMarkers();
@@ -499,6 +587,6 @@ new ResizeObserver(() => {
 }).observe(viewport);
 
 if (placeList.childElementCount) {
-  details.firstElementChild.textContent = "Здесь откроется карточка выбранного города.";
+  details.firstElementChild.textContent = "Выбери страну или отметку на карте.";
   requestedPlaceButton?.click();
 }
