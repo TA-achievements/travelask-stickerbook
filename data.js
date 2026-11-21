@@ -860,7 +860,7 @@ window.STICKERBOOK_DATA = {
       "id": "nika",
       "name": "Торохтий Вероника",
       "role": "Старший модератор\nОтдел контроля качества",
-      "avatar": null,
+      "avatar": "Veronica",
       "startDate": null,
       "achievements": [
         "bunker",
@@ -885,7 +885,7 @@ window.STICKERBOOK_DATA = {
       "department": [
         "control"
       ],
-      "avatarSrc": null,
+      "avatarSrc": "team/Veronica.jpg",
       "birthday": "12.04.1996",
       "zodiac": "♈️ Овен",
       "city": null,
