@@ -148,6 +148,8 @@
     --cover-angle: -102deg;
     transform: translateZ(calc(var(--lid-depth) / 2)) rotateY(var(--cover-angle));
   }
+  @media (min-width: 1250px) { .advent-cover { --cover-angle: -106deg; } }
+  @media (min-width: 1500px) { .advent-cover { --cover-angle: -114deg; } }
   .advent-intro .advent-cover { animation: open-book 1550ms 180ms cubic-bezier(.24,.66,.2,1) both; }
   @keyframes open-book {
     from { transform: translateZ(calc(var(--lid-depth) / 2)) rotateY(0deg); }
