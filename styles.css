@@ -581,4 +581,31 @@ body::after {
 }
 .profile-left .profile-photo { padding-bottom: 10px; }
 .profile-left .profile-photo > img { display: block; }
+/* Snow falls in a seamless tile without intercepting clicks. */
+@media (prefers-reduced-motion: no-preference) {
+  html::after {
+    content: "";
+    position: fixed;
+    inset: -480px -16px 0;
+    z-index: 20;
+    pointer-events: none;
+    background-image:
+      radial-gradient(circle at 44px 47px, #fff 0 1px, #6c829c45 1.7px, transparent 2.7px),
+      radial-gradient(circle at 247px 92px, #fffffff0 0 1.6px, #6c829c30 2.3px, transparent 3.4px),
+      radial-gradient(circle at 133px 166px, #ffffffd9 0 .7px, #6c829c32 1.4px, transparent 2.3px),
+      radial-gradient(circle at 357px 223px, #fff 0 1.3px, #6c829c40 2px, transparent 3.1px),
+      radial-gradient(circle at 69px 294px, #ffffffe6 0 1.4px, #6c829c35 2.1px, transparent 3px),
+      radial-gradient(circle at 214px 363px, #ffffffd9 0 .8px, #6c829c30 1.5px, transparent 2.5px),
+      radial-gradient(circle at 322px 432px, #fff 0 1px, #6c829c40 1.7px, transparent 2.7px);
+    background-size: 420px 480px;
+    animation: stickerbook-snowfall 21s linear infinite;
+  }
+  @keyframes stickerbook-snowfall {
+    0% { transform: translate3d(0, 0, 0); }
+    25% { transform: translate3d(10px, 120px, 0); }
+    50% { transform: translate3d(0, 240px, 0); }
+    75% { transform: translate3d(-10px, 360px, 0); }
+    100% { transform: translate3d(0, 480px, 0); }
+  }
+}
 /* END: новогоднее оформление Стикербука */
