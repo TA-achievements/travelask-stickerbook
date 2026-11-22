@@ -30,7 +30,7 @@ window.STICKERBOOK_GEOGRAPHY = [
   {
     city: "Хургада", country: "Египет",
     lat: 27.25738, lon: 33.81291,
-    members: ["Хассан Катерина"],
+    members: ["Хассан Катерина"], ["Якуничева Ольга"],
   },
   {
     city: "Московский", country: "Россия",
@@ -71,5 +71,19 @@ window.STICKERBOOK_GEOGRAPHY = [
     lat: 56.837435,
     lon: 60.597636,
     members: ["Жиянова Елена"],
+  },
+ {
+    city: "Санкт-Петербург",
+    country: "Россия",
+    lat: 59.9388,
+    lon: 30.3150,
+    members: ["Зайкова Ксения"],
+  },
+ {
+    city: "Дананг",
+    country: "Вьетнам",
+    lat: 16.0486,
+    lon: 108.2206,
+    members: ["Дуванова Виктория"],
   },
 ];
