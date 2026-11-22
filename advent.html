@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Новогодний адвент — TravelAsk Стикербук</title>
+<title>Книга зимних чудес — TravelAsk Стикербук</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="darkfix.css?v=2">
 <style>
@@ -555,12 +555,65 @@
     .advent[data-finale] .advent-wreath, .advent[data-finale] .advent-wreath::after { animation: none; }
     .advent[data-finale] .advent-wreath::after { opacity: .85; }
   }
-  .advent-music-link {
-    display: block; margin-top: 10px; color: #65353b;
-    font: 700 14px/1.4 system-ui, sans-serif; text-decoration: underline;
-    text-underline-offset: 3px; overflow-wrap: anywhere;
+  .book-advent { width: min(100%, 1080px); margin: 28px auto 0; }
+  .book-heading { text-align: center; margin: 0 auto 15px; color: #21443e; }
+  .book-heading h1 { margin: 0; font: 800 clamp(30px, 5.5vw, 58px)/1.06 Georgia, serif; letter-spacing: -.035em; }
+  .book-heading .advent-status { margin: 8px 0; }
+  .book-heading .advent-progress { margin: 0 auto 10px; }
+  .book-scene { position: relative; isolation: isolate; border-radius: 8px; box-shadow: 0 16px 38px #142a3745, 0 0 0 1px #9f7951; }
+  .book-image { display: block; width: 100%; height: auto; border-radius: inherit; }
+  .book-hotspots { position: absolute; inset: 0; }
+  .book-door { appearance: none; cursor: pointer; touch-action: manipulation; }
+  .book-hotspots .book-door {
+    position: absolute; translate: -50% -50%; width: 5%; height: 7%;
+    padding: 0; border: 0; border-radius: 22%; background: transparent; color: white;
   }
-  .advent-music-link[hidden] { display: none; }
+  .book-hotspots .book-door[data-side] { width: 6.2%; height: 7.5%; }
+  .book-hotspots .book-door:not([aria-disabled="true"]):hover,
+  .book-hotspots .book-door[data-opened] { background: radial-gradient(ellipse, #ffbb4633, transparent 70%); box-shadow: 0 0 14px #ffcf7777, inset 0 0 0 1px #ffe2a86b; }
+  .book-hotspots .book-door[data-opening] { background: radial-gradient(ellipse, #fff4cbb8, #ffc06932 58%, transparent 75%); }
+  .book-door[aria-disabled="true"] { cursor: default; }
+  .book-door:focus-visible { outline: 2px solid #fff1a3; outline-offset: 2px; }
+  .book-hotspots .book-door[data-today]:not(:focus-visible) { outline: 1px dashed #ffe4ad; }
+  .book-date-picker { display: none; }
+  .book-advent[data-finale] .book-scene { animation: book-final-glow 1.3s ease-out both; }
+  @keyframes book-final-glow {
+    35% { box-shadow: 0 0 35px #ffd47ba8, 0 0 0 2px #ffe1a2; }
+  }
+  @media (max-width: 700px) {
+    .book-advent { margin-top: 20px; }
+    .book-date-picker { display: block; margin-top: 12px; }
+    .book-date-picker summary {
+      display: list-item;
+      width: fit-content;
+      margin-inline: auto;
+      min-height: 44px;
+      padding: 10px 17px;
+      border: 1px solid #9db6a8;
+      border-radius: 24px;
+      background: #fffaf0;
+      color: #21443e;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .book-date-picker summary:focus-visible { outline: 2px solid #8b3746; outline-offset: 3px; }
+
+    .book-date-picker[open] .book-days { display: grid; grid-template-columns: repeat(auto-fit, minmax(44px, 1fr)); gap: 5px; margin-top: 11px; }
+    .book-days .book-door { position: relative; min-height: 44px; border: 1px solid #a98b63; border-radius: 7px; background: #fffaf0; color: #21443e; }
+    .book-days .book-door[data-opened] { background: #ffe0a0; }
+    .book-days .book-door[data-today] { border-color: #8b3746; border-width: 2px; }
+    .book-days .book-door[aria-disabled="true"] { opacity: .55; }
+    .book-days .book-door:focus-visible { outline-color: #8b3746; }
+  }
+  @media (prefers-color-scheme: dark) {
+    .book-heading, .book-heading .advent-status, .book-heading .advent-progress { color: #fff1d4; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .book-advent[data-finale] .book-scene { animation: none; }
+  }
+  .book-hotspots .book-door[data-extracting] .advent-card-edge {
+    animation: extract-card 400ms ease-out both;
+  }
 </style>
 </head>
 <body>
@@ -575,35 +628,22 @@
       <a class="pill lav" href="advent.html" aria-current="page">Адвент ❄</a>
     </nav>
   </header>
-  <div class="advent-stage" id="adventStage">
-  <section class="advent" aria-labelledby="advent-title">
-    <div class="advent-case-depth" aria-hidden="true"></div>
-    <div class="advent-lid">
-      <span class="advent-bow" aria-hidden="true">
-        <span class="advent-bow-tail"></span><span class="advent-bow-tail advent-bow-tail--right"></span>
-        <span class="advent-bow-loop"></span><span class="advent-bow-loop advent-bow-loop--right"></span>
-        <span class="advent-bow-knot"></span>
-      </span>
-      <h1 id="advent-title">Новогодний адвент</h1>
+
+  <section class="book-advent" aria-labelledby="advent-title">
+    <div class="book-heading">
+      <h1 id="advent-title">Книга зимних чудес</h1>
       <p class="advent-status" id="adventStatus" role="status"></p>
-      <label class="advent-progress"><progress id="adventProgress" max="31" value="0"></progress><span id="adventCount">Открыто 0 из 31</span></label>
+      <div class="advent-progress"><progress id="adventProgress" max="31" value="0" aria-label="Сколько окошек открыто"></progress><span id="adventCount">Открыто 0 из 31</span></div>
     </div>
-    <div class="advent-tray">
-      <div class="advent-grid" id="adventGrid"></div>
-      <div class="advent-tray-shadow" aria-hidden="true"></div>
+    <div class="book-scene">
+      <img class="book-image" src="background/advent-book-scene.webp" width="1536" height="1024" alt="Раскрытая зимняя книга с заснеженным особняком и пронумерованными окнами">
+      <div class="book-hotspots" id="adventGrid" role="group" aria-label="Окошки на иллюстрации"></div>
     </div>
-    <div class="advent-covers" aria-hidden="true">
-      <div class="advent-cover">
-        <div class="advent-cover-edge advent-cover-edge--fore"></div>
-        <div class="advent-cover-edge advent-cover-edge--hinge"></div>
-        <div class="advent-cover-edge advent-cover-edge--top"></div>
-        <div class="advent-cover-edge advent-cover-edge--bottom"></div>
-        <div class="advent-cover-face advent-cover-outside">❄<br>Новогодний адвент</div>
-        <div class="advent-cover-face advent-cover-inside"><span class="advent-wreath" id="adventWreath">❄</span></div>
-      </div>
-    </div>
+    <details class="book-date-picker">
+      <summary>Выбрать дату</summary>
+      <div class="book-days" id="bookDays" role="group" aria-label="Даты для телефона"></div>
+    </details>
   </section>
-  </div>
 </main>
 <dialog id="adventCard" class="advent-card" aria-labelledby="activityTitle">
   <div class="advent-fireworks" aria-hidden="true">
@@ -631,13 +671,11 @@
         <div id="activityDate" class="advent-date"></div>
         <h2 id="activityTitle"></h2>
         <p id="activityText"></p>
-        <a id="adventMusicLink" class="advent-music-link" target="_blank" rel="noopener noreferrer" hidden></a>
       </div>
   <form method="dialog"><button class="advent-card-close" aria-label="Закрыть карточку">×</button></form>
     </div>
   </div>
 </dialog>
-<script src="december-music.js"></script>
 <script>
   const year = 2026;
   const activities = [
@@ -675,7 +713,7 @@
   ];
 
   const grid = document.querySelector("#adventGrid");
-  const box = document.querySelector(".advent");
+  const box = document.querySelector(".book-advent");
   const status = document.querySelector("#adventStatus");
   const dialog = document.querySelector("#adventCard");
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
@@ -711,17 +749,17 @@
     status.textContent = !last ? `Старт 1 декабря ${year} года по Москве.` :
       today ? "Открывай сегодняшнее окошко и любые пропущенные." : "Все окошки доступны.";
     const visibleOpened = [...opened].filter(day => day <= last).length;
-    wreathLights.forEach((light, index) => light.toggleAttribute("data-lit", index < visibleOpened));
     document.querySelector("#adventProgress").value = visibleOpened;
     document.querySelector("#adventCount").textContent = `Открыто ${visibleOpened} из 31`;
-    buttons.forEach((button, index) => {
+    buttons.forEach((pair, index) => {
       const day = index + 1;
       const locked = day > last;
+      for (const button of pair) {
       button.setAttribute("aria-disabled", String(locked));
       button.toggleAttribute("data-today", day === today);
       button.toggleAttribute("data-opened", !locked && opened.has(day));
       button.setAttribute("aria-label", `${day} декабря${locked ? ", ещё закрыто" : opened.has(day) ? ", уже открыто" : ""}`);
-
+      }
     });
     return last;
   }
@@ -805,8 +843,7 @@
     document.querySelector("#activityDate").textContent = `${day} декабря`;
     document.querySelector("#activityTitle").textContent = title;
     document.querySelector("#activityText").textContent = description;
-    window.STICKERBOOK_MUSIC?.showAdventTrack(day);
-    const animate = !motion.matches;
+    const animate = !motion.matches && typeof button.animate === "function";
     const finale = day === activities.length;
     box.toggleAttribute("data-finale", finale);
     dialog.toggleAttribute("data-finale", finale);
@@ -851,43 +888,36 @@
     } else showCard();
   }
 
+  const coords = {1:[38.4766,19.7266],2:[50.5208,16.4062],3:[62.7604,19.4336],4:[33.8542,33.3008],5:[42.8385,32.0312],6:[58.7891,32.1289],7:[67.2526,32.7148],8:[32.2266,44.6289],9:[40.7552,44.4336],10:[50.7812,43.6523],11:[60.8724,43.7500],12:[69.4010,44.4336],13:[31.2500,57.6172],14:[39.1276,57.5195],15:[61.9141,57.6172],16:[70.0521,57.6172],17:[31.1198,71.3867],18:[38.5417,71.3867],19:[62.5651,71.2891],20:[70.3125,71.3867],21:[16.2760,25.7812],22:[16.7318,50.7812],23:[37.6302,83.0078],24:[50.5859,72.6562],25:[64.2578,83.3008],26:[12.0443,78.2227],27:[81.9661,25.2930],28:[87.5651,40.3320],29:[83.9193,54.2969],30:[88.5417,68.3594],31:[84.5703,77.9297]};
+  const sideDays = new Set([21, 22, 26, 27, 28, 29, 30, 31]);
+  const mobileDays = document.querySelector("#bookDays");
   const buttons = activities.map((_, index) => {
     const day = index + 1;
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "advent-window";
-    button.toggleAttribute("data-wide", [1, 5, 8, 12, 13, 17, 20, 23, 25, 29].includes(day));
-    const shapes = ["house", "bauble", "star", "tree", "tag", "heart", "arch"];
-    button.dataset.shape = day === 31 ? "bow" : shapes[index % shapes.length];
-    const motif = ["✧", "❅", "✦", "❋", "✷"][index % 5];
-    button.innerHTML = `<span class="advent-inside" aria-hidden="true"><span class="advent-inside-number">${day}</span></span>
-      <span class="advent-card-edge" aria-hidden="true"></span>
-      <span class="advent-door" aria-hidden="true"><span class="advent-number">${day}</span>
-      <span class="advent-motif">${motif}</span>${button.dataset.shape === "star" ? '<span class="advent-star-tip"></span>' : ""}</span>`;
-    button.addEventListener("click", () => openDay(day, button));
-    grid.append(button);
-    return button;
-  });
-  const wreath = document.querySelector("#adventWreath");
-  const wreathLights = activities.map((_, index) => {
-    const angle = index * 2 * Math.PI / activities.length - Math.PI / 2;
-    const light = document.createElement("span");
-    light.className = "advent-wreath-light";
-    light.style.left = `${50 + 50 * Math.cos(angle)}%`;
-    light.style.top = `${50 + 50 * Math.sin(angle)}%`;
-    wreath.append(light);
-    return light;
+    const [x, y] = coords[day];
+    const hotspot = document.createElement("button");
+    hotspot.style.left = x + "%";
+    hotspot.style.top = y + "%";
+    hotspot.toggleAttribute("data-side", sideDays.has(day));
+    hotspot.title = day + " декабря";
+    const shortcut = document.createElement("button");
+    shortcut.textContent = day;
+    for (const button of [hotspot, shortcut]) {
+      button.type = "button";
+      button.className = "book-door";
+      button.innerHTML += '<span class="advent-card-edge" aria-hidden="true"></span>';
+      button.addEventListener("click", () => {
+        if (day > refresh()) {
+          status.textContent = day + " декабря ещё закрыто.";
+          return;
+        }
+        openDay(day, hotspot);
+      });
+    }
+    grid.append(hotspot);
+    mobileDays.append(shortcut);
+    return [hotspot, shortcut];
   });
   refresh();
-  if (!motion.matches) {
-    const stage = document.querySelector("#adventStage");
-    grid.inert = true;
-    stage.classList.add("advent-intro");
-    setTimeout(() => {
-      stage.classList.remove("advent-intro");
-      grid.inert = false;
-    }, 1730);
-  }
   setInterval(refresh, 15000);
   window.addEventListener("pageshow", () => {
     restoreOpened();
