@@ -681,6 +681,34 @@
   @keyframes book-final-glow {
     35% { filter: drop-shadow(0 0 16px #ffd47bcc); }
   }
+  .advent-dusk .page > .header {
+    background: linear-gradient(125deg, #15243a, #253e58 76%, #24394e);
+    border-bottom-color: #a4875b;
+    box-shadow: 0 10px 28px #0c1b3266;
+  }
+  .advent-dusk .page > .header::before {
+    border-bottom-color: #b18d52;
+  }
+  .advent-dusk .page > .header .brand { color: #ffedc4; }
+  .advent-dusk .page > .header .nav .pill {
+    background: #2a435d;
+    border-color: #778a9a;
+    color: #fff4e4;
+    box-shadow: 0 2px 4px #101f3245;
+  }
+  .advent-dusk .page > .header .nav .pill:hover {
+    background: #385571;
+    border-color: #d5bd91;
+  }
+  .advent-dusk .page > .header .nav .pill[aria-current="page"] {
+    background: linear-gradient(145deg, #ffe4ab, #ddb477);
+    border-color: #f0cb8c;
+    color: #202c3e;
+  }
+  .advent-dusk .page > .header :is(.brand, .pill):focus-visible {
+    outline: 2px solid #ffe0a2;
+    outline-offset: 3px;
+  }
 </style>
 </head>
 <body class="advent-dusk">
