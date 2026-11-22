@@ -19,6 +19,27 @@
   .december-music ol { max-height: 210px; overflow: auto; padding-left: 19px; margin-bottom: 0; font-size: 14px; }
   .december-music li { margin-bottom: 5px; }
   .december-music li a:hover { text-decoration: underline; }
+
+  .album-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: clamp(8px, 2vw, 20px);
+    align-items: center;
+    margin-top: 12px;
+  }
+  .album-intro p { margin-top: 0; }
+  .album-tree-sticker {
+    display: block;
+    width: clamp(66px, 8vw, 112px);
+    height: auto;
+    margin: 4px 4px 4px 0;
+    transform: rotate(6deg);
+    filter: drop-shadow(1px 4px 3px #25393138);
+    pointer-events: none;
+  }
+  @media (min-width: 1024px) {
+    .album-tree-sticker { width: clamp(104px, 10vw, 140px); }
+  }
 </style>
 </head><body>
 <main class="page"><header class="header">
@@ -31,10 +52,15 @@
   </div>
   <div class="album-cover-copy">
     <h1 id="album-title">Стикербук команды</h1>
-    <p>Знакомься с нашей командой модерации и открывай коллекции ачивок в профилях коллег.</p>
-    <div class="album-actions">
-      <a class="pill mint" href="#team">Найти коллегу ↓</a>
-      <a class="pill album-advent-link" id="albumAdventLink" href="advent.html" hidden>Открыть адвент ❄</a>
+    <div class="album-intro">
+      <div>
+        <p>Знакомься с нашей командой модерации и открывай коллекции ачивок в профилях коллег.</p>
+        <div class="album-actions">
+          <a class="pill mint" href="#team">Найти коллегу ↓</a>
+          <a class="pill album-advent-link" id="albumAdventLink" href="advent.html" hidden>Открыть адвент ❄</a>
+        </div>
+      </div>
+      <img class="album-tree-sticker" src="background/christmas-tree-sticker.webp" alt="" width="260" height="510">
     </div>
     <section class="december-music" id="decemberMusic" aria-labelledby="decemberMusicTitle" hidden>
       <div class="music-layout">
