@@ -614,6 +614,46 @@
   .book-hotspots .book-door[data-extracting] .advent-card-edge {
     animation: extract-card 400ms ease-out both;
   }
+  /* Paper mount matching the winter banner on the home page. */
+  .book-advent {
+    --mount-paper: #fffaf0;
+    --mount-edge: #c6ae78;
+    position: relative;
+    width: min(100%, 1120px);
+    margin-top: 39px;
+    padding: clamp(14px, 2.2vw, 28px) clamp(10px, 1.65vw, 19px) clamp(14px, 2vw, 24px);
+    border: 1px solid var(--mount-edge);
+    border-radius: 3px;
+    background: var(--mount-paper);
+    box-shadow: 0 14px 29px #29484d27, 0 3px 7px #533c2819;
+  }
+  .book-advent::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    width: clamp(66px, 9vw, 104px);
+    height: clamp(16px, 2vw, 23px);
+    transform: translateX(-50%) rotate(-3deg);
+    background: repeating-linear-gradient(45deg, #9b4553 0 7px, #e8c49b 7px 10px, #722d41 10px 15px);
+    box-shadow: inset 0 1px #fff3c278, 0 2px 4px #5e2d3526;
+    pointer-events: none;
+  }
+  .book-heading { margin-bottom: clamp(10px, 1.8vw, 20px); }
+  .book-heading .advent-progress { margin-bottom: 0; }
+  .book-scene {
+    border-radius: 3px;
+    box-shadow: 0 0 0 1px #9f795166, 0 3px 8px #142a3728;
+  }
+  @media (max-width: 700px) {
+    .book-advent { margin-top: 27px; padding: 17px 6px 10px; }
+    .book-heading { padding-inline: 5px; }
+    .book-advent::before { top: -8px; }
+    .book-date-picker { margin-top: 10px; }
+  }
+  @media (prefers-color-scheme: dark) {
+    .book-advent { --mount-paper: #263a34; --mount-edge: #8c7b55; }
+  }
 </style>
 </head>
 <body>
