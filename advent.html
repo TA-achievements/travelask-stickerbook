@@ -614,7 +614,7 @@
   .book-hotspots .book-door[data-extracting] .advent-card-edge {
     animation: extract-card 400ms ease-out both;
   }
-  /* A soft pool of winter dusk behind the cutout book. */
+  /* An evening tint over the winter background on this page. */
   .book-advent {
     position: relative;
     isolation: isolate;
@@ -622,15 +622,17 @@
     margin-top: 37px;
     padding-bottom: 8px;
   }
-  .book-advent::before {
-    content: "";
-    position: absolute;
-    inset: 16% 0 -2%;
-    z-index: -1;
-    pointer-events: none;
+  body.advent-dusk::after {
     background:
-      radial-gradient(ellipse 55% 20% at 50% 89%, #f5c98278, transparent 100%),
-      radial-gradient(ellipse 53% 56% at 50% 43%, #6987a3a3 15%, #89a0b56b 59%, transparent 100%);
+      radial-gradient(ellipse 55% 35% at 50% 97%, #e5a45b7a, #e5a45b1a 62%, transparent 100%),
+      linear-gradient(180deg, #162d4bd1 0%, #294767bc 52%, #324a67a8 100%);
+  }
+  @media (prefers-color-scheme: dark) {
+    body.advent-dusk::after {
+      background:
+        radial-gradient(ellipse 55% 35% at 50% 97%, #d8965c45, transparent 100%),
+        linear-gradient(180deg, #10244488, #243a5a55) !important;
+    }
   }
   .book-heading {
     position: relative;
@@ -656,9 +658,6 @@
     pointer-events: none;
   }
   .book-heading .advent-progress { margin-bottom: 0; }
-  @media (min-width: 1250px) {
-    .book-advent::before { inset-inline: -70px; }
-  }
   @media (max-width: 700px) {
     .book-advent { margin-top: 26px; }
     .book-heading { padding: 17px 12px 10px; }
@@ -666,7 +665,6 @@
   }
   @media (prefers-color-scheme: dark) {
     .book-heading { background: #263a34; border-color: #8c7b55; }
-    .book-advent::before { opacity: .6; }
   }
   /* Outline in image coordinates, keeping the hotspot canvas intact. */
   .book-scene {
@@ -697,7 +695,7 @@
   }
 </style>
 </head>
-<body>
+<body class="advent-dusk">
 <main class="page">
   <header class="header">
     <a class="brand" href="index.html"><div class="brand-title">TravelAsk ✈</div><div class="brand-sub">Стикербук</div></a>
