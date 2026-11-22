@@ -614,45 +614,59 @@
   .book-hotspots .book-door[data-extracting] .advent-card-edge {
     animation: extract-card 400ms ease-out both;
   }
-  /* Paper mount matching the winter banner on the home page. */
+  /* A soft pool of winter dusk behind the cutout book. */
   .book-advent {
-    --mount-paper: #fffaf0;
-    --mount-edge: #c6ae78;
     position: relative;
-    width: min(100%, 1120px);
-    margin-top: 39px;
-    padding: clamp(14px, 2.2vw, 28px) clamp(10px, 1.65vw, 19px) clamp(14px, 2vw, 24px);
-    border: 1px solid var(--mount-edge);
-    border-radius: 3px;
-    background: var(--mount-paper);
-    box-shadow: 0 14px 29px #29484d27, 0 3px 7px #533c2819;
+    isolation: isolate;
+    width: min(100%, 1080px);
+    margin-top: 37px;
+    padding-bottom: 8px;
   }
   .book-advent::before {
     content: "";
     position: absolute;
-    top: -10px;
+    inset: 16% 0 -2%;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 55% 20% at 50% 89%, #f5c98278, transparent 100%),
+      radial-gradient(ellipse 53% 56% at 50% 43%, #6987a3a3 15%, #89a0b56b 59%, transparent 100%);
+  }
+  .book-heading {
+    position: relative;
+    width: fit-content;
+    max-width: calc(100% - 12px);
+    margin: 0 auto clamp(14px, 2vw, 24px);
+    padding: clamp(17px, 2vw, 24px) clamp(17px, 3vw, 42px) 13px;
+    border: 1px solid #c6ae78;
+    border-radius: 3px;
+    background: #fffaf0;
+    box-shadow: 0 6px 15px #29484d20;
+  }
+  .book-heading::before {
+    content: "";
+    position: absolute;
+    top: -9px;
     left: 50%;
-    width: clamp(66px, 9vw, 104px);
-    height: clamp(16px, 2vw, 23px);
+    width: clamp(62px, 8vw, 92px);
+    height: clamp(16px, 1.6vw, 21px);
     transform: translateX(-50%) rotate(-3deg);
     background: repeating-linear-gradient(45deg, #9b4553 0 7px, #e8c49b 7px 10px, #722d41 10px 15px);
     box-shadow: inset 0 1px #fff3c278, 0 2px 4px #5e2d3526;
     pointer-events: none;
   }
-  .book-heading { margin-bottom: clamp(10px, 1.8vw, 20px); }
   .book-heading .advent-progress { margin-bottom: 0; }
-  .book-scene {
-    border-radius: 3px;
-    box-shadow: 0 0 0 1px #9f795166, 0 3px 8px #142a3728;
+  @media (min-width: 1250px) {
+    .book-advent::before { inset-inline: -70px; }
   }
   @media (max-width: 700px) {
-    .book-advent { margin-top: 27px; padding: 17px 6px 10px; }
-    .book-heading { padding-inline: 5px; }
-    .book-advent::before { top: -8px; }
-    .book-date-picker { margin-top: 10px; }
+    .book-advent { margin-top: 26px; }
+    .book-heading { padding: 17px 12px 10px; }
+    .book-date-picker { margin-top: 5px; }
   }
   @media (prefers-color-scheme: dark) {
-    .book-advent { --mount-paper: #263a34; --mount-edge: #8c7b55; }
+    .book-heading { background: #263a34; border-color: #8c7b55; }
+    .book-advent::before { opacity: .6; }
   }
   /* Outline in image coordinates, keeping the hotspot canvas intact. */
   .book-scene {
