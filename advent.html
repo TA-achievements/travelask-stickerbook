@@ -658,6 +658,7 @@
   .book-scene {
     box-shadow: none;
     filter: drop-shadow(0 9px 10px #24353c44);
+    transform-origin: 50% 92%;
   }
   .book-image {
     clip-path: polygon(
@@ -994,6 +995,22 @@
     restoreOpened();
     refresh();
   });
+
+  // Start the entrance when the illustration is ready to be shown.
+  const bookScene = box.querySelector(".book-scene");
+  const bookImage = bookScene.querySelector(".book-image");
+  function liftBook() {
+    if (motion.matches || typeof bookScene.animate !== "function") return;
+    bookScene.animate([
+      { transform: "perspective(1350px) rotateX(20deg)" },
+      { transform: "perspective(1350px) rotateX(0deg)" },
+    ], { duration: 1100, easing: "cubic-bezier(.22,.64,.28,1)" });
+  }
+  if (bookImage.complete) {
+    if (bookImage.naturalWidth) liftBook();
+  } else {
+    bookImage.addEventListener("load", liftBook, { once: true });
+  }
 </script>
 </body>
 </html>
