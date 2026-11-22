@@ -1,15 +1,96 @@
 <!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#fbfaf5"><title>Все ачивки — TravelAsk Стикербук</title><link rel="stylesheet" href="styles.css">  <link rel="stylesheet" href="darkfix.css?v=2">
+<style>
+  .catalog-search { max-width: 540px; margin-bottom: 14px; }
+  .catalog-filters { margin-bottom: 12px; }
+  .catalog-filters .filter { min-height: 44px; color: #292720; }
+  .catalog-filters .filter.active { box-shadow: inset 0 0 0 1px #7c9f90; }
+  .catalog-status { min-height: 1.5em; margin: 0 0 24px; font-size: .875rem; }
+  .catalog-more { display: flex; justify-content: center; margin-top: 26px; }
+  .catalog-more button { min-height: 44px; cursor: pointer; }
+  .catalog-more button[hidden] { display: none; }
+  @media (max-width: 480px) {
+    .catalog-filters { gap: 6px; }
+    .catalog-filters .filter { padding-inline: 11px; }
+  }
+</style>
 </head><body>
 <main class="page"><header class="header">
   <a class="brand" href="index.html"><div class="brand-title">TravelAsk ✈</div><div class="brand-sub">Стикербук</div></a>
   <nav class="nav"><a class="pill mint" href="index.html">Команда</a><a class="pill lav" href="achievements.html">Ачивки</a><a class="pill" href="pets.html">Пушистые коллеги 🐾</a><a class="pill mint" href="geography.html">География команды</a><a class="pill lav" href="advent.html">Адвент ❄</a></nav>
 </header>
 <h1 class="catalog-title">Все ачивки ☆</h1>
-<div class="filters">
- <button class="filter active" data-cat="Все">Все</button>
- <button class="filter" data-cat="Знания">Знания</button><button class="filter" data-cat="Активность">Активность</button><button class="filter" data-cat="Индивидуальные">Индивидуальные</button><button class="filter" data-cat="Праздники">Праздники</button>
+<div class="search catalog-search">
+  <input id="catalogSearch" type="search" aria-label="Поиск по названию ачивки" placeholder="Поиск по названию ачивки…" autocomplete="off">
 </div>
-<div id="catalogRoot"></div>
+<div class="filters catalog-filters" id="catalogFilters" role="group" aria-label="Категории ачивок"></div>
+<p class="catalog-status" id="catalogStatus" role="status"></p>
+<div class="achievement-grid" id="catalogResults"></div>
+<div class="catalog-more">
+  <button class="pill mint" type="button" id="catalogMore" hidden>Показать ещё</button>
+</div>
 <footer class="footer"><span>Больше, чем ачивки ♡</span><span>TravelAsk</span></footer>
-</main><script src="data.js"></script><script src="script.js"></script></body></html>
+</main><script src="data.js"></script><script src="script.js"></script><script>
+(() => {
+  const pageSize = 12;
+  const all = "Все";
+  const badges = DATA.achievements.filter(badge => badge.type === "Обычная");
+  const search = document.querySelector("#catalogSearch");
+  const filters = document.querySelector("#catalogFilters");
+  const grid = document.querySelector("#catalogResults");
+  const status = document.querySelector("#catalogStatus");
+  const more = document.querySelector("#catalogMore");
+  const normalized = value => value.toLocaleLowerCase("ru").replaceAll("ё", "е").replace(/\s+/g, " ").trim();
+  let selected = all;
+  let matches = [];
+  let shown = 0;
+
+  function showMore() {
+    const next = matches.slice(shown, shown + pageSize);
+    grid.insertAdjacentHTML("beforeend", next.map(badge => achHTML(badge)).join(""));
+    shown += next.length;
+    enableAchievementInteraction(grid);
+    status.textContent = matches.length ? `Показано ${shown} из ${matches.length}` : "Ачивки не найдены.";
+    more.hidden = shown >= matches.length;
+  }
+
+  function updateResults() {
+    const query = normalized(search.value);
+    matches = badges.filter(badge =>
+      (selected === all || badge.category === selected) && normalized(badge.name).includes(query)
+    );
+    grid.replaceChildren();
+    shown = 0;
+    showMore();
+  }
+
+  const buttons = [all, ...categories].map(category => {
+    const count = category === all ? badges.length : badges.filter(badge => badge.category === category).length;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "filter";
+    button.textContent = `${category} · ${count}`;
+    button.classList.toggle("active", category === all);
+    button.setAttribute("aria-pressed", String(category === all));
+    button.addEventListener("click", () => {
+      selected = category;
+      for (const filter of buttons) {
+        filter.classList.toggle("active", filter === button);
+        filter.setAttribute("aria-pressed", String(filter === button));
+      }
+      updateResults();
+    });
+    filters.append(button);
+    return button;
+  });
+
+  search.addEventListener("input", updateResults);
+  more.addEventListener("click", () => {
+    const firstNew = shown;
+    showMore();
+    grid.children[firstNew]?.focus();
+  });
+  updateResults();
+})();
+</script>
+</body></html>
