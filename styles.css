@@ -615,4 +615,10 @@ button,input{font:inherit}
     100% { transform: translate3d(0, var(--snow-step), 0); }
   }
 }
+@media (max-width: 700px) and (orientation: portrait) and (prefers-color-scheme: light) {
+  body::before {
+    background-image: url("background/winter-background-mobile.webp");
+    background-size: 100% 100%;
+  }
+}
 /* END: новогоднее оформление Стикербука */
